@@ -1,0 +1,15 @@
+{
+  "name": "hong",
+  "version": "0.0.1",
+  "description": "universal dependencies",
+  "dependencies": {
+    "body-parser": "*",
+    "d3": "*",
+    "ejs": "*",
+    "express": "*",
+    "java": "*",
+    "jquery": "*",
+    "multer": "*",
+    "path": "*"
+  }
+}
