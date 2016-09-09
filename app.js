@@ -1,5 +1,6 @@
 // Before calling node index.js
 // Run the following: npm install express body-parser multer  --save
+global.__base = __dirname;
 var express = require('express');
 var path = require('path');
 var jquery = require('jquery');

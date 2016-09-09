@@ -9,6 +9,7 @@
     "express": "*",
     "java": "*",
     "jquery": "*",
+    "mongodb": "^2.2.9",
     "multer": "*",
     "path": "*"
   }

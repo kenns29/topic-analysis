@@ -1,35 +1,49 @@
 /*
 * Test code for node java
 */
-var java = require('java');
+var javaInit = require('./java/javaInit');
+var java = javaInit.getJavaInstance();
 var fs = require('fs');
-java.classpath.push("commons-lang3-3.1.jar");
-java.classpath.push("commons-io.jar");
 
-java.classpath.push("./jars/Test.jar");
-java.classpath.push("./jars/nlptoolkit.jar");
-console.log('java.classpath', java.classpath);
-var Test = java.import('Test');
-console.log('hello', new Test().printSync());
-var StanfordParser = java.import("nlp.edu.asu.vader.parser.StanfordParser");
-var StanfordCoreNLP = java.import('edu.stanford.nlp.pipeline.StanfordCoreNLP');
-var Properties = java.import('java.util.Properties');
-var props = new Properties();
-props.setPropertySync("annotators", "tokenize, ssplit,pos,lemma, ner,parse");
-var pipeline = new StanfordCoreNLP(props);
-var list1 = java.newInstanceSync('java.util.ArrayList');
-console.log(list1.sizeSync());
-list1.addSync('item1');
-list1.addSync(1);
-console.log(list1.sizeSync());
-for(var i = 0; i < list1.sizeSync(); i++){
-	console.log(list1.getSync(i));
+
+// var props = java.newInstanceSync('java.util.Properties');
+// props.setPropertySync("annotators", "tokenize, ssplit,pos,lemma, ner,parse");
+var pipeline = require('./nlp/stanfordCoreNLP');
+var stanfordParser = require('./nlp/stanfordParser');
+stanfordParser.setCoreNLPInstance(pipeline);
+
+fs.readFile('test-data.txt', 'utf8', function(err, data){
+	if(err){
+		console.log('err reading file', err);
+	}
+	else{
+		console.log('data', data);
+		stanfordParser.annotate(data);
+		var trees = stanfordParser.uniDepTree();
+		// trees.forEach(function(s){
+		// 	s.forEach(function(r){
+		// 		addParent(r);
+		// 	});
+		// });
+
+		
+		fs.writeFile('./test_output/tree.json', JSON.stringify(trees, null, 2), function(err){
+			if(err) return console.log('err');
+		});
+	}
+});
+
+/*
+* Add parent attribute for each node
+*/
+function addParent(r){
+	recurse(r, null);
+	function recurse(r, p){
+		if(r){
+			r.parent = p;
+			r.children.forEach(function(child){
+				recurse(child, r);
+			});
+		}
+	}
 }
-
-
-// var dependencies = fs.readdirSync(baseDir);
- 
-// dependencies.forEach(function(dependency){
-// 	console.log('dependency', dependency);
-//     java.classpath.push(baseDir + "/" + dependency);
-// });

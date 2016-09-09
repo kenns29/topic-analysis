@@ -3,5 +3,6 @@ d3.selection.prototype.moveToFront = function() {
     this.parentNode.appendChild(this);
   });
 };
+
 var service_url = 'http://localhost:10082/';
 
