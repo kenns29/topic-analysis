@@ -20,7 +20,7 @@ router.get('/loadunideptree', function(req, res){
 });
 
 router.get('/testunideptree', function(req, res){
-	fs.readFile('test-data.txt', 'utf8', function(err, data){
+	fs.readFile('test-data1.txt', 'utf8', function(err, data){
 		if(err){
 			console.log('err reading file', err);
 		}

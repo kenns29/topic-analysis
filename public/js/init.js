@@ -36,8 +36,8 @@ $(document).ready(function(){
         for(i = 0; i < trees.length; i++){
         	for(j = 0; j < trees[i].length; j++){
         		r = trees[i][j];
-        		addParent(r);
-        		events = events.concat(searchEvent(r, search_word, false));
+        		console.log('tree', uni_dep_tree(r).data());
+        		// events = events.concat(searchEvent(r, search_word, false));
         	}
         }
 
@@ -46,20 +46,6 @@ $(document).ready(function(){
 	});
 
 
-	/*
-	* Add parent attribute for each node
-	*/
-	function addParent(r){
-		recurse(r, null);
-		function recurse(r, p){
-			if(r){
-				r.parent = p;
-				r.children.forEach(function(child){
-					recurse(child, r);
-				});
-			}
-		}
-	}
 
 	/*
 	* Search the node that matches the phrase in the tree
@@ -122,7 +108,7 @@ $(document).ready(function(){
 						event.recipient_clause.node = recipient_node =  n;
 					}
 					if(n.edge_short_name === 'advcl'){
-						
+
 					}
 				}
 				return event;
