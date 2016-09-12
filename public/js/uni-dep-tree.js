@@ -106,6 +106,25 @@ function uni_dep_tree(input){
 	}
 
 
+
+	function extract_events(){
+
+	}
+
+	/*
+	* 
+	*/
+	function node_op(node){
+		if(node.tag.match('VB')){
+
+		}
+
+	}
+	/* Triplet functions
+	*
+	*/
+
+
 	var tree = {
 		'data' : function(_){
 			return arguments.length > 0 ? (data = _, this) : data;
