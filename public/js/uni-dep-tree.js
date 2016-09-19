@@ -118,57 +118,156 @@ function uni_dep_tree(input){
 	}
 
 	function find_roles(){
-		var i, j;
 		var r = data;
-		var child, cchild;
-		var evt, subj, obj, evt_mod, subj_mod, obj_mod;
-		if(r.type_set.has('evt')){
-			if(r.tag.match('VB'))
-				evt = r;
-			else{
+		var roles = [];
+		role_extractor(r, null, roles);
+		return roles;
+
+		function role_extractor(r, parent_stat, roles){
+			var i, j, k;
+			var evt, subj, obj, evt_mod, subj_mod, obj_mod;
+			var child, cchild, ccchild;
+
+			var subjs = [];
+			var objs = [];
+			var subj_mods = [];
+			var obj_mods = [];
+
+			/*
+			* if the current node is an event
+			*/
+			if(r.type_set.has('evt')){
+				/*
+				* Check if the event is a verb, if not the cop of the word needs to be the event
+				*/
+				if(r.tag.match(/VB[A-Z]*/)){
+					evt = r;
+				}
+				else{
+					for(i = 0; i < r.children.length; i++){
+						child = r.children[i];
+						if(child.type_set.has('cop')){
+							evt = child;
+						}
+					}
+					objs.push(r);
+				}
+
+				//for all children of the event
 				for(i = 0; i < r.children.length; i++){
 					child = r.children[i];
-					if(child.type_set.has('cop')){
-						evt = child;
+					//if the child is a modifier, collapse the child and set it as the event modifier
+					if(child.type_set.has('mod')){
+						evt_mod = tree_to_nodes(child);
 					}
+					//if the child is a subject, add it to the subject array
+					if(child.type_set.has('subj')){
+						subjs.push(child);
+						subj_mods.push(null);
+						//add modifiers for the child
+						for(j = 0; j < child.children.length; j++){
+							cchild = child.children[j];
+							//if the child has modifer, add modifer to the modifer array
+							if(cchild.type_set.has('mod')){
+								subj_mod = tree_to_nodes(cchild);
+								subj_mods[subj_mods.length - 1] = subj_mod;
+							}
+							//if the child has conjunction, add conjunction to the subject array, along with its modifiers
+							if(cchild.type_set.has('conj')){
+								subjs.push(cchild);
+								subj_mods.push(null);
+								for(k = 0; k < cchild.children.length; k++){
+									ccchild = ccchild.children[i];
+									if(ccchild.type_set.has('mod')){
+										subj_mod = tree_to_nodes(ccchild);
+										subj_mods[subj_mods.length - 1] = subj_mod
+									}
+								}
+							}
+						}
+					}
+					//if the child is a object, add it to the object array
+					if(child.type_set.has('obj')){
+						objs.push(child);
+						obj_mods.push(null);
+						for(j = 0; j < child.children.length; j++){
+							cchild = child.children[j];
+							//if the child has modifier, add modifier to the modifier array
+							if(cchild.type_set.has('mod')){
+								obj_mod = tree_to_nodes(cchild);
+								obj_mods[obj_mods.length - 1] = obj_mod;
+							}
+							//if the child has conjunctions, add conjunction to the object array, along with its modifiers
+							if(cchild.type_set.has('conj')){
+								objs.push(cchild);
+								obj_mods.push(null);
+								for(k = 0; i < ccchild; k++){
+									ccchild = ccchild.children[i];
+									if(ccchild.type_set.has('mod')){
+										obj_mod = tree_to_nodes(ccchild);
+										obj_mods[obj_mods.length - 1] = obj_mod;
+									}
+								}
+							}
+						}
+					}
+					//if the child is a conjunction, recursively extract the roles for the conjuction
+					if(child.type_set.has('conj')){
+						role_extractor(child, {
+							'subjs' : subjs,
+							'objs' : objs
+						}, roles);
+					}	
 				}
-				subj = r;
+				if(parent_stat){
+					if(subjs.length === 0)
+						subjs = parent_stat.subjs;
+					if(objs.length === 0)
+						objs = parent_stat.objs;
+				}
 			}
 
-			
-			for(i = 0; i < r.children.length; i++){
-				child = r.children[i];
-				if(child.type_set.has('mod')){
-					evt_mod = tree_to_nodes(child);
+			/*
+			* Append events to the role list
+			*/
+			for(i = 0; i < subjs.length; i++){
+				for(j = 0; j < objs.length; j++){
+					roles.push({
+						'evt' : evt,
+						'subj' : subjs[i],
+						'obj' : objs[j],
+						'evt_mod' : evt_mod,
+						'subj_mod' : subj_mods[i],
+						'obj_mod' : obj_mods[j]
+					});
 				}
-				if(child.type_set.has('subj')){
-					subj = child;
-					for(j = 0; j < subj.children.length; j++){
-						cchild = subj.children[j];
-						if(cchild.type_set.has('mod')){
-							subj_mod = tree_to_nodes(cchild);
-						}
-					}
+			}
+			if(subjs.length === 0){
+				for(j = 0; j < objs.length; j++){
+					roles.push({
+						'evt' : evt,
+						'subj' : null,
+						'obj' : objs[j],
+						'evt_mod' : evt_mod,
+						'subj_mod' : null,
+						'obj_mod' : obj_mods[j]
+					});
 				}
-				if(child.type_set.has('obj')){
-					obj = child;
-					for(j = 0; j < obj.children.length; j++){
-						cchild = obj.children[j];
-						if(cchild.type_set.has('mod')){
-							obj_mod = tree_to_nodes(cchild);
-						}
-					}
-				}	
+			}
+			if(objs.length === 0){
+				for(i = 0; i < subjs.length; i++){
+					roles.push({
+						'evt' : evt,
+						'subj' : subjs[i],
+						'obj' : null,
+						'evt_mod' : evt_mod,
+						'subj_mod' : subj_mods[i],
+						'obj_mod' : null
+					});
+				}
 			}
 		}
-		return {
-			'evt' : evt,
-			'subj' : subj,
-			'obj' : obj,
-			'evt_mod' : evt_mod,
-			'subj_mod' : subj_mod,
-			'obj_mod' : obj_mod
-		};
+		
 	}
 
 	function tree_to_role(r, role_string){
@@ -242,6 +341,9 @@ function uni_dep_tree(input){
 						break;
 						case 'conj':
 						r.type_set.add('conj');
+						if(parent.type_set.has('evt')){
+							r.type_set.add('evt');
+						}
 						break;
 						case 'cop':
 						r.type_set.add('cop');
