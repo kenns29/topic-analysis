@@ -117,46 +117,69 @@ function uni_dep_tree(input){
 		}
 	}
 
-
-
-	function extract_events(){
-
-	}
-
-	/*
-	* 
-	*/
-	function triplet_op(node){
-		var i, j, k, child;
-		var subj_node, obj_node, rel_node;
-		//if the pos is a verb, potentially a event node
-	
-		if(node.type_set.has('evt')){
-
-		}
-
-		for(i = 0; i < node.children.length; i++){
-			child = node.children[i];
-		}
-	}
-
 	function find_roles(){
-		var i;
+		var i, j;
 		var r = data;
+		var child, cchild;
+		var evt, subj, obj, evt_mod, subj_mod, obj_mod;
+		if(r.type_set.has('evt')){
+			if(r.tag.match('VB'))
+				evt = r;
+			else{
+				for(i = 0; i < r.children.length; i++){
+					child = r.children[i];
+					if(child.type_set.has('cop')){
+						evt = child;
+					}
+				}
+				subj = r;
+			}
 
-		for(i = 0; i < r.children.length; i++){
 			
+			for(i = 0; i < r.children.length; i++){
+				child = r.children[i];
+				if(child.type_set.has('mod')){
+					evt_mod = tree_to_nodes(child);
+				}
+				if(child.type_set.has('subj')){
+					subj = child;
+					for(j = 0; j < subj.children.length; j++){
+						cchild = subj.children[j];
+						if(cchild.type_set.has('mod')){
+							subj_mod = tree_to_nodes(cchild);
+						}
+					}
+				}
+				if(child.type_set.has('obj')){
+					obj = child;
+					for(j = 0; j < obj.children.length; j++){
+						cchild = obj.children[j];
+						if(cchild.type_set.has('mod')){
+							obj_mod = tree_to_nodes(cchild);
+						}
+					}
+				}	
+			}
 		}
+		return {
+			'evt' : evt,
+			'subj' : subj,
+			'obj' : obj,
+			'evt_mod' : evt_mod,
+			'subj_mod' : subj_mod,
+			'obj_mod' : obj_mod
+		};
 	}
 
 	function tree_to_role(r, role_string){
 		return {
-			'role' : role_string
-			'nodes' : tree_to_nodes(r),
+			'role' : role_string,
+			'nodes' : tree_to_nodes(r)
 		};
 	}
 	function tree_to_nodes(r){
 		var nodes = [];
+		recurse(r);
 		nodes.sort(function(a, b){
 			return a.positions[0] - b.positions[0];
 		});
@@ -164,7 +187,7 @@ function uni_dep_tree(input){
 		function recurse(r){
 			if(r){
 				nodes.push(r);
-				r.children.forEach(recurse;
+				r.children.forEach(recurse);
 			}
 		}
 	}
@@ -264,7 +287,7 @@ function uni_dep_tree(input){
 						else
 							r.type_set.add('mod');
 						break;
-						case 'nmod:psss':
+						case 'nmod:pass':
 						r.type_set.add('mod');
 						break;
 						case 'nmod:tmod':
@@ -321,7 +344,8 @@ function uni_dep_tree(input){
 		'data' : function(_){
 			return arguments.length > 0 ? (data = _, this) : data;
 		},
-		'collapse_compond' : collapse_compond
+		'collapse_compond' : collapse_compond,
+		'find_roles' : find_roles
 	}; 
 
 	return tree;

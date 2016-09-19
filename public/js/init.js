@@ -33,10 +33,13 @@ $(document).ready(function(){
         var trees = store.trees;
         var r; 
         var events = [];
+        var udt;
         for(i = 0; i < trees.length; i++){
         	for(j = 0; j < trees[i].length; j++){
         		r = trees[i][j];
-        		console.log('tree', uni_dep_tree(r).data());
+        		udt = uni_dep_tree(r); 
+        		console.log('tree', udt.data());
+        		console.log('role', udt.find_roles());
         		// events = events.concat(searchEvent(r, search_word, false));
         	}
         }
