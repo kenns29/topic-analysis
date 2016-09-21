@@ -32,8 +32,10 @@ $(document).ready(function(){
 
         var trees = store.trees;
         var udt_coll = uni_dep_tree_collection(trees); 
+        var sem_tree = udt_coll.join_sem_tree('trump');
         console.log('roles', udt_coll.flatten_sem_roles());
         console.log('collection', udt_coll.collection());
+        console.log('sem_tree', sem_tree);
 
 	});
 

@@ -50,13 +50,78 @@ function uni_dep_tree_collection(_){
 		return flat_roles;
 	}
 
-	// function merge_sem_roles(word){
-	// 	var roles = flatten_sem_roles();
-	// 	var i, j;
-	// 	for(i = 0; i < roles.length; i++){
-			
-	// 	}
-	// }
+	function join_sem_tree(word, pos){
+		var regex = new RegExp(word, 'i');
+		var roles = flatten_sem_roles();
+		var role;
+		var i, j;
+		var subj_token, obj_token, evt_token;
+		var r = {
+			'token' : word,
+			'nodes' : [], 
+			'children' : [],
+			'child_map' : d3.map(),
+			'dmod' : [],
+			'pmod' : [],
+			'role' : 'subj'
+		};
+
+		var e;
+		var o;
+		for(i = 0; i < roles.length; i++){
+			role = roles[i];
+			if(role.subj && role.subj.token.match(regex)){
+				r.nodes.push(role.subj);
+				r.dmod = r.dmod.concat(role.subj_mods);
+				if(role.evt){
+					if(r.child_map.has(role.evt.token)){
+						e = r.child_map.get(role.evt.token);
+						e.nodes.push(role.evt);
+					}
+					else{
+						e = {
+							'token' : role.evt.token,
+							'nodes' : [role.evt],
+							'children' : [],
+							'child_map' : d3.map(),
+							'dmod' : [],
+							'pmod' : [],
+							'role' : 'evt'
+						};
+						r.children.push(e);
+						r.child_map.set(role.evt.token, e);
+					}
+					
+					if(role.obj){
+						if(e.child_map.has(role.obj.token)){
+							o = e.child_map.get(role.obj.token);
+							o.nodes.push(role.obj);
+						}
+						else{
+							o = {
+								'token' : role.obj.token,
+								'nodes' : [role.obj],
+								'children' : [],
+								'child_map' : d3.map(),
+								'dmod' : [],
+								'pmod' : [],
+								'role' : 'obj'
+							};
+
+							e.children.push(o);
+							e.child_map.set(role.obj.token, o);
+						}
+					} 
+					
+					e.dmod = e.dmod.concat(role.evt_mods);
+					e.pmod = e.pmod.concat(role.subj_mods);
+					o.dmod = o.dmod.concat(role.obj_mods);
+					o.pmod = o.pmod.concat(role.evt_mods);
+				}
+			}
+		}
+		return r;
+	}
 	var collection = {
 		'data' : function(_){
 			return arguments.length > 0 ? (data = _, this) : data;
@@ -65,7 +130,8 @@ function uni_dep_tree_collection(_){
 			return uni_dep_collection
 		},
 		'flatten' : flatten,
-		'flatten_sem_roles' : flatten_sem_roles
+		'flatten_sem_roles' : flatten_sem_roles,
+		'join_sem_tree' : join_sem_tree
 	};
 	return collection;
 }

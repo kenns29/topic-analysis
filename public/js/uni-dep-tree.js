@@ -258,7 +258,7 @@ function uni_dep_tree(input){
 			for(i = 0; i < subjs.length; i++){
 				for(j = 0; j < objs.length; j++){
 					roles.push({
-						'evt' : evt,
+						'evt' : join_nodes([evt]),
 						'subj' : join_nodes(subjs[i]),
 						'obj' : join_nodes(objs[j]),
 						'evt_mods' : evt_mods.map(function(d){
@@ -266,33 +266,33 @@ function uni_dep_tree(input){
 						}),
 						'subj_mods' : (m = subj_mods_list[i]) ? m.map(function(d){
 							return join_nodes(d);
-						}) : null,
+						}) : [],
 						'obj_mods' : (m = obj_mods_list[j]) ? m.map(function(d){
 							return join_nodes(d);
-						}) : null
+						}) : []
 					});
 				}
 			}
 			if(subjs.length === 0){
 				for(j = 0; j < objs.length; j++){
 					roles.push({
-						'evt' : evt,
+						'evt' : join_nodes([evt]),
 						'subj' : null,
 						'obj' : join_nodes(objs[j]),
 						'evt_mods' : evt_mods.map(function(d){
 							return join_nodes(d);
 						}),
-						'subj_mods' : null,
+						'subj_mods' : [],
 						'obj_mods' : (m = obj_mods_list[j]) ? m.map(function(d){
 							return join_nodes(d);
-						}) : null
+						}) : []
 					});
 				}
 			}
 			if(objs.length === 0){
 				for(i = 0; i < subjs.length; i++){
 					roles.push({
-						'evt' : evt,
+						'evt' : join_nodes([evt]),
 						'subj' : join_nodes(subjs[i]),
 						'obj' : null,
 						'evt_mods' : evt_mods.map(function(d){
@@ -300,8 +300,8 @@ function uni_dep_tree(input){
 						}),
 						'subj_mods' : (m = subj_mods_list[i]) ? m.map(function(d){
 							return join_nodes(d);
-						}) : null,
-						'obj_mods' : null
+						}) : [],
+						'obj_mods' : []
 					});
 				}
 			}
@@ -324,13 +324,6 @@ function uni_dep_tree(input){
 		for(i = 0; i < nodes.length; i++){
 			node = nodes[i];
 			if(i > 0){
-				if(!node){
-					console.log('nodes', nodes, node, node);
-				}
-				if(!node.positions){
-					console.log('node', node);
-				}
-				try{
 				if(node.positions[1] === nodes[i -1].positions[0]){
 					merged_token += node.token;
 					merged_lemma += node.lemma;
@@ -339,24 +332,14 @@ function uni_dep_tree(input){
 					merged_token += ' ' + node.token;
 					merged_lemma += ' ' + node.lemma;
 				}
-				}
-				catch(err){
-					console.log(err);
-
-				}
 			}
 			else{
 				merged_token += node.token;
 				merged_lemma += node.lemma;
 			}
 		}
-		try{
+
 		var merged_positions = [nodes[0].positions[0], nodes[nodes.length - 1].positions[1]];
-		}
-		catch(err){
-			console.log(err);
-			console.log('nodes[0]', nodes[0], 'nodes[length-1]', nodes[nodes.length - 1], 'nodes', nodes);
-		}
 		var merged_tag = nodes[0].tag;
 		var merged_ner = nodes[0].ner;
 		return {
