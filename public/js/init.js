@@ -31,20 +31,9 @@ $(document).ready(function(){
         var search_word = 'Trump';
 
         var trees = store.trees;
-        var r; 
-        var events = [];
-        var udt;
-        for(i = 0; i < trees.length; i++){
-        	for(j = 0; j < trees[i].length; j++){
-        		r = trees[i][j];
-        		udt = uni_dep_tree(r); 
-        		console.log('tree', udt.data());
-        		console.log('role', udt.find_roles());
-        		// events = events.concat(searchEvent(r, search_word, false));
-        	}
-        }
-
-        console.log('events', events);
+        var udt_coll = uni_dep_tree_collection(trees); 
+        console.log('roles', udt_coll.flatten_sem_roles());
+        console.log('collection', udt_coll.collection());
 
 	});
 
