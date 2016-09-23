@@ -58,11 +58,13 @@ function uni_dep_tree_collection(_){
 		var subj_token, obj_token, evt_token;
 		var r = {
 			'token' : word,
+			'name' : word,
 			'nodes' : [], 
 			'children' : [],
 			'child_map' : d3.map(),
 			'dmod' : [],
 			'pmod' : [],
+			'size' : 1,
 			'role' : 'subj'
 		};
 
@@ -73,19 +75,23 @@ function uni_dep_tree_collection(_){
 			if(role.subj && role.subj.token.match(regex)){
 				r.nodes.push(role.subj);
 				r.dmod = r.dmod.concat(role.subj_mods);
+				++r.size;
 				if(role.evt){
 					if(r.child_map.has(role.evt.token)){
 						e = r.child_map.get(role.evt.token);
 						e.nodes.push(role.evt);
+						++e.size;
 					}
 					else{
 						e = {
 							'token' : role.evt.token,
+							'name' : role.evt.token,
 							'nodes' : [role.evt],
 							'children' : [],
 							'child_map' : d3.map(),
 							'dmod' : [],
 							'pmod' : [],
+							'size' : 1,
 							'role' : 'evt'
 						};
 						r.children.push(e);
@@ -96,15 +102,18 @@ function uni_dep_tree_collection(_){
 						if(e.child_map.has(role.obj.token)){
 							o = e.child_map.get(role.obj.token);
 							o.nodes.push(role.obj);
+							++o.size;
 						}
 						else{
 							o = {
 								'token' : role.obj.token,
+								'name' : role.obj.token,
 								'nodes' : [role.obj],
 								'children' : [],
 								'child_map' : d3.map(),
 								'dmod' : [],
 								'pmod' : [],
+								'size' : 1,
 								'role' : 'obj'
 							};
 

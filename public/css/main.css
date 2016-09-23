@@ -1,4 +1,12 @@
 
+#container{
+  width : 100%;
+}
+
+#joined_sem_tree_view{
+  width: 1200px;
+  height:600px;
+}
 /*
 *	Utilities
 */
