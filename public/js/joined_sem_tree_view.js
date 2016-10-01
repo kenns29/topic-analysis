@@ -190,12 +190,58 @@ function joined_sem_tree_view(_){
 		.text(function(d){
 			return d.token;
 		});
+
+		var obj_dmod_g = node_update.filter(function(d){
+			return d.data.role === 'obj' && d.data.dmod.length > 0;
+		})
+		.append('g')
+		.attr('class', 'joined-sem-tree-g-obj_dmod_g')
+
+		var obj_dmod_sel = obj_dmod_g.selectAll('.joined-sem-tree-g-obj_dmod')
+		.data(function(d){
+			console.log('d.data.dmod', d.data.dmod);
+			return d.data.dmod;
+		});
+
+		var obj_dmod_enter = obj_dmod_sel.enter().append('g')
+		.attr('class', '.joined-sem-tree-g-obj_dmod')
+		.attr('transform', function(d, i){
+			var parentData = d3.select(this.parentNode).data()[0];
+			return 'translate(' + [(i+1)*10 + i*20 + parentData.length + 20, 0] + ')';
+		});
+
+		obj_dmod_enter.append('circle')
+		.attr('r', 5)
+		.attr('stroke', 'black').attr('stroke-width', 1)
+		.attr('fill', 'orange');
+
+		obj_dmod_enter.append('path')
+		.attr('d', function(d, i){
+			var parentData = d3.select(this.parentNode.parentNode).data()[0];
+			var length = parentData.data.dmod.length;
+			return 'M' + [0, 0]
+			+ ' L' + [0, (length - i) * 10]
+			+ ' L' + [5, (length - i) * 10];
+		})
+		.attr('stroke', 'black')
+		.attr('stroke-width', 1)
+		.attr('fill', 'none');
+
+		obj_dmod_enter.append('text')
+		.attr('text-anchor', 'start')
+		.attr('dominant-baseline', 'middle')
+		.attr('x', 5)
+		.attr('y', function(d, i){
+			var parentData = d3.select(this.parentNode.parentNode).data()[0];
+			var length = parentData.data.dmod.length;
+			return (length - i) * 10;
+		})
+		.text(function(d){
+			return d.token;
+		});
 		return view;
 	}
 
-	function evt_modifiers(n){
-
-	}
 
 	function edge_path(n1, n2){
 		var h_dist = Math.abs(n2.y - n1.y);

@@ -187,7 +187,7 @@ function uni_dep_tree(input){
 									subjs.push(cchild);
 									c_subj_mods = [];
 									for(k = 0; k < cchild.children.length; k++){
-										ccchild = ccchild.children[i];
+										ccchild = cchild.children[i];
 										if(ccchild.type_set.has('mod')){
 											c_subj_mods = tree_to_nodes(ccchild);
 										}

@@ -6,3 +6,5 @@ d3.selection.prototype.moveToFront = function() {
 
 var service_url = 'http://localhost:10082/';
 
+var test_output_file;
+
