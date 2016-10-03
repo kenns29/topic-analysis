@@ -320,35 +320,40 @@ function uni_dep_tree(input){
 
 		var merged_token = '';
 		var merged_lemma = '';
-
+		var merged_coref_rep_mention = '';
 		for(i = 0; i < nodes.length; i++){
 			node = nodes[i];
 			if(i > 0){
 				if(node.positions[1] === nodes[i -1].positions[0]){
 					merged_token += node.token;
 					merged_lemma += node.lemma;
+					merged_coref_rep_mention += node.coref_rep_mention;
 				}
 				else{
 					merged_token += ' ' + node.token;
 					merged_lemma += ' ' + node.lemma;
+					merged_coref_rep_mention += ' ' + node.coref_rep_mention;
 				}
 			}
 			else{
 				merged_token += node.token;
 				merged_lemma += node.lemma;
+				merged_coref_rep_mention += node.coref_rep_mention;
 			}
 		}
 
 		var merged_positions = [nodes[0].positions[0], nodes[nodes.length - 1].positions[1]];
 		var merged_tag = nodes[0].tag;
 		var merged_ner = nodes[0].ner;
+
 		return {
 			'token' : merged_token,
 			'lemma' : merged_lemma,
 			'tag' : merged_tag,
 			'positions' : merged_positions,
 			'ner' : merged_ner,
-			'nodes' : nodes
+			'nodes' : nodes,
+			'coref_rep_mention' : merged_coref_rep_mention
 		};
 
 	}

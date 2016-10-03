@@ -72,20 +72,20 @@ function uni_dep_tree_collection(_){
 		var o;
 		for(i = 0; i < roles.length; i++){
 			role = roles[i];
-			if(role.subj && role.subj.token.match(regex)){
+			if(role.subj && role.subj.coref_rep_mention.match(regex)){
 				r.nodes.push(role.subj);
 				r.dmod = r.dmod.concat(role.subj_mods);
 				++r.size;
 				if(role.evt){
-					if(r.child_map.has(role.evt.token)){
-						e = r.child_map.get(role.evt.token);
+					if(r.child_map.has(role.evt.lemma)){
+						e = r.child_map.get(role.evt.lemma);
 						e.nodes.push(role.evt);
 						++e.size;
 					}
 					else{
 						e = {
-							'token' : role.evt.token,
-							'name' : role.evt.token,
+							'token' : role.evt.lemma,
+							'name' : role.evt.lemma,
 							'nodes' : [role.evt],
 							'children' : [],
 							'child_map' : d3.map(),
@@ -95,19 +95,19 @@ function uni_dep_tree_collection(_){
 							'role' : 'evt'
 						};
 						r.children.push(e);
-						r.child_map.set(role.evt.token, e);
+						r.child_map.set(role.evt.lemma, e);
 					}
 					
 					if(role.obj){
-						if(e.child_map.has(role.obj.token)){
-							o = e.child_map.get(role.obj.token);
+						if(e.child_map.has(role.obj.coref_rep_mention)){
+							o = e.child_map.get(role.obj.coref_rep_mention);
 							o.nodes.push(role.obj);
 							++o.size;
 						}
 						else{
 							o = {
-								'token' : role.obj.token,
-								'name' : role.obj.token,
+								'token' : role.obj.coref_rep_mention,
+								'name' : role.obj.coref_rep_mention,
 								'nodes' : [role.obj],
 								'children' : [],
 								'child_map' : d3.map(),
@@ -118,7 +118,7 @@ function uni_dep_tree_collection(_){
 							};
 
 							e.children.push(o);
-							e.child_map.set(role.obj.token, o);
+							e.child_map.set(role.obj.coref_rep_mention, o);
 						}
 						o.dmod = o.dmod.concat(role.obj_mods);
 						o.pmod = o.pmod.concat(role.evt_mods);
