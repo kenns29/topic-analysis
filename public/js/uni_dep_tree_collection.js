@@ -120,12 +120,13 @@ function uni_dep_tree_collection(_){
 							e.children.push(o);
 							e.child_map.set(role.obj.token, o);
 						}
+						o.dmod = o.dmod.concat(role.obj_mods);
+						o.pmod = o.pmod.concat(role.evt_mods);
 					} 
 					
 					e.dmod = e.dmod.concat(role.evt_mods);
 					e.pmod = e.pmod.concat(role.subj_mods);
-					o.dmod = o.dmod.concat(role.obj_mods);
-					o.pmod = o.pmod.concat(role.evt_mods);
+					
 				}
 			}
 		}
