@@ -4,13 +4,23 @@
   "description": "universal dependencies",
   "dependencies": {
     "body-parser": "*",
-    "d3": "*",
+    "bootstrap": "^3.3.7",
+    "d3": "^4.4.4",
     "ejs": "*",
     "express": "*",
     "java": "*",
-    "jquery": "*",
+    "jquery": "^3.1.1",
+    "jquery-ui": "^1.12.1",
     "mongodb": "^2.2.9",
     "multer": "*",
+    "mysql": "^2.13.0",
     "path": "*"
+  },
+  "scripts":{
+    "build-js": "browserify browser/js/main.js | uglifyjs -mc > public/bundle.js",
+    "build": "npm run build-js",
+    "watch-js": "watchify browser/js/main.js -o public/bundle.js -dv",
+    "watch": "npm run watch-js",
+    "start": "node app.js"
   }
 }
