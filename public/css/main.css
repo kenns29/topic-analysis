@@ -25,16 +25,14 @@
 #left-side-bar #data-select #year-select select{
 
 }
-
-
 #center-view{
   position: relative;
   float:left;
   width:calc(100% - 300px);
   height:auto;
 }
-#center-view #filler{
-  height: 1000px;
+#center-view #document-view-div{
+  height:auto;
   width:100%;
 }
 /*

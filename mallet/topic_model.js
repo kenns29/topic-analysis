@@ -4,12 +4,12 @@ var TopicModel = 'nlp.edu.asu.vader.mallet.model.TopicModel';
 var topicModel = java.newInstanceSync(TopicModel);
 topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
 topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
-
+topicModel.setModelNumThreadsSync(500);
 function uri(d, i){
-  return Number(i).toString();
+  return d.id;
 }
 function doc(d, i){
-  return d.abstract;
+  return d.title;
 }
 function build(data){
   var uri_array = java.newInstanceSync('java.util.ArrayList');
@@ -25,4 +25,6 @@ function build(data){
 }
 function ret(){return build();}
 ret.build = build;
+ret.uri = function(_){return arguments.length > 0 ? (uri =_, ret):uri;};
+ret.doc = function(_){return arguments.length > 0 ? (doc =_, doc):doc;};
 module.exports = ret;

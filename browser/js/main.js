@@ -1,18 +1,11 @@
 var $ = require('jquery');
 var d3 = require('./load_d3');
-var service_url = require('./service');
-var UI_year_select = require('./UI/year_select');
+global.service_url = require('./service');
+global.UI_year_select = require('./UI/year_select');
+global.document_viewer = require('./view/document_viewer');
 $(document).ready(function(){
-	UI_year_select.init();
-});
-
-$('#test').click(function(){
-	$.ajax({
-		url : service_url + '/traintopicmodel',
-		data : {},
-		dataType: 'json',
-		success : function(data){
-			console.log('data', data);
-		}
-	});
+	global.UI_year_select.init();
+	global.document_viewer.init();
+	require('./UI/btn_load_papers');
+	require('./UI/btn_train_topics');
 });
