@@ -16,7 +16,7 @@
     "mysql": "^2.13.0",
     "path": "*"
   },
-  "scripts":{
+  "scripts": {
     "build-js": "browserify browser/js/main.js | uglifyjs -mc > public/bundle.js",
     "build": "npm run build-js",
     "watch-js": "watchify browser/js/main.js -o public/bundle.js -dv",
