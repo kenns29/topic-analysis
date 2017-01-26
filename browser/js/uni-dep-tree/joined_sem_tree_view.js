@@ -1,4 +1,4 @@
-var d3 = require('./load_d3');
+var d3 = require('../load_d3');
 var $ = require('jquery');
 module.exports = function joined_sem_tree_view(_){
 	var data = _;

@@ -1,5 +1,5 @@
 var uni_dep_tree = require('./uni-dep-tree');
-var d3 = require('./load_d3');
+var d3 = require('../load_d3');
 module.exports = function uni_dep_tree_collection(_){
 	var data = _;
 	var uni_dep_collection = [];

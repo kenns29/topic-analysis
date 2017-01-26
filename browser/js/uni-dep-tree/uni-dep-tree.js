@@ -1,4 +1,4 @@
-var d3 = require('./load_d3');
+var d3 = require('../load_d3');
 module.exports = function uni_dep_tree(input){
 	var data = input;
 	var sem_roles = [];
