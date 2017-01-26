@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var mysql = require('mysql2');
 var host = 'vaderserver0.cidse.dhcp.asu.edu';
 var user = 'hong';
 var password = 'openpassword';

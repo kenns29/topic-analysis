@@ -27,5 +27,8 @@ app.listen(10082, function () {
   console.log('Example app listening on port 10082!');
 });
 
-
+var op = require('./db_mongo/get_docs');
+op().then(function(){
+  console.log('op finish');
+});
 module.exports = app;

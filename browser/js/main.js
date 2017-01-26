@@ -8,13 +8,11 @@ $(document).ready(function(){
 
 $('#test').click(function(){
 	$.ajax({
-		url : service_url + '/getdocs',
-		data : {
-
-		},
+		url : service_url + '/traintopicmodel',
+		data : {},
 		dataType: 'json',
 		success : function(data){
-
+			console.log('data', data);
 		}
 	});
 });

@@ -3,18 +3,21 @@
   "version": "0.0.1",
   "description": "universal dependencies",
   "dependencies": {
+    "assert": "^1.4.1",
     "body-parser": "*",
     "bootstrap": "^3.3.7",
+    "co": "^4.6.0",
     "d3": "^4.4.4",
     "ejs": "*",
     "express": "*",
     "java": "*",
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
-    "mongodb": "^2.2.9",
+    "mongodb": "^2.2.22",
     "multer": "*",
-    "mysql": "^2.13.0",
-    "path": "*"
+    "mysql2": "^1.1.2",
+    "path": "*",
+    "q": "^1.4.1"
   },
   "scripts": {
     "build-js": "browserify browser/js/main.js | uglifyjs -mc > public/bundle.js",
