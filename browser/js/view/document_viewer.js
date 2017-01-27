@@ -4,7 +4,7 @@ var container = '#document-viewer-div';
 var data;
 var width;
 function init(){
-  width = $(container).outerWidth(true);
+  width = $(container).width();
   d3.select(container).attr('class', 'document-viewer');
   return ret;
 }
@@ -21,7 +21,7 @@ function update(){
   .html(function(d){return d.year;});
   div_enter.append('div').attr('class', 'title')
   .style('float', 'left')
-  .style('width', (400) + 'px')
+  .style('width', (width - 100) + 'px')
   .html(function(d){return d.title;});
   div_sel.exit().remove();
   div_sel.select('.year').html(function(d){return d.year;});
