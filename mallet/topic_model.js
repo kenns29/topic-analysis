@@ -4,7 +4,7 @@ var TopicModel = 'nlp.edu.asu.vader.mallet.model.TopicModel';
 var topicModel = java.newInstanceSync(TopicModel);
 topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
 topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
-topicModel.setModelNumThreadsSync(500);
+topicModel.setModelNumThreadsSync(2000);
 function uri(d, i){
   return d.id;
 }

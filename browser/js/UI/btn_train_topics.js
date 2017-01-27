@@ -1,11 +1,7 @@
 var $ = require('jquery');
+var train_topics = require('../load/train_topics');
 module.exports = $('#btn-train-topics').click(function(){
-  $.ajax({
-    url : service_url + '/topictrainer',
-    data : {},
-    dataType: 'json',
-    success : function(data){
-      console.log('data', data);
-    }
+  train_topics().then(function(){
+    console.log('topic training finished');
   });
 });
