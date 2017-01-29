@@ -1,4 +1,4 @@
-var d3 = require('d3');
+var d3 = require('../load_d3');
 var $ = require('jquery');
 var container = '#topic-viewer-div';
 var svg, width, height;
