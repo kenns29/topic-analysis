@@ -9,5 +9,7 @@ function init(){
   .enter().append('option').html(function(d){return d;});
   d3.select(to_select).selectAll('option').data(d3.range(start_year, end_year+1, 1))
   .enter().append('option').html(function(d){return d;});
+  return this;
 }
+module.exports = init();
 module.exports.init = init;
