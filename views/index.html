@@ -16,8 +16,15 @@
         <select id = "to-year"></select>
       </div>
     </div>
-    <button id = "btn-train-topics" class="btn btn-default">Train Model</button>
-    <button id = "btn-load-papers" class="btn btn-default">Load Papers</button>
+    <div>
+      <button id = "btn-train-topics" class="btn btn-default">Train Model</button>
+      <button id = "btn-load-papers" class="btn btn-default">Load Papers</button>
+      <button id = "btn-load-panels" class="btn btn-default">Load Panels</button>
+    </div>
+    <div id = "topic-trainer-option-div">
+      <label>Number of Topics</label><input type="text"/ id="input_num_topics" value = "10">
+      <label>Number of Iterations</label><input type="text" id = "input_num_iterations" value = "500">
+    </div>
   </div>
   <div id = "center-view">
     <div id = "topic-viewer-div"></div>

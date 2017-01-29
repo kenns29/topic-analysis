@@ -45,6 +45,14 @@
   overflow-y: auto;
   float:left;
 }
+
+#left-side-bar #topic-trainer-option-div{
+  position: relative;
+  padding-top: 10px;
+}
+#left-side-bar #topic-trainer-option-div input{
+  width:50px;
+}
 /*
 *	Utilities
 */

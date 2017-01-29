@@ -3,6 +3,9 @@ var $ = require('jquery');
 var container = '#document-viewer-div';
 var data;
 var width;
+const PAPER = 1;
+const PANEL = 2;
+var data_type = PAPER;
 function init(){
   width = $(container).width();
   d3.select(container).attr('class', 'document-viewer');
@@ -33,5 +36,16 @@ function update(){
 var ret = {};
 ret.init = init;
 ret.update = update;
-ret.data = function(_){return arguments.length > 0 ?(data =_, ret):data;};
+ret.data_type = function(_){return arguments.length > 0 ? (data_type =_, ret) : data_type;};
+ret.data = function(_){
+  if(arguments.length > 0){
+    data = _;
+    data.forEach(function(d){
+      d.id = Number(data_type + '' + d.id);
+    });
+    return ret;
+  } else return data;
+};
+ret.PANEL = PANEL;
+ret.PAPER = PAPER;
 module.exports = init();
