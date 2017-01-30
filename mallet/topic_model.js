@@ -25,6 +25,15 @@ function build(data){
   topicModel.buildModelSync(uri_array, doc_array);
   return ret;
 }
+function get_topics_with_id(_){
+  var num_words = 10;
+  if(arguments.length > 0) num_words = arguments[0];
+  var json = get_topics(num_words);
+  return json.map(function(d, i){return {
+    id : i,
+    topic : d
+  };});
+}
 function get_topics(_){
   var num_words = 10;
   if(arguments.length > 0) num_words = arguments[0];
@@ -79,4 +88,5 @@ ret.num_topics = function(_){
 ret.num_iterations = function(_){return arguments.length > 0 ? (topicModel.setModelNumIterationSync(_), ret): topicModel.getModelNumIterationSync();};
 ret.get_topic = get_topic;
 ret.get_topics = get_topics;
+ret.get_topics_with_id = get_topics_with_id;
 module.exports = ret;

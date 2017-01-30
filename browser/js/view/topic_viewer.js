@@ -7,6 +7,7 @@ var margin = {top:10, left:10,bottom:10,right:10};
 var data;
 var text_x_space = 3;
 var text_y_space = 3;
+var topic_index_to_topic = [];
 function init(){
   width = $(container).width(), height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
@@ -14,13 +15,14 @@ function init(){
   return ret;
 }
 function update(){
+  order_topics();
   var font_scale = font_scale_factory();
-  var topic_sel = graph_g.selectAll('.topic').data(data);
+  var topic_sel = graph_g.selectAll('.topic').data(data, function(d){return d.index;});
   var topic_enter = topic_sel.enter().append('g').attr('class', 'topic');
   topic_sel.exit().remove();
   var topic_update = graph_g.selectAll('.topic');
   topic_update.each(function(d){d.height = 0; d.y = 0;});
-  var token_sel = topic_update.selectAll('.token').data(function(d){return d;}, function(d){return d.id;});
+  var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.id;});
   var token_enter = token_sel.enter().append('g').attr('class', 'token');
   token_enter.append('text');
   token_sel.exit().remove();
@@ -37,7 +39,7 @@ function update(){
   });
   topic_update.each(function(d, i){
     if(i > 0){
-      let pre_data = topic_update.data()[i-1];
+      let pre_data = topic_index_to_topic[d.index - 1];
       let pre_y = pre_data.y, pre_height = pre_data.height;
       d.y += pre_y + text_y_space + pre_height;
     }
@@ -46,7 +48,7 @@ function update(){
   token_update.each(function(d, i){
     d.width = d3.select(this).select('text').node().getComputedTextLength();
     if(i > 0){
-      let pre_data = d3.select(this.parentNode).data()[0][i-1];
+      let pre_data = d3.select(this.parentNode).data()[0].topic[i-1];
       let pre_x = pre_data.x, pre_width = pre_data.width;
       d.x += pre_x + text_x_space + pre_width;
     }
@@ -62,13 +64,24 @@ function update(){
 }
 function font_scale_factory(){
   var extent = [Infinity, -Infinity];
-  data.forEach(function(topic, i){
-    topic.forEach(function(token, i){
+  data.forEach(function(t){
+    t.topic.forEach(function(token){
       if(extent[0] > token.weight) extent[0] = token.weight;
       if(extent[1] < token.weight) extent[1] = token.weight;
     });
   });
   return d3.scaleSqrt().domain(extent).range([10,50]);
+}
+function order_topics(){
+  data.sort(function(a, b){
+    return b.topic[0].weight - a.topic[0].weight;
+  });
+  topic_index_to_topic = Array(data.length);
+  data.forEach(function(d, i){
+    d.index = i;
+    topic_index_to_topic[i] = d;
+  });
+  return data;
 }
 var ret = {};
 ret.init = init;
