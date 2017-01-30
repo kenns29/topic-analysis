@@ -7,7 +7,8 @@ var margin = {top:10, left:10,bottom:10,right:10};
 var data;
 var text_x_space = 3;
 var text_y_space = 3;
-var topic_index_to_topic = [];
+var index_to_topic = [];
+var index_to_token = [];
 function init(){
   width = $(container).width(), height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
@@ -22,7 +23,7 @@ function update(){
   topic_sel.exit().remove();
   var topic_update = graph_g.selectAll('.topic');
   topic_update.each(function(d){d.height = 0; d.y = 0;});
-  var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.id;});
+  var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.index;});
   var token_enter = token_sel.enter().append('g').attr('class', 'token');
   token_enter.append('text');
   token_sel.exit().remove();
@@ -37,9 +38,9 @@ function update(){
   .attr('text-anchor', 'start').attr('dominant-baseline', 'middle').text(function(d){
     return d.token;
   });
-  topic_update.each(function(d, i){
-    if(i > 0){
-      let pre_data = topic_index_to_topic[d.index - 1];
+  topic_update.each(function(d){
+    if(d.index > 0){
+      let pre_data = index_to_topic[d.index - 1];
       let pre_y = pre_data.y, pre_height = pre_data.height;
       d.y += pre_y + text_y_space + pre_height;
     }
@@ -47,16 +48,17 @@ function update(){
   token_update.each(function(d){d.x = 0;});
   token_update.each(function(d, i){
     d.width = d3.select(this).select('text').node().getComputedTextLength();
-    if(i > 0){
-      let pre_data = d3.select(this.parentNode).data()[0].topic[i-1];
+    if(d.index > 0){
+      let topic_data = d3.select(this.parentNode).data()[0];
+      let pre_data = index_to_token[topic_data.index][d.index - 1];
       let pre_x = pre_data.x, pre_width = pre_data.width;
       d.x += pre_x + text_x_space + pre_width;
     }
   });
-  topic_update.attr('transform', function(d, i){
+  topic_update.transition().duration(500).attr('transform', function(d){
     return 'translate(' + [0, d.y] +')';
   });
-  token_update.attr('transform', function(d, i){
+  token_update.transition().duration(500).attr('transform', function(d){
     var topic_height = d3.select(this.parentNode).data()[0].height;
     return 'translate(' + [d.x, topic_height/2] +')';
   });
@@ -76,13 +78,26 @@ function order_topics(){
   data.sort(function(a, b){
     return b.topic[0].weight - a.topic[0].weight;
   });
-  topic_index_to_topic = Array(data.length);
+  index_to_topic = Array(data.length);
+  index_to_token = [];
   data.forEach(function(d, i){
     d.index = i;
-    topic_index_to_topic[i] = d;
+    index_to_topic[i] = d;
+    order_tokens(d);
   });
   return data;
 }
+function order_tokens(t){
+  t.topic.sort(function(a, b){
+    return b.weight - a.weight;
+  });
+  if(!index_to_token[t.index]) index_to_token[t.index] = [];
+  t.topic.forEach(function(token, i){
+    token.index = i;
+    index_to_token[t.index][i] = token;
+  });
+}
+
 var ret = {};
 ret.init = init;
 ret.update = update;
