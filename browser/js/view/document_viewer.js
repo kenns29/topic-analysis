@@ -6,14 +6,17 @@ var width;
 const PAPER = 1;
 const PANEL = 2;
 var data_type = PAPER;
+var loading;
 function init(){
   width = $(container).width();
   d3.select(container).attr('class', 'document-viewer');
+  loading = d3.select(container).select('.loading').node();
   return ret;
 }
 function update(){
-  var div_sel =  d3.select(container).selectAll('div').data(data, function(d){return d.id;});
+  var div_sel =  d3.select(container).selectAll('.document').data(data, function(d){return d.id;});
   var div_enter = div_sel.enter().append('div')
+  .attr('class', 'document')
   .style('margin', '0px 0px 0px 0px')
   .style('padding', '0px 0px 0px 0px');
   div_enter.append('div').attr('class', 'year')
@@ -48,4 +51,5 @@ ret.data = function(_){
 };
 ret.PANEL = PANEL;
 ret.PAPER = PAPER;
+ret.loading = function(){return loading;};
 module.exports = init();

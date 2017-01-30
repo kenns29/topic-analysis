@@ -11,6 +11,9 @@ module.exports = $('#btn-train-topics').click(function(){
   .load().then(function(data){
     $(loading).hide();
     topic_viewer.data(data).update();
+  }).catch(function(err){
+    console.log(err);
+    $(loading).hide();
   });
 });
 
