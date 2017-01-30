@@ -24,4 +24,5 @@ ret.callback = function(_){return arguments.length > 0 ? (callback=_,ret):callba
 ret.data = function(){return data;};
 ret.num_iterations = function(_){return arguments.length > 0 ? (num_iterations=_,ret):num_iterations;};
 ret.num_topics = function(_){return arguments.length > 0 ? (num_topics=_,ret):num_topics;};
+ret.load = load;
 module.exports = ret;

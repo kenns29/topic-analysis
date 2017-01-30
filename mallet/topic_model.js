@@ -76,7 +76,7 @@ ret.num_topics = function(_){
     topicModel.setNumTopicsSync(_);
   } else return topicModel.getNumTopicsSync();
 };
-ret.num_iteration = function(_){return arguments.length > 0 ? (topicModel.setModelNumIterationSync(_), ret): topicModel.getModelNumIterationSync();};
+ret.num_iterations = function(_){return arguments.length > 0 ? (topicModel.setModelNumIterationSync(_), ret): topicModel.getModelNumIterationSync();};
 ret.get_topic = get_topic;
 ret.get_topics = get_topics;
 module.exports = ret;
