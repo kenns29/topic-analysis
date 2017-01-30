@@ -9,6 +9,7 @@ var text_x_space = 3;
 var text_y_space = 3;
 var index_to_topic = [];
 var index_to_token = [];
+var loading = d3.select(container).select('.loading').node();
 function init(){
   width = $(container).width(), height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
@@ -102,4 +103,5 @@ var ret = {};
 ret.init = init;
 ret.update = update;
 ret.data = function(_){return arguments.length > 0 ? (data = _, ret) : data;};
+ret.loading = function(){return loading;};
 module.exports = init();
