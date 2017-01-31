@@ -6,9 +6,10 @@ var from_select = '#from-year';
 var to_select = '#to-year';
 function init(){
   d3.select(from_select).selectAll('option').data(d3.range(start_year, end_year+1, 1))
-  .enter().append('option').html(function(d){return d;});
-  d3.select(to_select).selectAll('option').data(d3.range(start_year, end_year+1, 1))
-  .enter().append('option').html(function(d){return d;});
+  .enter().append('option').attr('value', function(d){return d;})
+  .html(function(d){return d;});
+  // d3.select(to_select).selectAll('option').data(d3.range(start_year, end_year+1, 1))
+  // .enter().append('option').html(function(d){return d;});
   return this;
 }
 module.exports = init();

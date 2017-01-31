@@ -3,7 +3,7 @@ var d3 = require('../load_d3');
 var load_topic_model_stats = require('../load/load_topic_model_stats');
 var load_topic_model = require('../load/load_topic_model');
 var container = '#topic-model-display-div';
-var data;
+var data = [];
 var table;
 function init(){
   table = d3.select(container).append('table')
