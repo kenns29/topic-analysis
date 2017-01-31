@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var d3 = require('../load_d3');
 var load_topic_model_stats = require('../load/load_topic_model_stats');
+var load_topic_model = require('../load/load_topic_model');
 var container = '#topic-model-display-div';
 var data;
 var table;
@@ -31,6 +32,9 @@ function update(){
       return g.name !== d.name;
     }).select('.radio-td').select('.radio').select('input').each(function(){
       this.checked = false;
+    });
+    load_topic_model.model_name(d.name).load().then(function(topics){
+      global.topic_viewer.data(topics).update();
     });
   });
   return ret;
