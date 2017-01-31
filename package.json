@@ -11,6 +11,7 @@
     "d3": "^4.4.4",
     "ejs": "*",
     "express": "*",
+    "fs-promise": "^1.0.0",
     "intercept-stdout": "^0.1.2",
     "java": "*",
     "jquery": "^3.1.1",

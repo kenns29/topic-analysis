@@ -6,7 +6,7 @@ module.exports = function(req, res){
   get_papers().then(function(data){
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
     topic_model.build(data);
-    topic_model.serialize('model-1988');
+    topic_model.serialize('model-1989');
     var json = topic_model.get_topics_with_id(10);
     res.json(json);
   }).catch(function(err){

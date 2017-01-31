@@ -10,7 +10,7 @@ function deserialize(name){
   var serializer = java.newInstanceSync('nlp.edu.asu.vader.utils.Serializer');
   serializer.setUseResourcesSync(false);
   serializer.setDirSync(dir);
-  return serialize.deserialize(name);
+  return serializer.deserializeSync(name);
 }
 module.exports.serialize = serialize;
 module.exports.deserialize = deserialize;

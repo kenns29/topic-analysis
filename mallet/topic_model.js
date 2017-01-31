@@ -7,8 +7,11 @@ topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
 topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
 topicModel.setModelNumIterationSync(250);
 topicModel.setNumTopicsSync(10);
+
+var id2index = [];
+var index2id = [];
 function uri(d, i){
-  return d.id;
+  return d.id.toString();
 }
 function doc(d, i){
   return d.title;
@@ -23,7 +26,40 @@ function build(data){
     doc_array.addSync(doc_item);
   });
   topicModel.buildModelSync(uri_array, doc_array);
+  topicModel.makeNameIndexHashSync();
+  get_id_index_map();
   return ret;
+}
+function load(name){
+  deserialize(name);
+  topicModel.makeNameIndexHashSync();
+  get_id_index_map();
+  return ret;
+}
+function get_id_index_map(){
+  id2index = [];
+  index2id = [];
+  var hashMap = topicModel.getNameIndexHashSync();
+  var ids = hashMap.keySetSync();
+  var iter = ids.iteratorSync();
+  while (iter.hasNextSync()) {
+    let id = iter.nextSync();
+    let index = hashMap.getSync(id);
+    id2index[id] = index;
+    index2id[index] = id;
+  }
+}
+function get_id_topic_distribution(){
+  var id2distr = [];
+  var model = topicModel.getModelSync();
+  var topicAssignments = model.getDataSync();
+  var size = topicAssignments.sizeSync();
+  for(let i = 0; i < size; i++){
+    let instance = topicAssignments.getSync(i);
+    let distr = model.getTopicProbabilitiesSync(i);
+    id2distr[index2id[i]] = distr;
+  }
+  return id2distr;
 }
 function get_topics_with_id(_){
   var num_words = 10;
@@ -89,4 +125,5 @@ ret.num_iterations = function(_){return arguments.length > 0 ? (topicModel.setMo
 ret.get_topic = get_topic;
 ret.get_topics = get_topics;
 ret.get_topics_with_id = get_topics_with_id;
+ret.load = load;
 module.exports = ret;
