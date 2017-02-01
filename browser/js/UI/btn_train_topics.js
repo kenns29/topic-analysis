@@ -1,5 +1,5 @@
 var $ = require('jquery');
-var train_topics = require('../load/train_topics');
+var TrainTopics = require('../load/train_topics');
 var topic_viewer = global.topic_viewer;
 module.exports = $('#btn-train-topics').click(function(){
   var num_topics = Number($('#input_num_topics').val());
@@ -7,7 +7,7 @@ module.exports = $('#btn-train-topics').click(function(){
   var name = 'model-' + $('#from-year').val();
   var loading = topic_viewer.loading();
   $(loading).show();
-  train_topics.num_topics(num_topics)
+  TrainTopics().num_topics(num_topics)
   .num_iterations(num_iterations)
   .model_name(name)
   .load().then(function(data){

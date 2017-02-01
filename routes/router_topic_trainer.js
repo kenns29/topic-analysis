@@ -1,6 +1,6 @@
 var GetPapers = require('../db_mongo/get_papers');
 var TopicModel = require('../mallet/topic_model');
-module.exports = function(req, res){
+module.exports = exports = function(req, res){
   var name = req.query.name;
   var num_topics = Number(req.query.num_topics);
   var num_iterations = Number(req.query.num_iterations);
