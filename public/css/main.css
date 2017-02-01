@@ -58,6 +58,14 @@
   padding-top:10px;
   width:100%;
 }
+#left-side-bar #topic-model-display-loading{
+  position:relative;
+  padding-top: 10px;
+  padding-bottom : 5px;
+  width : 100%;
+  height : auto;
+  display:none;
+}
 .loading {
   position: absolute;
   top: 0px;

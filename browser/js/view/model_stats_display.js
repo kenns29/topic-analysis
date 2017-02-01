@@ -33,7 +33,9 @@ function update(){
     }).select('.radio-td').select('.radio').select('input').each(function(){
       this.checked = false;
     });
+    $(global.topic_viewer.loading()).show();
     LoadTopicModel().model_name(d.name).load().then(function(topics){
+      $(global.topic_viewer.loading()).hide();
       global.topic_viewer.data(topics).update();
     });
   });

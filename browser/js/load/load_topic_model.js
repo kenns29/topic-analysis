@@ -4,7 +4,6 @@ module.exports = exports = function(){
   var model_name;
   function callback(data){}
   function load(){
-    console.log('name', name);
     var deferred = $.ajax({
       url : service_url + '/loadtopicmodel',
       data : {name : model_name},
