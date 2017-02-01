@@ -1,9 +1,10 @@
 var fsp = require('fs-promise');
+var TopicModel = require('../mallet/topic_model');
 module.exports = function(req, res){
   fsp.readdir('./models').then(function(files){
     var model_stats = [];
     files.forEach(function(file){
-      var topic_model = require('../mallet/topic_model');
+      var topic_model = TopicModel();
       topic_model.load(file);
       model_stats.push({
         name : file,
