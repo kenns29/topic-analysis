@@ -25,17 +25,42 @@ function update(){
   .style('width', '50px')
   .style('clear', 'both')
   .html(function(d){return d.year;});
-  div_enter.append('div').attr('class', 'title')
+  var div_main_enter = div_enter.append('div').attr('class', 'main')
+  .style('position', 'relative')
   .style('float', 'left')
-  .style('width', (width - 50 - 30) + 'px')
+  .style('width', (width - 50 - 30) + 'px');
+  div_main_enter.append('div').attr('class', 'title').style('width', '100%')
   .html(function(d){return d.title;});
+  div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
   div_sel.exit().remove();
   var div_update = d3.select(container).selectAll('div');
   div_update.select('.year').html(function(d){return d.year;});
-  div_update.select('.title').html(function(d){return d.title;});
+  div_update.select('.main').select('.title').html(function(d){return d.title;});
+  div_update.select('.main').select('.distr').each(update_topic_distr);
   return ret;
 }
-
+function update_topic_distr(d, i){
+  var sel = d3.select(this);
+  var dat = d;
+  var topic_color = require('./topic_color');
+  var topic_weight_scale = d3.scaleLinear().domain([0, 1]).range([0, width - 50 - 30]);
+  if(dat.topic_distr){
+    let topic_array = [];
+    for(let i in dat.topic_distr){
+      if(dat.topic_distr.hasOwnProperty(i)){
+        topic_array.push({id:i,weight:dat.topic_distr[i]});
+      }
+    }
+    var topic_sel = sel.selectAll('.topic').data(topic_array, function(d){return d.id;});
+    var topic_enter = topic_sel.enter().append('div').attr('class', 'topic');
+    topic_sel.exit().remove();
+    var topic_update = sel.selectAll('.topic');
+    topic_update.sort(function(a, b){return b.weight - a.weight;});
+    topic_update.style('display', 'inline-block').style('vertical-align', 'top')
+    .style('width', function(d){return topic_weight_scale(d.weight) + 'px';})
+    .style('height', '10px').style('background-color', function(d){return topic_color(d.id);});
+  }
+}
 var ret = {};
 ret.init = init;
 ret.update = update;

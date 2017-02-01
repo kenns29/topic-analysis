@@ -7,7 +7,6 @@ module.exports = $('#btn-load-papers').click(function(){
   $(loading).show();
   LoadPapers().model_name(model_name).load().then(function(data){
     $(loading).hide();
-    console.log('data', data);
     view.data_type(view.PAPER).data(data).update();
   })
   .catch(function(err){

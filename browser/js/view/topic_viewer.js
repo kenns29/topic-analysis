@@ -3,6 +3,8 @@ var $ = require('jquery');
 var container = '#topic-viewer-div';
 var svg, width, height;
 var graph_g, W, H;
+var topics_g;
+var label_g;
 var margin = {top:10, left:10,bottom:10,right:10};
 var data;
 var text_x_space = 3;
@@ -14,15 +16,42 @@ function init(){
   width = $(container).width(), height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
   graph_g = svg.append('g').attr('class', 'topic-viewer-g').attr('transform', 'translate(' + [margin.left, margin.top]+')');
+  topics_g = graph_g.append('g').attr('class', 'topics-g').attr('transform', 'translate('+ [50, 0] +')')
+  label_g = graph_g.append('g').attr('class', 'labels-g');
   return ret;
 }
 function update(){
   order_topics();
+  update_topics();
+  update_labels();
+  return ret;
+}
+function update_labels(){
+  var topic_color = require('./topic_color');
+  var label_sel = label_g.selectAll('.label').data(data, function(d){return d.index;});
+  var label_enter = label_sel.enter().append('g').attr('class', 'label');
+  label_enter.append('rect').attr('fill', function(d){
+    return topic_color(d.id);
+  });
+  label_sel.exit().remove();
+  var label_update = label_g.selectAll('.label');
+  label_update.transition().duration(500).attr('transform', function(d){
+    return 'translate(' + [0, d.y + d.height/2] + ')'
+  });
+  label_update.select('rect').each(function(d, i){
+    var rect_h = d.height > 20 ? 20 : d.height,
+        rect_w = 40;
+    d3.select(this).attr('fill', function(d){return topic_color(d.id);});
+    d3.select(this).transition().duration(500).attr('width', rect_w).attr('height', rect_h)
+    .attr('y', -rect_h/2);
+  });
+}
+function update_topics(){
   var font_scale = font_scale_factory();
-  var topic_sel = graph_g.selectAll('.topic').data(data, function(d){return d.index;});
+  var topic_sel = topics_g.selectAll('.topic').data(data, function(d){return d.index;});
   var topic_enter = topic_sel.enter().append('g').attr('class', 'topic');
   topic_sel.exit().remove();
-  var topic_update = graph_g.selectAll('.topic');
+  var topic_update = topics_g.selectAll('.topic');
   topic_update.each(function(d){d.height = 0; d.y = 0;});
   var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.index;});
   var token_enter = token_sel.enter().append('g').attr('class', 'token');
