@@ -56,6 +56,27 @@ function update_labels(){
   }).on('mouseout', function(){
     tooltip.hide();
   });
+  label_update.on('click', function(d){
+    var position = null;
+    var documents = global.document_viewer.documents();
+    var nodes = documents._groups[0];
+    var top = 0;
+    console.log('d.id', d.id);
+    if(nodes){
+      for(let i = 0; i < nodes.length; i++){
+        let node = nodes[i];
+        let dat = node.__data__;
+        if(Number(dat.topic) == Number(d.id)){
+          let position = $(node).offset();
+          console.log('position', position);
+          top = position.top;
+          break;
+        }
+      }
+    }
+    console.log('top', top);
+    console.log('documents', documents);
+  });
   return Promise.resolve();
 }
 function update_topics(){

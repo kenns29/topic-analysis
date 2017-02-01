@@ -1,6 +1,6 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
-module.exports = exports = function tooltip_factory(_container){
+module.exports = exports = function(_container){
 	var tooltip;
 	var container;
 	if(_container !== undefined){

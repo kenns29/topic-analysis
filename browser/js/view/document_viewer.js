@@ -132,4 +132,5 @@ ret.PANEL = PANEL;
 ret.PAPER = PAPER;
 ret.loading = function(){return loading;};
 ret.load = load;
+ret.documents = function(){return d3.select(container).selectAll('.document');};
 module.exports = init();
