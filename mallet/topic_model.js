@@ -2,14 +2,19 @@ var java = require('../java/java_init');
 var dictionary = require('./dictionary');
 var serializer = require('../nlptoolkit/serializer');
 var TopicModel = 'nlp.edu.asu.vader.mallet.model.TopicModel';
-var topicModel = java.newInstanceSync(TopicModel);
-topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
-topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
-topicModel.setModelNumIterationSync(250);
-topicModel.setNumTopicsSync(10);
-
+var topicModel;
+console.log('required topic model');
 var id2index = [];
 var index2id = [];
+function init(){
+  console.log('init topic model');
+  topicModel = java.newInstanceSync(TopicModel);
+  topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
+  topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
+  topicModel.setModelNumIterationSync(250);
+  topicModel.setNumTopicsSync(10);
+  return ret;
+}
 function uri(d, i){
   return d.id.toString();
 }
@@ -25,13 +30,19 @@ function build(data){
     uri_array.addSync(uri_item);
     doc_array.addSync(doc_item);
   });
+  console.log('num_topics', topicModel.getNumTopicsSync());
+  console.log('num_iterations', topicModel.getModelNumIterationSync());
+  console.log('num_threads', topicModel.getModelNumThreadsSync());
   topicModel.buildModelSync(uri_array, doc_array);
   topicModel.makeNameIndexHashSync();
+
   get_id_index_map();
   return ret;
 }
 function load(name){
   deserialize(name);
+  topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
+  topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
   topicModel.makeNameIndexHashSync();
   get_id_index_map();
   return ret;
@@ -111,6 +122,7 @@ function deserialize(name){
   return ret;
 }
 function ret(){return build();}
+ret.topicModel = function(){return topicModel;};
 ret.build = build;
 ret.uri = function(_){return arguments.length > 0 ? (uri =_, ret):uri;};
 ret.doc = function(_){return arguments.length > 0 ? (doc =_, doc):doc;};
@@ -126,4 +138,5 @@ ret.get_topic = get_topic;
 ret.get_topics = get_topics;
 ret.get_topics_with_id = get_topics_with_id;
 ret.load = load;
-module.exports = ret;
+ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
+module.exports = init();
