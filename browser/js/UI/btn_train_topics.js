@@ -20,8 +20,7 @@ module.exports = $('#btn-train-topics').click(function(){
   }).catch(function(err){
     console.log(err);
     loading.css('display', 'none');
-  })
-  .then(function(data){
+  }).then(function(data){
     loading.css('display', 'none');
     global.model_stats_display.data(data).update();
   }).catch(function(err){

@@ -17,6 +17,7 @@
     "jquery-ui": "^1.12.1",
     "bootstrap": "^3.3.7",
     "awesome-bootstrap-checkbox": "^0.3.7",
-    "babel-standalone": "^6.19.0"
+    "babel-standalone": "^6.19.0",
+    "font-awesome": "^4.7.0"
   }
 }

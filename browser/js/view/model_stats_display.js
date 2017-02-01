@@ -2,6 +2,7 @@ var $ = require('jquery');
 var d3 = require('../load_d3');
 var LoadTopicModelStats = require('../load/load_topic_model_stats');
 var LoadTopicModel = require('../load/load_topic_model');
+var DeleteTopicModel = require('../load/delete_topic_model');
 var container = '#topic-model-display-div';
 var data = [];
 var table;
@@ -18,11 +19,14 @@ function update(){
   var model_sel = table.selectAll('.model').data(data, function(d){return d.name;});
   var model_enter = model_sel.enter().append('tr').attr('class', 'model');
   model_enter.append('td').attr('class', 'name').style('width', '60%');
-  model_enter.append('td').attr('class', 'num-topics').style('width', '30%');
+  model_enter.append('td').attr('class', 'num-topics').style('width', '20%');
   model_enter.append('td').attr('class', 'radio-td').style('width', '10%')
   .append('div').attr('class', 'radio').style('text-align', 'center')
   .append('input').attr('type', 'radio').style('position', 'relative')
   .style('margin-left', '0px');
+  model_enter.append('td').attr('class', 'trash').style('width', '10%')
+  .append('div').style('text-align', 'center')
+  .append('i').attr('class', 'fa fa-trash-o fa-cog fa-1x').style('cursor', 'pointer');
   model_sel.exit().remove();
   var model_update = table.selectAll('.model');
   model_update.select('.name').html(function(d){return d.name;});
@@ -37,6 +41,16 @@ function update(){
     LoadTopicModel().model_name(d.name).load().then(function(topics){
       $(global.topic_viewer.loading()).hide();
       global.topic_viewer.data(topics).update();
+    });
+  });
+  model_update.select('.trash').select('i').on('click', function(d, i){
+    DeleteTopicModel().model_name(d.name).load().then(function(status){
+      if(status === 'success'){
+        data.splice(i, 1);
+      } else alert('did not delete the model successfully.');
+    }).catch(function(err){
+      console.log(err);
+      alert('did not delete the model successfully');
     });
   });
   return ret;
