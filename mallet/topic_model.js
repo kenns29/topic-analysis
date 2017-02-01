@@ -31,7 +31,6 @@ module.exports = function(){
     });
     topicModel.buildModelSync(uri_array, doc_array);
     topicModel.makeNameIndexHashSync();
-
     get_id_index_map();
     return ret;
   }
@@ -135,5 +134,6 @@ module.exports = function(){
   ret.get_topics_with_id = get_topics_with_id;
   ret.load = load;
   ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
+  ret.id2distr = function(_){return get_id_topic_distribution();};
   return init();
 };

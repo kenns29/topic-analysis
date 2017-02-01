@@ -6,6 +6,7 @@ var DeleteTopicModel = require('../load/delete_topic_model');
 var container = '#topic-model-display-div';
 var data = [];
 var table;
+var selected_model = {};
 function init(){
   table = d3.select(container).append('table')
   .attr('class', 'table')
@@ -32,6 +33,7 @@ function update(){
   model_update.select('.name').html(function(d){return d.name;});
   model_update.select('.num-topics').html(function(d){return d.num_topics;});
   model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
+    selected_model = d;
     model_update.filter(function(g){
       return g.name !== d.name;
     }).select('.radio-td').select('.radio').select('input').each(function(){
@@ -45,6 +47,7 @@ function update(){
   });
   model_update.select('.trash').select('i').on('click', function(d, i){
     DeleteTopicModel().model_name(d.name).load().then(function(status){
+      console.log('status', status);
       if(status === 'success'){
         data.splice(i, 1);
       } else alert('did not delete the model successfully.');
@@ -63,4 +66,5 @@ ret.load = load;
 ret.init = init;
 ret.update = update;
 ret.data = function(_){return arguments.length>0 ? (data =_, ret) : data;};
+ret.selected_model = function(){return selected_model;};
 module.exports = init();

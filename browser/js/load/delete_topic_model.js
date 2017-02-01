@@ -7,7 +7,7 @@ module.exports = exports = function(){
     var deferred = $.ajax({
       url : service_url + '/deletetopicmodel',
       data : {name : model_name},
-      dataType: 'json',
+      dataType: 'text',
       success : function(data){
         callback(data);
       }
