@@ -3,6 +3,8 @@ var d3 = require('../load_d3');
 var LoadTopicModelStats = require('../load/load_topic_model_stats');
 var LoadTopicModel = require('../load/load_topic_model');
 var DeleteTopicModel = require('../load/delete_topic_model');
+var LoadPapers = require('../load/load_papers');
+var DelayPromise = require('../util').DelayPromise;
 var container = '#topic-model-display-div';
 var data = [];
 var table;
@@ -42,7 +44,12 @@ function update(){
     $(global.topic_viewer.loading()).show();
     LoadTopicModel().model_name(d.name).load().then(function(topics){
       $(global.topic_viewer.loading()).hide();
-      global.topic_viewer.data(topics).update();
+      return global.topic_viewer.data(topics).update();
+    }).then(DelayPromise(global.topic_viewer.duration() + 100))
+    .then(function(){
+      return global.document_viewer.load();
+    }).then(function(data){
+      global.document_viewer.data(data).update();
     });
   });
   model_update.select('.trash').select('i').on('click', function(d, i){

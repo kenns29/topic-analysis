@@ -13,6 +13,34 @@ function init(){
   loading = d3.select(container).select('.loading').node();
   return ret;
 }
+function load(){
+  var LoadPapers = require('../load/load_papers');
+  var LoadPanels = require('../load/load_panels');
+  var model_name = global.model_stats_display.selected_model().name;
+  if(data_type === PAPER){
+    $(loading).show();
+    return LoadPapers().model_name(model_name).load().then(function(data){
+      $(loading).hide();
+      return Promise.resolve(data);
+    })
+    .catch(function(err){
+      console.log(err);
+      $(loading).hide();
+    });
+  }
+  else if(data_type === PANEL){
+    $(loading).show();
+    return LoadPanels().load().then(function(data){
+      $(loading).hide();
+      return Promise.resolve(data);
+    })
+    .catch(function(err){
+      console.log(err);
+      $(loading).hide();
+    });
+  }
+  return Promise.resove([]);
+}
 function update(){
   var div_sel =  d3.select(container).selectAll('.document').data(data, function(d){return d.id;});
   var div_enter = div_sel.enter().append('div')
@@ -77,4 +105,5 @@ ret.data = function(_){
 ret.PANEL = PANEL;
 ret.PAPER = PAPER;
 ret.loading = function(){return loading;};
+ret.load = load;
 module.exports = init();

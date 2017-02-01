@@ -12,6 +12,7 @@ var text_y_space = 3;
 var index_to_topic = [];
 var index_to_token = [];
 var loading = d3.select(container).select('.loading').node();
+var duration = 1000;
 function init(){
   width = $(container).width(), height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
@@ -35,14 +36,14 @@ function update_labels(){
   });
   label_sel.exit().remove();
   var label_update = label_g.selectAll('.label');
-  label_update.transition().duration(500).attr('transform', function(d){
+  label_update.transition().duration(duration).attr('transform', function(d){
     return 'translate(' + [0, d.y + d.height/2] + ')'
   });
   label_update.select('rect').each(function(d, i){
     var rect_h = d.height > 20 ? 20 : d.height,
         rect_w = 40;
     d3.select(this).attr('fill', function(d){return topic_color(d.id);});
-    d3.select(this).transition().duration(500).attr('width', rect_w).attr('height', rect_h)
+    d3.select(this).transition().duration(duration).attr('width', rect_w).attr('height', rect_h)
     .attr('y', -rect_h/2);
   });
 }
@@ -85,14 +86,22 @@ function update_topics(){
       d.x += pre_x + text_x_space + pre_width;
     }
   });
-  topic_update.transition().duration(500).attr('transform', function(d){
-    return 'translate(' + [0, d.y] +')';
-  });
-  token_update.transition().duration(500).attr('transform', function(d){
-    var topic_height = d3.select(this.parentNode).data()[0].height;
-    return 'translate(' + [d.x, topic_height/2] +')';
-  });
-  return ret;
+  var t1 = function(){
+    return new Promise(function(resolve, reject){
+      topic_update.transition().duration(duration).attr('transform', function(d){
+        return 'translate(' + [0, d.y] +')';
+      }).on('end', resolve);
+    });
+  };
+  var t2 = function(){
+    return new Promise(function(resolve, reject){
+      token_update.transition().duration(duration).attr('transform', function(d){
+        var topic_height = d3.select(this.parentNode).data()[0].height;
+        return 'translate(' + [d.x, topic_height/2] +')';
+      }).on('end', resolve);
+    });
+  };
+  return Promise.all([t1(), t2()]);
 }
 function font_scale_factory(){
   var extent = [Infinity, -Infinity];
@@ -133,4 +142,5 @@ ret.init = init;
 ret.update = update;
 ret.data = function(_){return arguments.length > 0 ? (data = _, ret) : data;};
 ret.loading = function(){return loading;};
+ret.duration = function(){return duration;};
 module.exports = init();
