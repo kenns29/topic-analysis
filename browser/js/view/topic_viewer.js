@@ -1,31 +1,34 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
+var Tooltip = require('./tooltip');
 var container = '#topic-viewer-div';
 var svg, width, height;
 var graph_g, W, H;
 var topics_g;
 var label_g;
 var margin = {top:10, left:10,bottom:10,right:10};
-var data;
+var data = [];
 var text_x_space = 3;
 var text_y_space = 3;
 var index_to_topic = [];
 var index_to_token = [];
 var loading = d3.select(container).select('.loading').node();
 var duration = 1000;
+var tooltip;
 function init(){
   width = $(container).width(), height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
   graph_g = svg.append('g').attr('class', 'topic-viewer-g').attr('transform', 'translate(' + [margin.left, margin.top]+')');
   topics_g = graph_g.append('g').attr('class', 'topics-g').attr('transform', 'translate('+ [50, 0] +')')
   label_g = graph_g.append('g').attr('class', 'labels-g');
+  tooltip = Tooltip().container(container).html(function(d){return d;}).init();
   return ret;
 }
 function update(){
   order_topics();
-  update_topics();
-  update_labels();
-  return ret;
+  var p1 = update_topics();
+  var p2 = update_labels();
+  return Promise.all([p1, p2]);
 }
 function update_labels(){
   var topic_color = require('./topic_color');
@@ -46,6 +49,14 @@ function update_labels(){
     d3.select(this).transition().duration(duration).attr('width', rect_w).attr('height', rect_h)
     .attr('y', -rect_h/2);
   });
+  label_update.on('mouseover', function(d){
+    tooltip.show(svg.node(), d.id);
+  }).on('mousemove', function(){
+    tooltip.move(svg.node());
+  }).on('mouseout', function(){
+    tooltip.hide();
+  });
+  return Promise.resolve();
 }
 function update_topics(){
   var font_scale = font_scale_factory();

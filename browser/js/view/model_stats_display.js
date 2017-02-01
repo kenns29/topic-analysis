@@ -45,7 +45,7 @@ function update(){
     LoadTopicModel().model_name(d.name).load().then(function(topics){
       $(global.topic_viewer.loading()).hide();
       return global.topic_viewer.data(topics).update();
-    }).then(DelayPromise(global.topic_viewer.duration() + 100))
+    }).then(DelayPromise(global.topic_viewer.duration()))
     .then(function(){
       return global.document_viewer.load();
     }).then(function(data){
@@ -54,9 +54,9 @@ function update(){
   });
   model_update.select('.trash').select('i').on('click', function(d, i){
     DeleteTopicModel().model_name(d.name).load().then(function(status){
-      console.log('status', status);
       if(status === 'success'){
         data.splice(i, 1);
+        update();
       } else alert('did not delete the model successfully.');
     }).catch(function(err){
       console.log(err);
