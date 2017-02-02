@@ -60,6 +60,7 @@ function update(){
   .style('vertical-align', 'inline-block')
   .style('width', (width - 50 - 30) + 'px');
   div_main_enter.append('div').attr('class', 'title').style('width', '100%')
+  .style('background-color', '#F8F8F8')
   .html(function(d){return d.title;});
   div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
   div_sel.exit().remove();
