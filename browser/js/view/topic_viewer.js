@@ -49,33 +49,26 @@ function update_labels(){
     d3.select(this).transition().duration(duration).attr('width', rect_w).attr('height', rect_h)
     .attr('y', -rect_h/2);
   });
-  label_update.on('mouseover', function(d){
-    tooltip.show(svg.node(), d.id);
-  }).on('mousemove', function(){
-    tooltip.move(svg.node());
-  }).on('mouseout', function(){
-    tooltip.hide();
-  });
+  label_update.on('mouseover', function(d){tooltip.show(svg.node(), d.id);})
+  .on('mousemove', function(){tooltip.move(svg.node());})
+  .on('mouseout', function(){tooltip.hide();});
   label_update.on('click', function(d){
-    var position = null;
-    var documents = global.document_viewer.documents();
-    var nodes = documents._groups[0];
+    var nodes = global.document_viewer.documents()._groups[0];
     var top = 0;
-    console.log('d.id', d.id);
+    var documents_container = global.document_viewer.container();
     if(nodes){
       for(let i = 0; i < nodes.length; i++){
         let node = nodes[i];
         let dat = node.__data__;
         if(Number(dat.topic) == Number(d.id)){
-          let position = $(node).offset();
-          console.log('position', position);
-          top = position.top;
+          top = $(node).position().top + $(documents_container).scrollTop();
           break;
         }
       }
     }
-    console.log('top', top);
-    console.log('documents', documents);
+    $(documents_container).animate({
+      scrollTop : top
+    }, 1000);
   });
   return Promise.resolve();
 }

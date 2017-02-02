@@ -49,14 +49,15 @@ function update(){
   .style('margin', '0px 0px 0px 0px')
   .style('padding', '0px 0px 0px 0px');
   div_enter.append('div').attr('class', 'year')
-  .style('float', 'left')
+  .style('display', 'inline-block')
+  .style('vertical-align', 'top')
   .style('height', 'auto')
   .style('width', '50px')
-  .style('clear', 'both')
   .html(function(d){return d.year;});
   var div_main_enter = div_enter.append('div').attr('class', 'main')
   .style('position', 'relative')
-  .style('float', 'left')
+  .style('display', 'inline-block')
+  .style('vertical-align', 'inline-block')
   .style('width', (width - 50 - 30) + 'px');
   div_main_enter.append('div').attr('class', 'title').style('width', '100%')
   .html(function(d){return d.title;});
@@ -116,6 +117,7 @@ function order_documents(){
   return data;
 }
 var ret = {};
+ret.container = function(_){return arguments.length > 0 ? (container = _, ret) : container;};
 ret.init = init;
 ret.update = update;
 ret.data_type = function(_){return arguments.length > 0 ? (data_type =_, ret) : data_type;};
