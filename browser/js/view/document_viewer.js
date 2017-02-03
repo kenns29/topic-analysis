@@ -1,6 +1,7 @@
 var d3 = require('d3');
 var $ = require('jquery');
 var topic_color = require('./topic_color');
+var util = require('../util.js');
 var container = '#document-viewer-div';
 var data = [];
 var width;
@@ -93,9 +94,15 @@ function update_title_span(d, i){
   var span_enter = span_sel.enter().append('span');
   span_sel.exit().remove();
   var span_update = d3.select(this).selectAll('span');
-  span_update.style('color', function(d){
-    if(d === -1) return 'black';
-    else return topic_color(d.topic);
+  span_update.style('background-color', function(d){
+    if(d.topic === -1) return 'white';
+    else{
+      let hex = topic_color(d.topic);
+      let rgb = {r:255, g:255, b:255};
+      try{rgb = util.hexToRgb(hex);}
+      catch(err){console.log(err);}
+      return 'rgba(' + [rgb.r, rgb.g, rgb.b, 0.3] + ')';
+    }
   });
   span_update.html(function(d){return d.span;});
 }
