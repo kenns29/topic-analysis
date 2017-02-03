@@ -1,8 +1,9 @@
 var java = require('../java/java_init');
 var dictionary = require('./dictionary');
-var serializer = require('../nlptoolkit/serializer');
+var Serializer = require('../nlptoolkit/serializer');
 var co = require('co');
 module.exports = function(){
+  var serializer = Serializer();
   var TopicModel = 'nlp.edu.asu.vader.mallet.model.TopicModel';
   var topicModel;
   var id2index = [];
