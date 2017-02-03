@@ -6,5 +6,6 @@ module.exports = exports = function(req, res){
     res.send('success');
   }).catch(function(err){
     console.log(err);
+    res.send('fail');
   });
 };
