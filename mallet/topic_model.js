@@ -31,9 +31,6 @@ module.exports = function(){
       uri_array.addSync(uri_item);
       doc_array.addSync(doc_item);
     });
-    // topicModel.buildModelSync(uri_array, doc_array);
-    // topicModel.makeNameIndexHashSync();
-    // get_id_index_map();
     return co(function*(){
       yield topicModel.buildModelPromise(uri_array, doc_array);
       yield topicModel.makeNameIndexHashPromise();

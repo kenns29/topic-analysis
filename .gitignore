@@ -2,4 +2,5 @@ node_modules/
 bower_components/
 npm-debug.log
 npm-debug.log.*
+hs_err_pid*
 public/bundle.js
