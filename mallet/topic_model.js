@@ -20,6 +20,7 @@ module.exports = function(){
   function doc(d, i){
     return d.title;
   }
+
   function build(data){
     var uri_array = java.newInstanceSync('java.util.ArrayList');
     var doc_array = java.newInstanceSync('java.util.ArrayList');
