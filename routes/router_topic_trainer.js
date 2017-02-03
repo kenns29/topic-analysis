@@ -5,10 +5,11 @@ module.exports = exports = function(req, res){
   var num_topics = Number(req.query.num_topics);
   var num_iterations = Number(req.query.num_iterations);
   var get_papers = GetPapers();
+  var topic_model = TopicModel();
   get_papers().then(function(data){
-    var topic_model = TopicModel();
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
-    topic_model.build(data);
+    return topic_model.build(data);
+  }).then(function(){
     topic_model.serialize(name);
     var json = topic_model.get_topics_with_id(10);
     res.json(json);
