@@ -69,19 +69,26 @@ module.exports = function(){
   function get_id_tokens(){
     var id2tokens = [];
     var model = topicModel.getModelSync();
+    var alphabet = model.getAlphabetSync();
     var topicAssignments = model.getDataSync();
     var size = topicAssignments.sizeSync();
     for(let i = 0; i < size; i++){
       let topicAssignment = topicAssignments.getSync(i);
       let tokenTopicAssignments = topicModel.topicAssignment2TokenTopicTopicAssignmentListSync(topicAssignment);
-      for(let j = 0; j < tokenTopicAssignments.sizeSync(); j++){
-        let token = tokenTopicAssignments.getSync(j);
-        let index = token.getIndexSync();
-        let charindex = token.getCharindexSync();
-        let topic = token.getTopicSync();
-        console.log('index', index, 'charindex', charindex, 'topic', topic);
+      let tokensLength = tokenTopicAssignments.sizeSync();
+      let tokens = Array(tokensLength);
+      for(let j = 0; j < tokensLength; j++){
+        let t = tokenTopicAssignments.getSync(j);
+        let v = tokens[j] = {};
+        v.id = t.getTokenIndexSync();
+        v.charindex = t.getCharindexSync();
+        v.topic = t.getTopicSync();
+        v.index = j;
+        v.text = alphabet.lookupObjectSync(id);
       }
+      id2tokens[index2id[i]] = tokens;
     }
+    return id2tokens;
   }
   function get_topics_with_id(_){
     var num_words = 10;
