@@ -73,7 +73,14 @@ module.exports = function(){
     var size = topicAssignments.sizeSync();
     for(let i = 0; i < size; i++){
       let topicAssignment = topicAssignments.getSync(i);
-      // let tokenTopicAssignments = 
+      let tokenTopicAssignments = topicModel.topicAssignment2TokenTopicTopicAssignmentListSync(topicAssignment);
+      for(let j = 0; j < tokenTopicAssignments.sizeSync(); j++){
+        let token = tokenTopicAssignments.getSync(j);
+        let index = token.getIndexSync();
+        let charindex = token.getCharindexSync();
+        let topic = token.getTopicSync();
+        console.log('index', index, 'charindex', charindex, 'topic', topic);
+      }
     }
   }
   function get_topics_with_id(_){
