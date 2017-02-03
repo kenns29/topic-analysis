@@ -83,11 +83,12 @@ module.exports = function(){
       for(let j = 0; j < tokensLength; j++){
         let t = tokenTopicAssignments.getSync(j);
         let v = tokens[j] = {};
+        let a;
         v.id = t.getTokenIndexSync();
-        v.charindex = t.getCharindexSync();
+        v.charindex = ((a = t.getCharindexSync()), [a[0], a[1]]);
         v.topic = t.getTopicSync();
         v.index = j;
-        v.text = alphabet.lookupObjectSync(id);
+        v.text = alphabet.lookupObjectSync(v.id);
       }
       id2tokens[index2id[i]] = tokens;
     }

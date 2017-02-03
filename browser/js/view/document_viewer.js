@@ -1,5 +1,6 @@
 var d3 = require('d3');
 var $ = require('jquery');
+var topic_color = require('./topic_color');
 var container = '#document-viewer-div';
 var data = [];
 var width;
@@ -59,22 +60,48 @@ function update(){
   .style('display', 'inline-block')
   .style('vertical-align', 'inline-block')
   .style('width', (width - 50 - 30) + 'px');
-  div_main_enter.append('div').attr('class', 'title').style('width', '100%')
-  .style('background-color', '#F8F8F8')
-  .html(function(d){return d.title;});
+  div_main_enter.append('div').attr('class', 'title').style('width', '100%').style('background-color', '#F8F8F8');
+  // .html(function(d){return d.title;});
   div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
   div_sel.exit().remove();
   var div_update = d3.select(container).selectAll('.document');
   div_update.sort(function(a, b){return a.index - b.index;});
   div_update.select('.year').html(function(d){return d.year;});
-  div_update.select('.main').select('.title').html(function(d){return d.title;});
+  // div_update.select('.main').select('.title').html(function(d){return d.title;});
+  div_update.select('.main').select('.title').each(update_title_span);
   div_update.select('.main').select('.distr').each(update_topic_distr);
   return ret;
+}
+function update_title_span(d, i){
+  var span_array = [];
+  var title = d.title;
+  if(!d.topic_tokens || d.topic_tokens.length === 0){
+    span_array.push({span : title, topic : -1});
+  } else {
+    let len = d.topic_tokens.length;
+    let pre_charindex = [0, 0];
+    for(let j = 0; j < len; j++){
+      let token = d.topic_tokens[j];
+      let charindex = token.charindex;
+      if(charindex[0] > pre_charindex[1]) span_array.push({span : title.substring(pre_charindex[1], charindex[0]), topic : -1});
+      span_array.push({span : title.substring(charindex[0], charindex[1]), topic : token.topic});
+      if(j === len - 1 && charindex[1] < len)span_array.push({span : title.substring(charindex[1], len), topic : -1});
+      pre_charindex = charindex;
+    }
+  }
+  var span_sel = d3.select(this).selectAll('span').data(span_array);
+  var span_enter = span_sel.enter().append('span');
+  span_sel.exit().remove();
+  var span_update = d3.select(this).selectAll('span');
+  span_update.style('color', function(d){
+    if(d === -1) return 'black';
+    else return topic_color(d.topic);
+  });
+  span_update.html(function(d){return d.span;});
 }
 function update_topic_distr(d, i){
   var sel = d3.select(this);
   var dat = d;
-  var topic_color = require('./topic_color');
   var topic_weight_scale = d3.scaleLinear().domain([0, 1]).range([0, width - 50 - 30]);
   if(dat.topic_distr){
     let topic_array = [];
