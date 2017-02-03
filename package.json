@@ -20,7 +20,8 @@
     "multer": "*",
     "mysql2": "^1.1.2",
     "path": "*",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "when": "^3.7.7"
   },
   "scripts": {
     "build-js": "browserify browser/js/main.js | uglifyjs -mc > public/bundle.js",
