@@ -61,11 +61,20 @@ module.exports = function(){
     var topicAssignments = model.getDataSync();
     var size = topicAssignments.sizeSync();
     for(let i = 0; i < size; i++){
-      let instance = topicAssignments.getSync(i);
       let distr = model.getTopicProbabilitiesSync(i);
       id2distr[index2id[i]] = distr;
     }
     return id2distr;
+  }
+  function get_id_tokens(){
+    var id2tokens = [];
+    var model = topicModel.getModelSync();
+    var topicAssignments = model.getDataSync();
+    var size = topicAssignments.sizeSync();
+    for(let i = 0; i < size; i++){
+      let topicAssignment = topicAssignments.getSync(i);
+      // let tokenTopicAssignments = 
+    }
   }
   function get_topics_with_id(_){
     var num_words = 10;
@@ -135,5 +144,6 @@ module.exports = function(){
   ret.load = load;
   ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
   ret.id2distr = function(_){return get_id_topic_distribution();};
+  ret.id2tokens = function(_){return get_id_tokens();};
   return init();
 };
