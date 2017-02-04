@@ -144,6 +144,13 @@ module.exports = function(){
     topicModel = serializer.deserialize(name);
     return ret;
   }
+  function serializeBinary(){
+    return serializer.serializeBinary(topicModel);
+  }
+  function deserializeBinary(binary){
+    topicModel = serializer.deserializeBinary(binary);
+    return ret;
+  }
   function ret(){return build();}
   ret.topicModel = function(){return topicModel;};
   ret.build = build;
@@ -151,6 +158,8 @@ module.exports = function(){
   ret.doc = function(_){return arguments.length > 0 ? (doc =_, doc):doc;};
   ret.serialize = serialize;
   ret.deserialize = deserialize;
+  ret.serializeBinary = serializeBinary;
+  ret.deserializeBinary = deserializeBinary;
   ret.topicModel = function(){return topicModel;};
   ret.num_topics = function(_){
     if(arguments.length > 0){

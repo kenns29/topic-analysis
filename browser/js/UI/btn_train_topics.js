@@ -22,6 +22,8 @@ module.exports = $('#btn-train-topics').click(function(){
     console.log(err);
     if(err.responseText && err.responseText === 'NO_DATA')
       alert('There are no data for year ' + year);
+    else
+      alert('error while training the model');
   });
 });
 

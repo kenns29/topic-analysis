@@ -1,5 +1,9 @@
 var GetPapers = require('../db_mongo/get_papers');
 var TopicModel = require('../mallet/topic_model');
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+var co = require('co');
+var ConnStat = require('../db_mongo/connection');
 module.exports = exports = function(req, res){
   var name = req.query.name;
   var year = Number(req.query.year);
@@ -11,11 +15,30 @@ module.exports = exports = function(req, res){
     if(!data || data.length === 0) return Promise.reject('NO_DATA');
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
     return topic_model.build(data);
-  }).then(function(){
-    topic_model.serialize(name);
-    var json = topic_model.get_topics_with_id(10);
-    res.json(json);
-  }).catch(function(err){
+  })
+  // .then(function(){
+  //   topic_model.serialize(name);
+  //   var json = topic_model.get_topics_with_id(10);
+  //   res.json(json);
+  // })
+  .then(function(){
+    var binary = topic_model.serializeBinary();
+    console.log('binary', binary);
+    return co(function*(){
+      var db = yield MongoClient.connect(ConnStat().url());
+      var col = db.collection('models');
+      var bulk = col.initializeOrderedBulkOp();
+      var bin = new mongodb.Binary(binary);
+      // bulk.find({name:name}).upsert().updateOne({
+      //   name : name,
+      //   year : year,
+      //   model : bin
+      // });
+      // yield bulk.execute();
+      db.close();
+    });
+  })
+  .catch(function(err){
     console.log(err);
     res.status(500);
     res.send(err);

@@ -11,10 +11,17 @@ function store(){
   co(function*(){
     var name = 'model-1979';
     var file = yield fsp.readFile(path.join(__dirname, 'models', name));
+    console.log('file type', typeof file, file);
+    console.log('is buffer', Buffer.isBuffer(file));
+    var topic_model = TopicModel().load(name);
+    var binary = topic_model.serializeBinary();
+    var buffer = Buffer.from(binary);
+    console.log('buffer type', typeof buffer, buffer);
+    console.log('is buffer', Buffer.isBuffer(buffer));
     var db = yield MongoClient.connect(ConnStat().url());
-    var col = db.collection('bin_test');
+    var col = db.collection('models');
     var bulk = col.initializeOrderedBulkOp();
-    var bin = new mongodb.Binary(file);
+    var bin = new mongodb.Binary(buffer);
     bulk.find({name:name}).upsert().updateOne({
       name : name,
       model : bin
@@ -32,5 +39,5 @@ function load(){
 }
 
 function byte(){
-  
+
 }
