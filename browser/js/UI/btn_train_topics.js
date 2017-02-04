@@ -13,7 +13,6 @@ module.exports = $('#btn-train-topics').click(function(){
   .year(year)
   .model_name(name)
   .load().then(function(data){
-    console.log('data', data);
     return global.model_stats_display.load();
   }).then(function(data){
     loading.css('display', 'none');
