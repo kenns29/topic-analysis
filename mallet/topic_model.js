@@ -151,6 +151,7 @@ module.exports = function(){
   ret.doc = function(_){return arguments.length > 0 ? (doc =_, doc):doc;};
   ret.serialize = serialize;
   ret.deserialize = deserialize;
+  ret.topicModel = function(){return topicModel;};
   ret.num_topics = function(_){
     if(arguments.length > 0){
       topicModel.setNumTopicsSync(_);
