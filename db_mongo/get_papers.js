@@ -9,7 +9,7 @@ module.exports = exports = function(){
   function ret(){
     return co(function*(){
       var db = yield mongo_client.connect(url);
-      var col = db.collection('papers_test');
+      var col = db.collection('papers');
       var data = yield col.find({year:year}).toArray();
       db.close();
       return Promise.resolve(data);
