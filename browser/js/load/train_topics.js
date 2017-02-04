@@ -4,6 +4,7 @@ module.exports = exports = function(){
   var num_topics = 10;
   var num_iterations = 500;
   var model_name = 'default';
+  var year = 1979;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
@@ -11,7 +12,8 @@ module.exports = exports = function(){
       data : {
         name : model_name,
         num_topics : num_topics,
-        num_iterations : num_iterations
+        num_iterations : num_iterations,
+        year : year
       },
       dataType: 'json',
       success : function(data){
@@ -29,5 +31,6 @@ module.exports = exports = function(){
   ret.num_topics = function(_){return arguments.length > 0 ? (num_topics=_,ret):num_topics;};
   ret.load = load;
   ret.model_name = function(_){return arguments.length > 0 ? (model_name=_,ret):model_name;};
+  ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
   return ret;
 };

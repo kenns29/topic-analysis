@@ -4,28 +4,25 @@ var topic_viewer = global.topic_viewer;
 module.exports = $('#btn-train-topics').click(function(){
   var num_topics = Number($('#input_num_topics').val());
   var num_iterations = Number($('#input_num_iterations').val());
-  var name = 'model-' + $('#from-year').val();
   var loading = $('#topic-model-display-loading');
+  var year = global.UI_year_select.year();
+  var name = 'model-' + year;
   loading.css('display', 'block');
   TrainTopics().num_topics(num_topics)
   .num_iterations(num_iterations)
+  .year(year)
   .model_name(name)
   .load().then(function(data){
-    return Promise.resolve('success');
-  }).catch(function(err){
-    console.log(err);
-    loading.css('display', 'none');
-  }).then(function(){
+    console.log('data', data);
     return global.model_stats_display.load();
-  }).catch(function(err){
-    console.log(err);
-    loading.css('display', 'none');
   }).then(function(data){
     loading.css('display', 'none');
     global.model_stats_display.data(data).update();
   }).catch(function(err){
+    loading.css('display', 'none');
     console.log(err);
-    loading.css('display', 'none')
+    if(err.responseText && err.responseText === 'NO_DATA')
+      alert('There are no data for year ' + year);
   });
 });
 

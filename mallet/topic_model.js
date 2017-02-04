@@ -36,7 +36,7 @@ module.exports = function(){
       yield topicModel.buildModelPromise(uri_array, doc_array);
       yield topicModel.makeNameIndexHashPromise();
       get_id_index_map();
-    }).catch(function(err){console.log(err);});
+    });
   }
   function load(name){
     deserialize(name);

@@ -2,7 +2,8 @@ var GetPapers = require('../db_mongo/get_papers');
 var TopicModel = require('../mallet/topic_model');
 module.exports = exports = function(req, res){
   var model_name = req.query.model_name;
-  var get_papers = GetPapers();
+  var year = Number(req.query.year);
+  var get_papers = GetPapers().year(year);
   get_papers().then(function(data){
     if(model_name){
       let topic_model = TopicModel().load(model_name);

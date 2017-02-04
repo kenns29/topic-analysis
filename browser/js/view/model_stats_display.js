@@ -47,7 +47,8 @@ function update(){
       return global.topic_viewer.data(topics).update();
     })
     .then(function(){
-      return global.document_viewer.load();
+      var year = Number(d.name.match(/\d{4}/));
+      return global.document_viewer.year(year).load();
     }).then(function(data){
       global.document_viewer.data(data).update();
     });

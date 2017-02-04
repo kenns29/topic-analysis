@@ -9,6 +9,7 @@ const PAPER = 1;
 const PANEL = 2;
 var data_type = PAPER;
 var loading;
+var year = global.UI_year_select.year();
 function init(){
   width = $(container).width();
   d3.select(container).attr('class', 'document-viewer');
@@ -21,7 +22,8 @@ function load(){
   var model_name = global.model_stats_display.selected_model().name;
   if(data_type === PAPER){
     $(loading).show();
-    return LoadPapers().model_name(model_name).load().then(function(data){
+    return LoadPapers().model_name(model_name)
+    .year(year).load().then(function(data){
       $(loading).hide();
       return Promise.resolve(data);
     })
@@ -32,7 +34,7 @@ function load(){
   }
   else if(data_type === PANEL){
     $(loading).show();
-    return LoadPanels().load().then(function(data){
+    return LoadPanels().year(year).load().then(function(data){
       $(loading).hide();
       return Promise.resolve(data);
     })
@@ -165,6 +167,7 @@ ret.data = function(_){
     return ret;
   } else return data;
 };
+ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
 ret.PANEL = PANEL;
 ret.PAPER = PAPER;
 ret.loading = function(){return loading;};

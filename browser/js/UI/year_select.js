@@ -14,3 +14,7 @@ function init(){
 }
 module.exports = init();
 module.exports.init = init;
+module.exports.year = function(){
+  var val = $('#from-year :selected').val();
+  return Number(val);
+};
