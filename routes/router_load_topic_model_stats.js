@@ -9,7 +9,7 @@ module.exports = exports = function(req, res){
     var model_stats = [];
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models');
-    var models = yield col.find({}).toArray();
+    var models = yield col.find({}).sort({name : 1}).toArray();
     db.close();
     models.forEach(function(m){
       var topic_model = TopicModel();
