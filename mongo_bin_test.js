@@ -4,7 +4,9 @@ var mongodb = require('mongodb');
 var ConnStat = require('./db_mongo/connection');
 var co = require('co');
 var fsp = require('fs-promise');
-var path = require('path')
+var path = require('path');
+var btoa = require('btoa');
+var btoa = require('btoa');
 store();
 
 function store(){
@@ -13,20 +15,25 @@ function store(){
     var file = yield fsp.readFile(path.join(__dirname, 'models', name));
     console.log('file type', typeof file, file);
     console.log('is buffer', Buffer.isBuffer(file));
-    var topic_model = TopicModel().load(name);
-    var binary = topic_model.serializeBinary();
-    var buffer = Buffer.from(binary);
-    console.log('buffer type', typeof buffer, buffer);
-    console.log('is buffer', Buffer.isBuffer(buffer));
+    var topicModel = TopicModel().load_from_binary(file);
+
+    var bin = topicModel.serializeBinary();
+    var buffer = Buffer.from(bin);
+    topicModel = TopicModel().load_from_binary(buffer);
+    topicModel.topicModel().printModelSync();
+    console.log('buffer', buffer);
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models');
     var bulk = col.initializeOrderedBulkOp();
-    var bin = new mongodb.Binary(buffer);
+    var binary = new mongodb.Binary(bin);
     bulk.find({name:name}).upsert().updateOne({
       name : name,
-      model : bin
+      model : binary
     });
     yield bulk.execute();
+
+    var model = yield col.find({name : name}).toArray();
+
     db.close();
   }).catch(function(err){console.log(err);});
 }

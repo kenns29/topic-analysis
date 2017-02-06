@@ -4,8 +4,10 @@
   "description": "universal dependencies",
   "dependencies": {
     "assert": "^1.4.1",
+    "atob": "^2.0.3",
     "body-parser": "*",
     "bootstrap": "^3.3.7",
+    "btoa": "^1.1.2",
     "co": "^4.6.0",
     "console-remote-client": "^0.4.3",
     "d3": "^4.4.4",

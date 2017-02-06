@@ -40,8 +40,18 @@ module.exports = function(){
   }
   function load(name){
     deserialize(name);
-    topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
-    topicModel.setMalletStopPatternPathSync('./mallet_resources/stop_pattern.txt');
+    topicModel.makeNameIndexHashSync();
+    get_id_index_map();
+    return ret;
+  }
+  function load_from_binary(binary){
+    deserializeBinary(binary);
+    topicModel.makeNameIndexHashSync();
+    get_id_index_map();
+    return ret;
+  }
+  function load_from_base64(base64){
+    deserializeBase64(base64);
     topicModel.makeNameIndexHashSync();
     get_id_index_map();
     return ret;
@@ -151,6 +161,13 @@ module.exports = function(){
     topicModel = serializer.deserializeBinary(binary);
     return ret;
   }
+  function serializeBase64(){
+    return serializer.serializeBase64(topicModel);
+  }
+  function deserializeBase64(str){
+    topicModel = serializer.deserializeBase64(str);
+    return ret;
+  }
   function ret(){return build();}
   ret.topicModel = function(){return topicModel;};
   ret.build = build;
@@ -160,6 +177,8 @@ module.exports = function(){
   ret.deserialize = deserialize;
   ret.serializeBinary = serializeBinary;
   ret.deserializeBinary = deserializeBinary;
+  ret.serializeBase64 = serializeBase64;
+  ret.deserializeBase64 = deserializeBase64;
   ret.topicModel = function(){return topicModel;};
   ret.num_topics = function(_){
     if(arguments.length > 0){
@@ -171,6 +190,8 @@ module.exports = function(){
   ret.get_topics = get_topics;
   ret.get_topics_with_id = get_topics_with_id;
   ret.load = load;
+  ret.load_from_binary = load_from_binary;
+  ret.load_from_base64 = load_from_base64;
   ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
   ret.id2distr = function(_){return get_id_topic_distribution();};
   ret.id2tokens = function(_){return get_id_tokens();};
