@@ -5,28 +5,12 @@ var mongodb = require('mongodb');
 var co = require('co');
 var MongoClient = mongodb.MongoClient;
 module.exports = exports = function(req, res){
-  // fsp.readdir('./models').then(function(files){
-  //   var model_stats = [];
-  //   files.forEach(function(file){
-  //     var topic_model = TopicModel();
-  //     topic_model.load(file);
-  //     model_stats.push({
-  //       name : file,
-  //       num_topics : topic_model.num_topics()
-  //     });
-  //   });
-  //   return Promise.resolve(model_stats);
-  // }).catch(function(err){
-  //   console.log(err);
-  // }).then(function(model_stats){
-  //   res.json(model_stats);
-  // });
-
   co(function*(){
     var model_stats = [];
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models');
     var models = yield col.find({}).toArray();
+    db.close();
     models.forEach(function(m){
       var topic_model = TopicModel();
       topic_model.load_from_binary(m.model.buffer);

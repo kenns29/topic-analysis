@@ -16,11 +16,6 @@ module.exports = exports = function(req, res){
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
     return topic_model.build(data);
   })
-  // .then(function(){
-  //   topic_model.serialize(name);
-  //   var json = topic_model.get_topics_with_id(10);
-  //   res.json(json);
-  // })
   .then(function(){
     var bin = topic_model.serializeBinary();
     var buffer = Buffer.from(bin, 'binary');
@@ -36,7 +31,7 @@ module.exports = exports = function(req, res){
       });
       yield bulk.execute();
       db.close();
-      var json = topicModel.get_topics_with_id(10);
+      var json = topic_model.get_topics_with_id(10);
       res.json(json);
     });
   }).catch(function(err){

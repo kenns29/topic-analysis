@@ -6,12 +6,11 @@ var MongoClient = mongodb.MongoClient;
 
 module.exports = exports = function(req, res){
   var name = req.query.name;
-  // var topic_model = TopicModel().load(name);
-  // res.json(topic_model.get_topics_with_id(10));
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models');
     var data_array = yield col.find({name : name}).toArray();
+    db.close();
     var m = data_array[0];
     var topic_model = TopicModel().load_from_binary(m.model.buffer);
     return Promise.resolve(topic_model.get_topics_with_id(10));
