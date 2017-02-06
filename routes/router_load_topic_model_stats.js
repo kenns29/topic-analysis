@@ -1,4 +1,3 @@
-var fsp = require('fs-promise');
 var TopicModel = require('../mallet/topic_model');
 var ConnStat = require('../db_mongo/connection');
 var mongodb = require('mongodb');
