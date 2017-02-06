@@ -7,7 +7,7 @@ module.exports = exports = function(req, res){
   co(function*(){
     var model_stats = [];
     var db = yield MongoClient.connect(ConnStat().url());
-    var col = db.collection('models');
+    var col = db.collection('models_test');
     var models = yield col.find({}).sort({name : 1}).toArray();
     db.close();
     models.forEach(function(m){

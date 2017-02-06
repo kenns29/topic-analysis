@@ -14,14 +14,14 @@ module.exports = exports = function(req, res){
   get_papers().then(function(data){
     if(!data || data.length === 0) return Promise.reject('NO_DATA');
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
-    return topic_model.build(data);
+    return topic_model.build(title_data(data));
   })
   .then(function(){
     var bin = topic_model.serializeBinary();
     var buffer = Buffer.from(bin, 'binary');
     return co(function*(){
       var db = yield MongoClient.connect(ConnStat().url());
-      var col = db.collection('models');
+      var col = db.collection('models_test');
       var bulk = col.initializeOrderedBulkOp();
       var binary = new mongodb.Binary(buffer);
       bulk.find({name:name}).upsert().updateOne({
@@ -40,3 +40,26 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
+function title_data(data){
+  return data.map(function(d){
+    var text = '';
+    var pre_end_pos = 0;
+    for(let i = 0; i < d.tokens.length; i++){
+      let token = d.tokens[i];
+      if(pre_end_pos < token.begin_position){text += ' ';}
+      let word = token.lemma;
+      if(token.lemma.length > token.text.length){word = token.text;}
+      else if(token.lemma.length < token.text.length){
+        let spaces = '';
+        for(let j = 0; j < token.text.length - token.lemma.length; j++){spaces += ' ';}
+        word += spaces;
+      }
+      text += word;
+      pre_end_pos = token.end_position;
+    }
+    return {
+      id : d.id,
+      text : text
+    }
+  });
+}

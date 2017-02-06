@@ -20,7 +20,7 @@ module.exports = function(){
     return d.id.toString();
   }
   function doc(d, i){
-    return d.title;
+    return d.text;
   }
 
   function build(data){
