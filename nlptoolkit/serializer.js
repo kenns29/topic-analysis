@@ -23,6 +23,14 @@ module.exports = exports = function(){
     var serializer = java.newInstanceSync('nlp.edu.asu.vader.utils.Serializer');
     return serializer.deserializeBase64Sync(str);
   }
+  function serializeByteArray(obj){
+    var serializer = java.newInstanceSync('nlp.edu.asu.vader.utils.Serializer');
+    return serializer.serializeByteArraySync(obj);
+  }
+  function deserializeByteArray(str){
+    var serializer = java.newInstanceSync('nlp.edu.asu.vader.utils.Serializer');
+    return serializer.deserializeByteArraySync(str);
+  }
   function serializeBinary(obj){
     var str = serializeBase64(obj);
     return atob(str);

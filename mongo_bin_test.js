@@ -18,14 +18,14 @@ function store(){
     var topicModel = TopicModel().load_from_binary(file);
 
     var bin = topicModel.serializeBinary();
-    var buffer = Buffer.from(bin);
-    topicModel = TopicModel().load_from_binary(buffer);
+    topicModel = TopicModel().load_from_binary(bin);
     topicModel.topicModel().printModelSync();
+    var buffer = Buffer.from(bin, 'binary');
     console.log('buffer', buffer);
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models');
     var bulk = col.initializeOrderedBulkOp();
-    var binary = new mongodb.Binary(bin);
+    var binary = new mongodb.Binary(buffer);
     bulk.find({name:name}).upsert().updateOne({
       name : name,
       model : binary
@@ -33,7 +33,10 @@ function store(){
     yield bulk.execute();
 
     var model = yield col.find({name : name}).toArray();
-
+    var binData = model[0].model;
+    var new_bin = binData.buffer;
+    topicModel = TopicModel().load_from_binary(new_bin);
+    topicModel.topicModel().printModelSync();
     db.close();
   }).catch(function(err){console.log(err);});
 }
