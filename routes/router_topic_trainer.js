@@ -22,23 +22,24 @@ module.exports = exports = function(req, res){
   //   res.json(json);
   // })
   .then(function(){
-    var binary = topic_model.serializeBinary();
-    console.log('binary', binary);
+    var bin = topic_model.serializeBinary();
+    var buffer = Buffer.from(bin, 'binary');
     return co(function*(){
       var db = yield MongoClient.connect(ConnStat().url());
       var col = db.collection('models');
       var bulk = col.initializeOrderedBulkOp();
-      var bin = new mongodb.Binary(binary);
-      // bulk.find({name:name}).upsert().updateOne({
-      //   name : name,
-      //   year : year,
-      //   model : bin
-      // });
-      // yield bulk.execute();
+      var binary = new mongodb.Binary(buffer);
+      bulk.find({name:name}).upsert().updateOne({
+        name : name,
+        year : year,
+        model : binary
+      });
+      yield bulk.execute();
       db.close();
+      var json = topicModel.get_topics_with_id(10);
+      res.json(json);
     });
-  })
-  .catch(function(err){
+  }).catch(function(err){
     console.log(err);
     res.status(500);
     res.send(err);
