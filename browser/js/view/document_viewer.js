@@ -64,13 +64,11 @@ function update(){
   .style('vertical-align', 'inline-block')
   .style('width', (width - 50 - 30) + 'px');
   div_main_enter.append('div').attr('class', 'title').style('width', '100%').style('background-color', '#F8F8F8');
-  // .html(function(d){return d.title;});
   div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
   div_sel.exit().remove();
   var div_update = d3.select(container).selectAll('.document');
   div_update.sort(function(a, b){return a.index - b.index;});
   div_update.select('.year').html(function(d){return d.year;});
-  // div_update.select('.main').select('.title').html(function(d){return d.title;});
   div_update.select('.main').select('.title').each(update_title_span);
   div_update.select('.main').select('.distr').each(update_topic_distr);
   return ret;

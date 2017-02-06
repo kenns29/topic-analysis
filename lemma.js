@@ -7,10 +7,9 @@ var ConnStat = require('./db_mongo/connection');
 var stanford_core_nlp = StanfordCoreNLP();
 var stanford_parser = StanfordParser();
 module.exports = co(function*(){
-  var get_papers = GetPapers();
-  var data = yield get_papers();
   var db = yield MongoClient.connect(ConnStat().url());
   var col = db.collection('papers');
+  var data = yield col.find({}).toArray();
   var bulk = col.initializeOrderedBulkOp();
   stanford_parser.pipeline(stanford_core_nlp());
   for(let i = 0; i < data.length; i++){
