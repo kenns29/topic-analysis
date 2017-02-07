@@ -14,8 +14,7 @@ module.exports = exports = function(req, res){
   get_papers().then(function(data){
     if(!data || data.length === 0) return Promise.reject('NO_DATA');
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
-    var dat = title_data(data);
-    return topic_model.build(dat);
+    return topic_model.build(data);
   }).then(function(){
     var bin = topic_model.serializeBinary();
     var buffer = Buffer.from(bin, 'binary');
@@ -81,6 +80,6 @@ function title_data(){
       id : d.id,
       text : text,
       pos2token : pos2token
-    }
+    };
   });
 }

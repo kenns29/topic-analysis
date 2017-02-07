@@ -17,8 +17,9 @@ module.exports = exports = function(req, res){
         db.close();
         var m = data_array[0];
         let topic_model = TopicModel().load_from_binary(m.model.buffer);
+        let id2pos2token = topic_model.make_id2pos2token(data);
         let id2distr = topic_model.id2distr();
-        let id2tokens = topic_model.id2tokens();
+        let id2tokens = topic_model.id2tokens(id2pos2token);
         data.forEach(function(d){
           d.topic_distr = id2distr[d.id];
           d.topic_tokens = id2tokens[d.id];

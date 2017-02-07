@@ -8,6 +8,7 @@ module.exports = function(){
   var topicModel;
   var id2index = [];
   var index2id = [];
+
   function init(){
     topicModel = java.newInstanceSync(TopicModel);
     topicModel.setMalletStopwordsPathSync('./mallet_resources/stoplists/en.txt');
@@ -20,7 +21,7 @@ module.exports = function(){
     return d.id.toString();
   }
   function doc(d, i){
-    return d.text;
+    return d.title;
   }
 
   function build(data){
@@ -37,6 +38,24 @@ module.exports = function(){
       yield topicModel.makeNameIndexHashPromise();
       get_id_index_map();
     });
+  }
+  function get_id_pos_tokens(data){
+    var id2pos2token = [];
+    data.forEach(function(d){
+      var pos2token = [];
+      var text = '';
+      var pre_end_pos = 0;
+      for(let i = 0; i < d.tokens.length; i++){
+        let token = d.tokens[i];
+        let lemma_start_pos = text.length;
+        if(pre_end_pos < token.begin_position){text += ' '; ++lemma_start_pos;}
+        text += token.lemma;
+        pos2token[lemma_start_pos] = d.token;
+        pre_end_pos = token.end_position;
+      }
+      id2pos2token[id] = pos2token;
+    });
+    return id2pos2token;
   }
   function load(name){
     deserialize(name);
@@ -80,7 +99,7 @@ module.exports = function(){
     }
     return id2distr;
   }
-  function get_id_tokens(){
+  function get_id_tokens(id2pos2token){
     var id2tokens = [];
     var model = topicModel.getModelSync();
     var alphabet = model.getAlphabetSync();
@@ -100,6 +119,9 @@ module.exports = function(){
         v.topic = t.getTopicSync();
         v.index = j;
         v.text = alphabet.lookupObjectSync(v.id);
+        if(id2pos2token && id2pos2token[v.id]){
+          v.orig_token = id2pos2token[v.id][v.charindex[0]];
+        }
       }
       id2tokens[index2id[i]] = tokens;
     }
@@ -195,5 +217,6 @@ module.exports = function(){
   ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
   ret.id2distr = function(_){return get_id_topic_distribution();};
   ret.id2tokens = function(_){return get_id_tokens();};
+  ret.make_id2pos2token = function(data){return get_id_pos_tokens(data);};
   return init();
 };

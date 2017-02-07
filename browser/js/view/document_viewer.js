@@ -46,6 +46,7 @@ function load(){
   return Promise.resove([]);
 }
 function update(){
+  console.log('doc data', data);
   order_documents();
   var div_sel =  d3.select(container).selectAll('.document').data(data, function(d){return d.id;});
   var div_enter = div_sel.enter().append('div')
