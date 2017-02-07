@@ -14,9 +14,9 @@ module.exports = exports = function(req, res){
   get_papers().then(function(data){
     if(!data || data.length === 0) return Promise.reject('NO_DATA');
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
-    return topic_model.build(title_data(data));
-  })
-  .then(function(){
+    var dat = title_data(data);
+    return topic_model.build(dat);
+  }).then(function(){
     var bin = topic_model.serializeBinary();
     var buffer = Buffer.from(bin, 'binary');
     return co(function*(){
@@ -40,26 +40,47 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
-function title_data(data){
+// function title_data(data){
+//   return data.map(function(d){
+//     var text = '';
+//     var pre_end_pos = 0;
+//     for(let i = 0; i < d.tokens.length; i++){
+//       let token = d.tokens[i];
+//       if(pre_end_pos < token.begin_position){text += ' ';}
+//       let word = token.lemma;
+//       if(token.lemma.length > token.text.length){word = token.text;}
+//       else if(token.lemma.length < token.text.length){
+//         let spaces = '';
+//         for(let j = 0; j < token.text.length - token.lemma.length; j++){spaces += ' ';}
+//         word += spaces;
+//       }
+//       text += word;
+//       pre_end_pos = token.end_position;
+//     }
+//     return {
+//       id : d.id,
+//       text : text
+//     }
+//   });
+// }
+
+function title_data(){
   return data.map(function(d){
+    var pos2token = [];
     var text = '';
     var pre_end_pos = 0;
     for(let i = 0; i < d.tokens.length; i++){
       let token = d.tokens[i];
-      if(pre_end_pos < token.begin_position){text += ' ';}
-      let word = token.lemma;
-      if(token.lemma.length > token.text.length){word = token.text;}
-      else if(token.lemma.length < token.text.length){
-        let spaces = '';
-        for(let j = 0; j < token.text.length - token.lemma.length; j++){spaces += ' ';}
-        word += spaces;
-      }
-      text += word;
+      let lemma_start_pos = text.length;
+      if(pre_end_pos < token.begin_position){text += ' '; ++lemma_start_pos;}
+      text += token.lemma;
+      pos2token[lemma_start_pos] = d.token;
       pre_end_pos = token.end_position;
     }
     return {
       id : d.id,
-      text : text
+      text : text,
+      pos2token : pos2token
     }
   });
 }
