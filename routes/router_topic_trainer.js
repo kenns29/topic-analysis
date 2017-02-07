@@ -22,11 +22,10 @@ module.exports = exports = function(req, res){
       var db = yield MongoClient.connect(ConnStat().url());
       var col = db.collection('models_test');
       var bulk = col.initializeOrderedBulkOp();
-      var binary = new mongodb.Binary(buffer);
       bulk.find({name:name}).upsert().updateOne({
         name : name,
         year : year,
-        model : binary
+        model : new mongodb.Binary(buffer)
       });
       yield bulk.execute();
       db.close();

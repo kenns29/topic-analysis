@@ -15,13 +15,25 @@ function init(){
   .style('width', '100%')
   .style('position', 'relative')
   .attr('border', 1);
+
+  var header = table.append('tr').attr('class', 'header');
+  header.append('td').attr('class', 'name').attr('align', 'center').style('width', '20%').html('name');
+  header.append('td').attr('class', 'year').attr('align', 'center').style('width', '20%').html('year');
+  header.append('td').attr('class', 'type').attr('align', 'center').style('width', '10%').html('type');
+  header.append('td').attr('class', 'p').attr('align', 'center').style('width', '10%').html('P/PN')
+  header.append('td').attr('class', 'num-topics').attr('align', 'center').style('width', '20%').html('num-topics');
+  header.append('td').attr('class', 'radio-td').attr('align', 'center').style('width', '10%').html('sel');
+  header.append('td').attr('class', 'trash').attr('align', 'center').style('width', '10%').html('del');
   return ret;
 }
 
 function update(){
   var model_sel = table.selectAll('.model').data(data, function(d){return d.name;});
   var model_enter = model_sel.enter().append('tr').attr('class', 'model');
-  model_enter.append('td').attr('class', 'name').style('width', '60%');
+  model_enter.append('td').attr('class', 'name').style('width', '20%');
+  model_enter.append('td').attr('class', 'year').style('width', '10%');
+  model_enter.append('td').attr('class', 'type').style('width', '10%');
+  model_enter.append('td').attr('class', 'p').style('width', '10%');
   model_enter.append('td').attr('class', 'num-topics').style('width', '20%');
   model_enter.append('td').attr('class', 'radio-td').style('width', '10%')
   .append('div').attr('class', 'radio').style('text-align', 'center')
@@ -33,6 +45,9 @@ function update(){
   model_sel.exit().remove();
   var model_update = table.selectAll('.model');
   model_update.select('.name').html(function(d){return d.name;});
+  model_update.select('.year').html(function(d){return d.year;});
+  model_update.select('.type').html(function(d){return d.type;});
+  model_update.select('.p').html(function(d){return d.p;});
   model_update.select('.num-topics').html(function(d){return d.num_topics;});
   model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
     selected_model = d;
