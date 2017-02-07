@@ -21,7 +21,16 @@ module.exports = function(){
     return d.id.toString();
   }
   function doc(d, i){
-    return d.title;
+    // return d.title;
+    var text = '';
+    var pre_end_pos = 0;
+    for(let i = 0; i < d.tokens.length; i++){
+      let token = d.tokens[i];
+      if(pre_end_pos < token.begin_position){text += ' ';}
+      text += token.lemma;
+      pre_end_pos = token.end_position;
+    }
+    return text;
   }
 
   function build(data){
@@ -50,10 +59,10 @@ module.exports = function(){
         let lemma_start_pos = text.length;
         if(pre_end_pos < token.begin_position){text += ' '; ++lemma_start_pos;}
         text += token.lemma;
-        pos2token[lemma_start_pos] = d.token;
+        pos2token[lemma_start_pos] = token;
         pre_end_pos = token.end_position;
       }
-      id2pos2token[id] = pos2token;
+      id2pos2token[d.id] = pos2token;
     });
     return id2pos2token;
   }
@@ -119,8 +128,8 @@ module.exports = function(){
         v.topic = t.getTopicSync();
         v.index = j;
         v.text = alphabet.lookupObjectSync(v.id);
-        if(id2pos2token && id2pos2token[v.id]){
-          v.orig_token = id2pos2token[v.id][v.charindex[0]];
+        if(id2pos2token && id2pos2token[index2id[i]]){
+          v.orig_token = id2pos2token[index2id[i]][v.charindex[0]];
         }
       }
       id2tokens[index2id[i]] = tokens;
@@ -216,7 +225,7 @@ module.exports = function(){
   ret.load_from_base64 = load_from_base64;
   ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
   ret.id2distr = function(_){return get_id_topic_distribution();};
-  ret.id2tokens = function(_){return get_id_tokens();};
+  ret.id2tokens = function(_){return get_id_tokens(_);};
   ret.make_id2pos2token = function(data){return get_id_pos_tokens(data);};
   return init();
 };

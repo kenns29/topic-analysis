@@ -85,6 +85,9 @@ function update_title_span(d, i){
     for(let j = 0; j < len; j++){
       let token = d.topic_tokens[j];
       let charindex = token.charindex;
+      if(token.orig_token){
+        charindex = [token.orig_token.begin_position, token.orig_token.end_position];
+      }
       if(charindex[0] > pre_charindex[1]) span_array.push({span : title.substring(pre_charindex[1], charindex[0]), topic : -1});
       span_array.push({span : title.substring(charindex[0], charindex[1]), topic : token.topic});
       if(j === len - 1 && charindex[1] < len)span_array.push({span : title.substring(charindex[1], len), topic : -1});
