@@ -9,6 +9,8 @@ module.exports = exports = function(req, res){
   var year = Number(req.query.year);
   var num_topics = Number(req.query.num_topics);
   var num_iterations = Number(req.query.num_iterations);
+  var type = Number(req.query.type);
+  var level = Number(req.query.level);
   var get_papers = GetPapers().year(year);
   var topic_model = TopicModel();
   get_papers().then(function(data){
@@ -22,9 +24,15 @@ module.exports = exports = function(req, res){
       var db = yield MongoClient.connect(ConnStat().url());
       var col = db.collection('models_test');
       var bulk = col.initializeOrderedBulkOp();
-      bulk.find({name:name}).upsert().updateOne({
+      var id = Number(year + '' + level + '' + type);
+      bulk.find({id:id}).upsert().updateOne({
+        id : id,
         name : name,
         year : year,
+        type : type,
+        level : level,
+        num_topics : num_topics,
+        num_iterations : num_iterations,
         model : new mongodb.Binary(buffer)
       });
       yield bulk.execute();

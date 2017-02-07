@@ -1,0 +1,4 @@
+module.exports.A = 1; //academic
+module.exports.RW = 2; //round table or workshop
+module.exports.P = 3; //paper
+module.exports.PN = 4; //panel
