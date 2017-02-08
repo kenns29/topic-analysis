@@ -10,9 +10,6 @@
   width:300px;
   height:100%;
   margin-top: 5px;
-}
-
-#left-side-bar {
   #data-select {
     position: relative;
     width: 100%;
@@ -23,6 +20,24 @@
       height : auto;
     }
   }
+  #topic-trainer-option-div {
+    position: relative;
+    padding-top: 10px;
+    input {width:50px}
+  }
+  #topic-model-display-div {
+    position: relative;
+    padding-top:10px;
+    width:100%;
+  }
+  #topic-model-display-loading {
+    position:relative;
+    padding-top: 10px;
+    padding-bottom : 5px;
+    width : 100%;
+    height : auto;
+    display:none;
+  }
 }
 
 #center-view {
@@ -30,41 +45,36 @@
   float:left;
   width:calc(100% - 300px);
   height:auto;
-  #topic-viewer-div {
+  #middle-view {
     position: relative;
     height: 100%;
     width: 60%;
-    overflow-y: auto;
-    float: left;
+    float : left;
+    #topic-viewer-div {
+      position: relative;
+      height: 40%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    #timeline-view-div {
+      position: relative;
+      height : 60%;
+      width: 100%;
+    }
   }
-  #document-viewer-div {
+  #right-view {
     position: relative;
-    height:100%;
-    width:40%;
-    overflow-y: auto;
-    float:left;
+    width : 40%;
+    height: 100%;
+    float: left;
+    #document-viewer-div {
+      position: relative;
+      height:100%;
+      width:100%;
+      overflow-y: auto;
+    }
   }
-}
-
-#left-side-bar #topic-trainer-option-div {
-  position: relative;
-  padding-top: 10px;
-  input {width:50px}
-}
-
-#left-side-bar #topic-model-display-div {
-  position: relative;
-  padding-top:10px;
-  width:100%;
-}
-
-#left-side-bar #topic-model-display-loading {
-  position:relative;
-  padding-top: 10px;
-  padding-bottom : 5px;
-  width : 100%;
-  height : auto;
-  display:none;
 }
 
 .loading {
@@ -91,7 +101,7 @@
 }
 
 /*
-* Utilities
+*	Utilities
 */
 .d3-tip {
   line-height: 1;
@@ -111,157 +121,6 @@
     position: absolute;
     text-align: center;
   }
-}
-
-.d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
-}
-
-/* Fix Awesome Checkbox */
-input[type="checkbox"].styled:checked + label:after,
-input[type="radio"].styled:checked + label:after,
-.checkbox input[type=checkbox]:checked + label:after {
-    font-family: 'Glyphicons Halflings';
-    content: "\e013";
-}
-
-input[type="checkbox"].styled:checked label:after,
-input[type="radio"].styled:checked label:after,
-.checkbox label:after {
-    padding-left: 3px;
-    padding-top: 2px;
-    font-size: 9px;
-}
-
-
-#wrapper{
-  position:relative;
-  width : 100%;
-  height: auto;
-}
-#left-side-bar{
-  position: relative;
-  float:left;
-  width:300px;
-  height:100%;
-  margin-top: 5px;
-}
-#left-side-bar #data-select{
-  position: relative;
-  width: 100%;
-  height:auto;
-}
-#left-side-bar #data-select #year-select{
-  position: relative;
-  width:100%;
-  height : auto;
-}
-#left-side-bar #topic-trainer-option-div{
-  position: relative;
-  padding-top: 10px;
-}
-#left-side-bar #topic-trainer-option-div input{
-  width:50px;
-}
-#left-side-bar #topic-model-display-div{
-  position: relative;
-  padding-top:10px;
-  width:100%;
-}
-#left-side-bar #topic-model-display-loading{
-  position:relative;
-  padding-top: 10px;
-  padding-bottom : 5px;
-  width : 100%;
-  height : auto;
-  display:none;
-}
-#center-view{
-  position: relative;
-  float:left;
-  width:calc(100% - 300px);
-  height:auto;
-}
-
-#center-view #middle-view{
-  position: relative;
-  height: 100%;
-  width: 60%;
-  float : left;
-}
-#middle-view #topic-viewer-div{
-  position: relative;
-  height: 40%;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-#middle-view #timeline-view-div{
-  position: relative;
-  height : 60%;
-  width: 100%;
-}
-#center-view #right-view{
-  position: relative;
-  width : 40%;
-  height: 100%;
-  float: left;
-}
-#right-view #document-viewer-div{
-  position: relative;
-  height:100%;
-  width:100%;
-  overflow-y: auto;
-}
-
-
-.loading {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  text-align: center;
-  background-color: #fff;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  z-index: 1000;
-  opacity: .8;
-  display: none;
-}
-.loading .loading-helper {
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-}
-.loading img {
-  height: 50%;
-  max-height: 100px;
-}
-/*
-*	Utilities
-*/
-.d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
-}
-
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
 }
 
 /* Style northward tooltips differently */
