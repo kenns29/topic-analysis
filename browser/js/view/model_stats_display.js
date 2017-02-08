@@ -4,7 +4,7 @@ var LoadTopicModelStats = require('../load/load_topic_model_stats');
 var LoadTopicModel = require('../load/load_topic_model');
 var DeleteTopicModel = require('../load/delete_topic_model');
 var LoadPapers = require('../load/load_papers');
-var DelayPromise = require('../util').DelayPromise;
+var LoadPanels = require('../load/load_panels');
 var container = '#topic-model-display-div';
 var data = [];
 var table;
@@ -72,11 +72,8 @@ function update(){
     });
   });
   model_update.select('.trash').select('i').on('click', function(d, i){
-    DeleteTopicModel().model_name(d.name).load().then(function(status){
-      if(status === 'success'){
-        data.splice(i, 1);
-        update();
-      } else alert('did not delete the model successfully.');
+    DeleteTopicModel().model_name(d.id).load().then(function(status){
+        data.splice(i, 1); update();
     }).catch(function(err){
       console.log(err);
       alert('did not delete the model successfully');

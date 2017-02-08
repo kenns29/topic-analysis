@@ -3,11 +3,11 @@ var MongoClient = mongodb.MongoClient;
 var ConnStat = require('../db_mongo/connection');
 var co = require('co');
 module.exports = exports = function(req, res){
-  var name = req.query.name;
+  var id = Number(req.query.id);
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models_test');
-    yield col.deleteOne({name : name});
+    yield col.deleteOne({id : id});
     res.send('success');
   }).catch(function(err){
     console.log(err);

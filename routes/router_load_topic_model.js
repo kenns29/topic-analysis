@@ -5,11 +5,11 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 
 module.exports = exports = function(req, res){
-  var name = req.query.name;
+  var id = Number(req.query.id);
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models_test');
-    var data_array = yield col.find({name : name}).toArray();
+    var data_array = yield col.find({id : id}).toArray();
     db.close();
     var m = data_array[0];
     var topic_model = TopicModel().load_from_binary(m.model.buffer);

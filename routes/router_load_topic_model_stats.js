@@ -8,7 +8,7 @@ module.exports = exports = function(req, res){
     var model_stats = [];
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection('models_test');
-    var models = yield col.find({}).sort({year : 1, level : 1, type : 1}).toArray();
+    var models = yield col.find({}).sort({year : 1, level : 1, type : 1, field:1}).toArray();
     db.close();
     models.forEach(function(m){
       var topic_model = TopicModel();
@@ -18,6 +18,7 @@ module.exports = exports = function(req, res){
         year : m.year,
         type : m.type,
         level : m.level,
+        field : m.field,
         num_topics : m.num_topics,
         num_iterations : m.num_iterations
       });

@@ -20,19 +20,20 @@ module.exports = function(){
   function uri(d, i){
     return d.id.toString();
   }
-  function doc(d, i){
-    // return d.title;
-    var text = '';
-    var pre_end_pos = 0;
-    for(let i = 0; i < d.tokens.length; i++){
-      let token = d.tokens[i];
-      if(pre_end_pos < token.begin_position){text += ' ';}
-      text += token.lemma;
-      pre_end_pos = token.end_position;
-    }
-    return text;
+  var doc = doc_factory('title_tokens');
+  function doc_factory(field){
+    return function(d, i){
+      var text = '';
+      var pre_end_pos = 0;
+      for(let i = 0; i < d[field].length; i++){
+        let token = d[field][i];
+        if(pre_end_pos < token.begin_position){text += ' ';}
+        text += token.lemma;
+        pre_end_pos = token.end_position;
+      }
+      return text;
+    };
   }
-
   function build(data){
     var uri_array = java.newInstanceSync('java.util.ArrayList');
     var doc_array = java.newInstanceSync('java.util.ArrayList');
@@ -48,14 +49,14 @@ module.exports = function(){
       get_id_index_map();
     });
   }
-  function get_id_pos_tokens(data){
+  function get_id_pos_tokens(data, field){
     var id2pos2token = [];
     data.forEach(function(d){
       var pos2token = [];
       var text = '';
       var pre_end_pos = 0;
-      for(let i = 0; i < d.tokens.length; i++){
-        let token = d.tokens[i];
+      for(let i = 0; i < d[field].length; i++){
+        let token = d[field][i];
         let lemma_start_pos = text.length;
         if(pre_end_pos < token.begin_position){text += ' '; ++lemma_start_pos;}
         text += token.lemma;
@@ -203,7 +204,13 @@ module.exports = function(){
   ret.topicModel = function(){return topicModel;};
   ret.build = build;
   ret.uri = function(_){return arguments.length > 0 ? (uri =_, ret):uri;};
-  ret.doc = function(_){return arguments.length > 0 ? (doc =_, doc):doc;};
+  ret.doc = function(_){
+    if(arguments.length > 0){
+      if(typeof _ === 'function') doc = _;
+      else if(typeof _ === 'string') doc = doc_factory(_);
+      return ret;
+    } else return doc;
+  };
   ret.serialize = serialize;
   ret.deserialize = deserialize;
   ret.serializeBinary = serializeBinary;
@@ -226,6 +233,6 @@ module.exports = function(){
   ret.model_name = function(_){return arguments.length > 0 ? (topicModel.setNameSync(_), ret) : topicModel.getNameSync();};
   ret.id2distr = function(_){return get_id_topic_distribution();};
   ret.id2tokens = function(_){return get_id_tokens(_);};
-  ret.make_id2pos2token = function(data){return get_id_pos_tokens(data);};
+  ret.id2pos2token = function(data, field){return get_id_pos_tokens(data, field);};
   return init();
 };
