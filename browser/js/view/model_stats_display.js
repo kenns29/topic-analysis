@@ -61,12 +61,12 @@ function update(){
       this.checked = false;
     });
     $(global.topic_viewer.loading()).show();
-    LoadTopicModel().model_name(d.name).load().then(function(topics){
+    LoadTopicModel().id(d.id).load().then(function(topics){
       $(global.topic_viewer.loading()).hide();
       return global.topic_viewer.data(topics).update();
     })
     .then(function(){
-      var year = Number(d.name.match(/\d{4}/));
+      var year = d.year;
       return global.document_viewer.year(year).load();
     }).then(function(data){
       global.document_viewer.data(data).update();

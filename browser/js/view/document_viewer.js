@@ -2,6 +2,7 @@ var d3 = require('d3');
 var $ = require('jquery');
 var topic_color = require('./topic_color');
 var util = require('../util.js');
+var DOC = require('../../../flags/doc_flags');
 var container = '#document-viewer-div';
 var data = [];
 var width;
