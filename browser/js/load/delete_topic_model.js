@@ -1,12 +1,12 @@
 var $ = require('jquery');
 module.exports = exports = function(){
   var data;
-  var model_name;
+  var id;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
       url : service_url + '/deletetopicmodel',
-      data : {name : model_name},
+      data : {id : id},
       dataType: 'text',
       success : function(data){
         callback(data);
@@ -14,13 +14,10 @@ module.exports = exports = function(){
     });
     return Promise.resolve(deferred);
   }
-
-  function ret(){
-    return load();
-  }
+  function ret(){return load();}
   ret.callback = function(_){return arguments.length > 0 ? (callback=_,ret):callback;};
   ret.data = function(){return data;};
   ret.load = load;
-  ret.model_name = function(_){return arguments.length > 0 ? (model_name=_,ret):model_name;};
+  ret.id = function(_){return arguments.length > 0 ? (id=_,ret):id;};
   return ret;
 };

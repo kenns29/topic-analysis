@@ -8,6 +8,7 @@ module.exports = exports = function(){
   var year = 1979;
   var type = DOC.A;
   var level = DOC.P;
+  var field = DOC.TITLE;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
@@ -18,7 +19,8 @@ module.exports = exports = function(){
         num_iterations : num_iterations,
         year : year,
         type : type,
-        level : level
+        level : level,
+        field : field
       },
       dataType: 'json',
       success : function(data){
@@ -39,5 +41,6 @@ module.exports = exports = function(){
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
+  ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
   return ret;
 };

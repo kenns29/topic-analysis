@@ -5,6 +5,7 @@ var LoadTopicModel = require('../load/load_topic_model');
 var DeleteTopicModel = require('../load/delete_topic_model');
 var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
+var DOC = require('../../../flag/doc_flags');
 var container = '#topic-model-display-div';
 var data = [];
 var table;

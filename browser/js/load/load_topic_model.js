@@ -1,13 +1,13 @@
 var $ = require('jquery');
 module.exports = exports = function(){
   var data;
-  var model_name;
+  var id;
   function callback(data){}
   function load(){
     var year = Number(model_name.match(/\d{4}/));
     var deferred = $.ajax({
       url : service_url + '/loadtopicmodel',
-      data : {name : model_name},
+      data : {id : id},
       dataType: 'json',
       success : function(_){
         data = _; callback(data);
@@ -20,7 +20,7 @@ module.exports = exports = function(){
   }
   ret.callback = function(_){return arguments.length > 0 ? (callback=_,ret):callback;};
   ret.data = function(){return data;};
-  ret.model_name = function(_){return arguments.length > 0 ? (model_name=_, ret) : model_name;};
+  ret.id = function(_){return arguments.length > 0 ? (id=_, ret) : id;};
   ret.load = load;
   return ret;
 };
