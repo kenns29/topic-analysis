@@ -52,7 +52,6 @@ module.exports = function(){
   function get_id_pos_tokens(data, field){
     var id2pos2token = [];
     data.forEach(function(d){
-      console.log('d', d, 'field', field);
       var pos2token = [];
       var text = '';
       var pre_end_pos = 0;

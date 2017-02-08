@@ -7,12 +7,10 @@ module.exports = $('#btn-train-topics').click(function(){
   var num_iterations = Number($('#input_num_iterations').val());
   var type;
   var type_value = $('#select_model_type').val();
-  console.log('type_value', type_value);
   if(type_value === 'A') type = DOC.A;
   else if(type_value === 'RW') type = DOC.RW;
   var level;
   var level_value = $('#select_model_level').val();
-  console.log('level_value', level_value);
   if(level_value === 'P') level = DOC.P;
   else if(level_value === 'PN') level = DOC.PN;
 

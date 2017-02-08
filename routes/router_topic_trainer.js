@@ -13,7 +13,7 @@ module.exports = exports = function(req, res){
   var num_iterations = Number(req.query.num_iterations);
   var type = Number(req.query.type);
   var level = Number(req.query.level);
-  var field = req.query.field;
+  var field = Number(req.query.field);
   var topic_model = TopicModel();
   if(field === DOC.TITLE) topic_model.doc('title_tokens');
   else if(field === DOC.ABSTRACT) topic_model.doc('abstract_tokens');
@@ -21,7 +21,6 @@ module.exports = exports = function(req, res){
     if(level === DOC.P) return GetPapers().type(type).year(year).load();
     else if(level === DOC.PN) return GetPanels().type(type).year(year).load();
   }).then(function(data){
-    console.log('data', data, 'level', level, 'type', type, 'year', year);
     if(!data || data.length === 0) return Promise.reject('NO_DATA');
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
     return topic_model.build(data);

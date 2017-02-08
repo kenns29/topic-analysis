@@ -30,6 +30,7 @@ function init(){
 }
 
 function update(){
+  console.log('data', data);
   var model_sel = table.selectAll('.model').data(data, function(d){return d.id;});
   var model_enter = model_sel.enter().append('tr').attr('class', 'model');
   model_enter.append('td').attr('class', 'name').style('width', '20%');
@@ -49,9 +50,9 @@ function update(){
   var model_update = table.selectAll('.model');
   model_update.select('.name').html(function(d){return d.name;});
   model_update.select('.year').html(function(d){return d.year;});
-  model_update.select('.type').html(function(d){return d.type;});
-  model_update.select('.level').html(function(d){return d.level;});
-  model_update.select('.field').html(function(d){return d.field;});
+  model_update.select('.type').html(function(d){return flag2str(d.type);});
+  model_update.select('.level').html(function(d){return flag2str(d.level);});
+  model_update.select('.field').html(function(d){return flag2str(d.field);});
   model_update.select('.num-topics').html(function(d){return d.num_topics;});
   model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
     selected_model = d;
@@ -72,7 +73,7 @@ function update(){
     });
   });
   model_update.select('.trash').select('i').on('click', function(d, i){
-    DeleteTopicModel().model_name(d.id).load().then(function(status){
+    DeleteTopicModel().id(d.id).load().then(function(status){
         data.splice(i, 1); update();
     }).catch(function(err){
       console.log(err);
@@ -80,6 +81,17 @@ function update(){
     });
   });
   return ret;
+}
+function flag2str(flag){
+  switch(flag){
+    case DOC.P : return 'P';
+    case DOC.PN : return 'PN';
+    case DOC.A : return 'A';
+    case DOC.RW : return 'RW';
+    case DOC.TITLE : return 't';
+    case DOC.ABSTRACT : return 'abs';
+    default : return '';
+  }
 }
 function load(){
   return LoadTopicModelStats()();
