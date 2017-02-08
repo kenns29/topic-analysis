@@ -29,7 +29,7 @@ module.exports = exports = function(req, res){
     var buffer = Buffer.from(bin, 'binary');
     return co(function*(){
       var db = yield MongoClient.connect(ConnStat().url());
-      var col = db.collection('models_test');
+      var col = db.collection('models');
       var bulk = col.initializeOrderedBulkOp();
       var id = Number(year + '' + level + '' + type + '' + field);
       bulk.find({id:id}).upsert().updateOne({

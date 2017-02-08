@@ -1,6 +1,7 @@
 var ConnStat = require('./connection');
 var co = require('co');
 var mongodb = require('mongodb');
+var DOC = require('../flags/doc_flags');
 module.exports = exports = function(){
   var mongo_client = mongodb.MongoClient;
   var url = ConnStat().url();

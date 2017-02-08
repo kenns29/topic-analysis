@@ -8,7 +8,7 @@ module.exports = exports = function(req, res){
   var id = Number(req.query.id);
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
-    var col = db.collection('models_test');
+    var col = db.collection('models');
     var data_array = yield col.find({id : id}).toArray();
     db.close();
     var m = data_array[0];

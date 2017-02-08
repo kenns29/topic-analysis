@@ -6,7 +6,7 @@ module.exports = exports = function(req, res){
   var id = Number(req.query.id);
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
-    var col = db.collection('models_test');
+    var col = db.collection('models');
     yield col.deleteOne({id : id});
     res.send('success');
   }).catch(function(err){

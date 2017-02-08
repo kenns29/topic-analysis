@@ -16,7 +16,7 @@ module.exports = exports = function(req, res){
     if(model_id){
       return co(function*(){
         var db = yield MongoClient.connect(ConnStat().url());
-        var col = db.collection('models_test');
+        var col = db.collection('models');
         var data_array = yield col.find({id : model_id}).toArray();
         db.close();
         var m = data_array[0];
