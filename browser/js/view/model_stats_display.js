@@ -34,10 +34,10 @@ function update(){
   var model_sel = table.selectAll('.model').data(data, function(d){return d.id;});
   var model_enter = model_sel.enter().append('tr').attr('class', 'model');
   model_enter.append('td').attr('class', 'name').style('width', '20%');
-  model_enter.append('td').attr('class', 'year').style('width', '20%');
-  model_enter.append('td').attr('class', 'type').style('width', '10%');
-  model_enter.append('td').attr('class', 'level').style('width', '10%');
-  model_enter.append('td').attr('class', 'field').style('width', '10%')
+  model_enter.append('td').attr('class', 'year').attr('align', 'center').style('width', '20%');
+  model_enter.append('td').attr('class', 'type').attr('align', 'center').style('width', '10%');
+  model_enter.append('td').attr('class', 'level').attr('align', 'center').style('width', '10%');
+  model_enter.append('td').attr('class', 'field').attr('align', 'center').style('width', '10%')
   model_enter.append('td').attr('class', 'num-topics').style('width', '10%');
   model_enter.append('td').attr('class', 'radio-td').style('width', '10%')
   .append('div').attr('class', 'radio').style('text-align', 'center')
