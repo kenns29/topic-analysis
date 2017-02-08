@@ -30,6 +30,7 @@
     "build": "npm run build-js",
     "watch-js": "watchify browser/js/main.js -o public/bundle.js -dv",
     "watch": "npm run watch-js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "build-css": "sass browser/css/main.scss:public/css/main.css --style compressed"
   }
 }
