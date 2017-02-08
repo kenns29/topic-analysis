@@ -30,7 +30,6 @@ function init(){
 }
 
 function update(){
-  console.log('data', data);
   var model_sel = table.selectAll('.model').data(data, function(d){return d.id;});
   var model_enter = model_sel.enter().append('tr').attr('class', 'model');
   model_enter.append('td').attr('class', 'name').style('width', '20%');
