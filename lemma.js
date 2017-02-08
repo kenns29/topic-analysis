@@ -14,15 +14,34 @@ module.exports = co(function*(){
   stanford_parser.pipeline(stanford_core_nlp());
   for(let i = 0; i < data.length; i++){
     let entry = data[i];
+    let set_obj = {};
     stanford_parser.annotate(entry.title);
-    let list = stanford_parser.tokens();
-    bulk.find({id:entry.id}).updateOne({
-      $set : {
-        tokens : list
-      }
-    });
+    set_obj.title_tokens = stanford_parser.tokens();
+    if(entry.abstract){
+      stanford_parser.annotate(entry.abstract);
+      set_obj.abstract_tokens = stanford_parser.tokens();
+    }
+    bulk.find({id:entry.id}).updateOne({$set : set_obj});
   }
   yield bulk.execute();
+  console.log('finished papers');
+
+  col = db.collection('panels')
+  data = yield col.find({}).toArray();
+  bulk = col.initializeOrderedBulkOp();
+  for(let i = 0; i < data.length; i++){
+    let entry = data[i];
+    let set_obj = {};
+    stanford_parser.annotate(entry.title);
+    set_obj.title_tokens = stanford_parser.tokens();
+    if(entry.abstract){
+      stanford_parser.annotate(entry.abstract);
+      set_obj.abstract_tokens = stanford_parser.tokens();
+    }
+    bulk.find({id:entry.id}).updateOne({$set : set_obj});
+  }
+  yield bulk.execute();
+  console.log('finished panels');
   db.close();
 }).catch(function(err){
   console.log(err);
