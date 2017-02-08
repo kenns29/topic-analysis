@@ -16,7 +16,7 @@ var loading = d3.select(container).select('.loading').node();
 var duration = 1000;
 var tooltip;
 function init(){
-  width = $(container).width(), height = $(container).height();
+  width = $(container).width() - 15, height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
   graph_g = svg.append('g').attr('class', 'topic-viewer-g').attr('transform', 'translate(' + [margin.left, margin.top]+')');
   topics_g = graph_g.append('g').attr('class', 'topics-g').attr('transform', 'translate('+ [50, 0] +')')
@@ -111,6 +111,8 @@ function update_topics(){
       d.x += pre_x + text_x_space + pre_width;
     }
   });
+  height = svg_height(data);
+  svg.attr('height',height);
   var t1 = function(){
     return new Promise(function(resolve, reject){
       topic_update.transition().duration(duration).attr('transform', function(d){
@@ -127,6 +129,18 @@ function update_topics(){
     });
   };
   return Promise.all([t1(), t2()]);
+}
+function total_topic_height(data){
+  var total_height = 0;
+  data.forEach(function(d, i){
+    if(i === 0) total_height += d.height;
+    else total_height += text_y_space + d.height;
+  });
+  return total_height;
+}
+function svg_height(data){
+  var total_height = total_topic_height(data);
+  return margin.top + total_height + margin.bottom;
 }
 function font_scale_factory(){
   var extent = [Infinity, -Infinity];

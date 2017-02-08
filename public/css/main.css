@@ -33,9 +33,10 @@
 }
 #center-view #topic-viewer-div{
   position: relative;
-  height: 100%;
+  height: 40%;
   width: 60%;
   overflow-y: auto;
+  overflow-x: hidden;
   float: left;
 }
 #center-view #document-viewer-div{
