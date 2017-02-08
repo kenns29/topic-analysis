@@ -6,6 +6,7 @@ var DeleteTopicModel = require('../load/delete_topic_model');
 var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
 var DOC = require('../../../flags/doc_flags');
+var co = require('co');
 var container = '#topic-model-display-div';
 var data = [];
 var table;
@@ -60,15 +61,16 @@ function update(){
     }).select('.radio-td').select('.radio').select('input').each(function(){
       this.checked = false;
     });
-    $(global.topic_viewer.loading()).show();
-    LoadTopicModel().id(d.id).load().then(function(topics){
+    co(function*(){
+      $(global.topic_viewer.loading()).show();
+      var topics = yield LoadTopicModel().id(d.id).load();
       $(global.topic_viewer.loading()).hide();
-      return global.topic_viewer.data(topics).update();
-    })
-    .then(function(){
-      return global.document_viewer.year(d.year).type(d.type).level(d.level).load();
-    }).then(function(data){
+      yield global.topic_viewer.data(topics).update();
+      var data = yield global.document_viewer.year(d.year).type(d.type).level(d.level).load();
       global.document_viewer.data(data).update();
+    }).catch(function(err){
+      console.log(err);
+      $(global.topic_viewer.loading()).hide();
     });
   });
   model_update.select('.trash').select('i').on('click', function(d, i){

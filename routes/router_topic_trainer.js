@@ -5,6 +5,7 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var co = require('co');
 var ConnStat = require('../db_mongo/connection');
+var model_col = require('../db_mongo/model_col');
 var DOC = require('../flags/doc_flags');
 module.exports = exports = function(req, res){
   var name = req.query.name;
@@ -29,7 +30,7 @@ module.exports = exports = function(req, res){
     var buffer = Buffer.from(bin, 'binary');
     return co(function*(){
       var db = yield MongoClient.connect(ConnStat().url());
-      var col = db.collection('models');
+      var col = db.collection(model_col);
       var bulk = col.initializeOrderedBulkOp();
       var id = Number(year + '' + level + '' + type + '' + field);
       bulk.find({id:id}).upsert().updateOne({

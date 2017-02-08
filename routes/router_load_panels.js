@@ -4,6 +4,7 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var co = require('co');
 var ConnStat = require('../db_mongo/connection');
+var model_col = require('../db_mongo/model_col');
 var DOC = require('../flags/doc_flags');
 module.exports = exports = function(req, res){
   var model_id = Number(req.query.model_id);
@@ -16,7 +17,7 @@ module.exports = exports = function(req, res){
     if(model_id){
       return co(function*(){
         var db = yield MongoClient.connect(ConnStat().url());
-        var col = db.collection('models');
+        var col = db.collection(model_col);
         var data_array = yield col.find({id : model_id}).toArray();
         db.close();
         var m = data_array[0];

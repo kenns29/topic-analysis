@@ -1,5 +1,6 @@
 var TopicModel = require('../mallet/topic_model');
 var ConnStat = require('../db_mongo/connection');
+var model_col = require('../db_mongo/model_col');
 var mongodb = require('mongodb');
 var co = require('co');
 var MongoClient = mongodb.MongoClient;
@@ -7,7 +8,7 @@ module.exports = exports = function(req, res){
   co(function*(){
     var model_stats = [];
     var db = yield MongoClient.connect(ConnStat().url());
-    var col = db.collection('models');
+    var col = db.collection(model_col);
     var models = yield col.find({}).sort({year : 1, level : 1, type : 1, field:1}).toArray();
     db.close();
     models.forEach(function(m){
