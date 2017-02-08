@@ -20,8 +20,9 @@ function init(){
   header.append('td').attr('class', 'name').attr('align', 'center').style('width', '20%').html('name');
   header.append('td').attr('class', 'year').attr('align', 'center').style('width', '20%').html('year');
   header.append('td').attr('class', 'type').attr('align', 'center').style('width', '10%').html('type');
-  header.append('td').attr('class', 'level').attr('align', 'center').style('width', '10%').html('P/PN')
-  header.append('td').attr('class', 'num-topics').attr('align', 'center').style('width', '20%').html('num-topics');
+  header.append('td').attr('class', 'level').attr('align', 'center').style('width', '10%').html('P/PN');
+  header.append('td').attr('class', 'field').attr('align', 'center').style('width', '10%').html('title/abs');
+  header.append('td').attr('class', 'num-topics').attr('align', 'center').style('width', '10%').html('num-topics');
   header.append('td').attr('class', 'radio-td').attr('align', 'center').style('width', '10%').html('sel');
   header.append('td').attr('class', 'trash').attr('align', 'center').style('width', '10%').html('del');
   return ret;
@@ -31,10 +32,11 @@ function update(){
   var model_sel = table.selectAll('.model').data(data, function(d){return d.id;});
   var model_enter = model_sel.enter().append('tr').attr('class', 'model');
   model_enter.append('td').attr('class', 'name').style('width', '20%');
-  model_enter.append('td').attr('class', 'year').style('width', '10%');
+  model_enter.append('td').attr('class', 'year').style('width', '20%');
   model_enter.append('td').attr('class', 'type').style('width', '10%');
   model_enter.append('td').attr('class', 'level').style('width', '10%');
-  model_enter.append('td').attr('class', 'num-topics').style('width', '20%');
+  model_enter.append('td').attr('class', 'field').style('width', '10%')
+  model_enter.append('td').attr('class', 'num-topics').style('width', '10%');
   model_enter.append('td').attr('class', 'radio-td').style('width', '10%')
   .append('div').attr('class', 'radio').style('text-align', 'center')
   .append('input').attr('type', 'radio').style('position', 'relative')
@@ -47,7 +49,8 @@ function update(){
   model_update.select('.name').html(function(d){return d.name;});
   model_update.select('.year').html(function(d){return d.year;});
   model_update.select('.type').html(function(d){return d.type;});
-  model_update.select('.level').html(function(d){return d.p;});
+  model_update.select('.level').html(function(d){return d.level;});
+  model_update.select('.field').html(function(d){return d.field;});
   model_update.select('.num-topics').html(function(d){return d.num_topics;});
   model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
     selected_model = d;
