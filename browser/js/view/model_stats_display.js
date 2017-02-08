@@ -5,7 +5,7 @@ var LoadTopicModel = require('../load/load_topic_model');
 var DeleteTopicModel = require('../load/delete_topic_model');
 var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
-var DOC = require('../../../flag/doc_flags');
+var DOC = require('../../../flags/doc_flags');
 var container = '#topic-model-display-div';
 var data = [];
 var table;
@@ -56,7 +56,7 @@ function update(){
   model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
     selected_model = d;
     model_update.filter(function(g){
-      return g.name !== d.name;
+      return g.id !== d.id;
     }).select('.radio-td').select('.radio').select('input').each(function(){
       this.checked = false;
     });
@@ -66,8 +66,7 @@ function update(){
       return global.topic_viewer.data(topics).update();
     })
     .then(function(){
-      var year = d.year;
-      return global.document_viewer.year(year).load();
+      return global.document_viewer.year(d.year).type(d.type).level(d.level).load();
     }).then(function(data){
       global.document_viewer.data(data).update();
     });

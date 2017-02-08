@@ -52,6 +52,7 @@ module.exports = function(){
   function get_id_pos_tokens(data, field){
     var id2pos2token = [];
     data.forEach(function(d){
+      console.log('d', d, 'field', field);
       var pos2token = [];
       var text = '';
       var pre_end_pos = 0;
@@ -160,7 +161,7 @@ module.exports = function(){
   function get_topic(topic, _){
     var num_words = 10;
     if(arguments.length > 1) num_words = arguments[1];
-    var topic_words = Array(num_words);
+    var topic_words = [];
     var alphabet = topicModel.model.getAlphabetSync();
     var tokens = topicModel.model.getDataSync().getSync(0).instance.getDataSync();
     var topics = topicModel.model.getDataSync().getSync(0).topicSequence;
@@ -174,7 +175,7 @@ module.exports = function(){
       id = idSorter.getIDSync();
       word = alphabet.lookupObjectSync(id);
       weight = idSorter.getWeightSync();
-      topic_words[rank++] = {token:word,weight:weight,id:id,index:rank};
+      topic_words.push({token:word,weight:weight,id:id,index:rank});
     }
     return topic_words;
   }

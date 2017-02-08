@@ -4,7 +4,6 @@ module.exports = exports = function(){
   var id;
   function callback(data){}
   function load(){
-    var year = Number(model_name.match(/\d{4}/));
     var deferred = $.ajax({
       url : service_url + '/loadtopicmodel',
       data : {id : id},

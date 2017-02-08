@@ -6,9 +6,8 @@ var DOC = require('../../../flags/doc_flags');
 var container = '#document-viewer-div';
 var data = [];
 var width;
-const PAPER = 1;
-const PANEL = 2;
-var data_type = PAPER;
+var level = DOC.P;
+var type = DOC.A;
 var loading;
 var year = global.UI_year_select.year();
 function init(){
@@ -20,11 +19,10 @@ function init(){
 function load(){
   var LoadPapers = require('../load/load_papers');
   var LoadPanels = require('../load/load_panels');
-  var model_name = global.model_stats_display.selected_model().name;
-  if(data_type === PAPER){
+  var model_id = global.model_stats_display.selected_model().id;
+  if(level === DOC.P){
     $(loading).show();
-    return LoadPapers().model_name(model_name)
-    .year(year).load().then(function(data){
+    return LoadPapers().model_id(model_id).year(year).type(type).load().then(function(data){
       $(loading).hide();
       return Promise.resolve(data);
     })
@@ -33,9 +31,9 @@ function load(){
       $(loading).hide();
     });
   }
-  else if(data_type === PANEL){
+  else if(level === DOC.PN){
     $(loading).show();
-    return LoadPanels().year(year).load().then(function(data){
+    return LoadPanels().model_id(model_id).year(year).type(type).load().then(function(data){
       $(loading).hide();
       return Promise.resolve(data);
     })
@@ -165,14 +163,14 @@ ret.data = function(_){
   if(arguments.length > 0){
     data = _;
     data.forEach(function(d){
-      d.id = Number(data_type + '' + d.id);
+      d.id = Number(level + '' + d.id);
     });
     return ret;
   } else return data;
 };
 ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
-ret.PANEL = PANEL;
-ret.PAPER = PAPER;
+ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
+ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
 ret.loading = function(){return loading;};
 ret.load = load;
 ret.documents = function(){return d3.select(container).selectAll('.document');};

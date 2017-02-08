@@ -21,6 +21,7 @@ module.exports = exports = function(req, res){
     if(level === DOC.P) return GetPapers().type(type).year(year).load();
     else if(level === DOC.PN) return GetPanels().type(type).year(year).load();
   }).then(function(data){
+    console.log('data', data, 'level', level, 'type', type, 'year', year);
     if(!data || data.length === 0) return Promise.reject('NO_DATA');
     topic_model.num_iterations(num_iterations).num_topics(num_topics);
     return topic_model.build(data);

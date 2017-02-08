@@ -5,11 +5,12 @@ module.exports = exports = function(){
   var model_id;
   var year = 1979;
   var type = DOC.A;
+  var field = DOC.TITLE;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
       url : service_url + '/loadpapers',
-      data : {model_id:model_id, year:year, type:type},
+      data : {model_id:model_id, year:year, type:type, field:field},
       dataType: 'json',
       success : function(data){
         callback(data);
@@ -24,8 +25,9 @@ module.exports = exports = function(){
   ret.callback = function(_){return arguments.length > 0 ? (callback=_,ret):callback;};
   ret.data = function(){return data;};
   ret.load = load;
-  ret.model_name = function(_){return arguments.length > 0 ? (model_name =_, ret):model_name;};
+  ret.model_id = function(_){return arguments.length > 0 ? (model_id =_, ret):model_;};
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
   ret.title = function(_){return arguments.length > 0 ? (title = _, ret) : title;};
+  ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   return ret;
 };

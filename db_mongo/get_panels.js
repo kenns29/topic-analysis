@@ -7,7 +7,7 @@ module.exports = exports = function(){
   var data;
   var year = 1979;
   var type = DOC.A;
-  function ret(){
+  function load(){
     return co(function*(){
       var db = yield mongo_client.connect(url);
       var col = db.collection('panels');
@@ -18,8 +18,10 @@ module.exports = exports = function(){
       console.log(err);
     });
   }
+  function ret(){return load();}
   ret.data = function(){return data;};
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
+  ret.load = load;
   return ret;
 };
