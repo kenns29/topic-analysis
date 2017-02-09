@@ -42,7 +42,7 @@ module.exports = exports = function(){
     var timeline_sel = timeline_g.selectAll('.timeline').data(data, function(d){return d.id;});
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
     var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[45, 0]+')')
-    .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10)
+    .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10).style('cursor', 'pointer')
     .text(function(d){return d.id});
     var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[50, 0]+ ')');
     area_enter.append('path');
@@ -59,6 +59,11 @@ module.exports = exports = function(){
       margin.left + 50,
       data.length * (timeline_height + timeline_y_space) + 5
     ]+')');
+    label_enter.on('click', function(d, i){
+      console.log('d', d);
+      remove_timeline(d.id);
+      update();
+    });
     return ret;
   }
   function update_line(d, i){
@@ -81,10 +86,11 @@ module.exports = exports = function(){
     return ret;
   }
   function remove_timeline(id){
-    var i = data.length;
+    var i = data.length - 1;
     while(i >= 0){
       if(data[i].id === id){
         data.splice(i, 1);
+        delete id2data[id];
         for(let j = i; j < data.length;j++) data[j].index = j;
         break;
       }
