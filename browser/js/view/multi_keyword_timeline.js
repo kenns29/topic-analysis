@@ -4,7 +4,7 @@ module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
   var timeline_g, W, H;
-  var margin = {top:20, bottom:10, left:10, right:10};
+  var margin = {top:20, bottom:10, left:10, right:20};
   var data = [];
   var id2data = [];
   var timeline_height = 30;
@@ -12,6 +12,8 @@ module.exports = exports = function(){
   var min_year = 1979;
   var max_year = 1989;
   var x_scale;
+  var x_axis;
+  var x_axis_g;
   function init(){
     width = $(container).width(), height = $(container).height();
     W = width - margin.left - margin.right - 50;
@@ -20,6 +22,8 @@ module.exports = exports = function(){
     .append('svg').attr('width', width).attr('height', height);
     timeline_g = svg.append('g').attr('transform','translate('+[margin.left, margin.top]+')');
     x_scale = d3.scaleLinear().domain([min_year, max_year]).range([0, W]);
+    x_axis = d3.axisBottom().scale(x_scale).ticks(max_year - min_year + 1);
+    x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + 50, 0]+')');
     return ret;
   }
   function update(){
@@ -38,6 +42,11 @@ module.exports = exports = function(){
       return 'translate('+[x, y]+')';
     });
     timeline_update.select('.area').each(update_line);
+    x_axis_g.call(x_axis);
+    x_axis_g.transition().duration(500).attr('transform', 'translate(' + [
+      margin.left + 50,
+      data.length * (timeline_height + timeline_y_space) + 5
+    ]+')');
     return ret;
   }
   function update_line(d, i){
