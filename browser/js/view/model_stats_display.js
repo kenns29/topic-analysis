@@ -69,7 +69,6 @@ function update(){
       $(global.topic_viewer.loading()).hide();
       yield global.topic_viewer.data(topics).update();
       var data = yield global.document_viewer.year(d.year).type(d.type).level(d.level).load();
-      console.log(d.year, d.type, d.level);
       global.document_viewer.data(data).update();
     }).catch(function(err){
       console.log(err);
