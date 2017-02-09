@@ -14,7 +14,9 @@ var selected_model = {};
 function init(){
   table = d3.select(container).append('table')
   .attr('class', 'table')
-  .style('width', '100%')
+  .style('width', '90%')
+  .style('padding-right', '0px')
+  .style('padding-left', '0px')
   .style('position', 'relative')
   .attr('border', 1);
 
@@ -23,7 +25,7 @@ function init(){
   header.append('td').attr('class', 'year').attr('align', 'center').style('width', '20%').html('year');
   header.append('td').attr('class', 'type').attr('align', 'center').style('width', '10%').html('type');
   header.append('td').attr('class', 'level').attr('align', 'center').style('width', '10%').html('P/PN');
-  header.append('td').attr('class', 'field').attr('align', 'center').style('width', '10%').html('title/abs');
+  header.append('td').attr('class', 'field').attr('align', 'center').style('width', '10%').html('title-abs');
   header.append('td').attr('class', 'num-topics').attr('align', 'center').style('width', '10%').html('num-topics');
   header.append('td').attr('class', 'radio-td').attr('align', 'center').style('width', '10%').html('sel');
   header.append('td').attr('class', 'trash').attr('align', 'center').style('width', '10%').html('del');
@@ -38,7 +40,7 @@ function update(){
   model_enter.append('td').attr('class', 'type').attr('align', 'center').style('width', '10%');
   model_enter.append('td').attr('class', 'level').attr('align', 'center').style('width', '10%');
   model_enter.append('td').attr('class', 'field').attr('align', 'center').style('width', '10%')
-  model_enter.append('td').attr('class', 'num-topics').style('width', '10%');
+  model_enter.append('td').attr('class', 'num-topics').attr('align', 'center').style('width', '10%');
   model_enter.append('td').attr('class', 'radio-td').style('width', '10%')
   .append('div').attr('class', 'radio').style('text-align', 'center')
   .append('input').attr('type', 'radio').style('position', 'relative')

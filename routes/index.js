@@ -4,6 +4,7 @@ var router_load_panels = require('./router_load_panels');
 var router_load_topic_model_stats = require('./router_load_topic_model_stats');
 var router_load_topic_model = require('./router_load_topic_model');
 var router_delete_topic_model = require('./router_delete_topic_model');
+var router_load_tfidf = require('./router_load_tfidf');
 var express = require('express');
 router = express.Router();
 router.get('/', function(req, res) {
@@ -15,4 +16,5 @@ router.get('/topictrainer', router_topic_trainer);
 router.get('/loadtopicmodelstats', router_load_topic_model_stats);
 router.get('/loadtopicmodel', router_load_topic_model);
 router.get('/deletetopicmodel', router_delete_topic_model);
+router.get('/loadtfidf', router_load_tfidf);
 module.exports = router;

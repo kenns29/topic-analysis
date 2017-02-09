@@ -57,9 +57,17 @@
       overflow-y: auto;
       overflow-x: hidden;
     }
-    #timeline-view-div {
+    #keyword-select-div{
       position: relative;
-      height : 60%;
+    }
+    #keyword-timeline-view-div{
+      position: relative;
+      height : calc(60% - 20);
+      width : 100%;
+    }
+    #topic-timeline-view-div {
+      position: relative;
+      height : 0%;
       width: 100%;
     }
   }

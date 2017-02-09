@@ -10,3 +10,5 @@ require('./UI/btn_train_topics');
 global.model_stats_display.load().then(function(data){
   global.model_stats_display.data(data).update();
 });
+var KeywordSelect = require('./UI/keyword_select');
+global.keyword_select = KeywordSelect().init();
