@@ -9,10 +9,13 @@ module.exports = exports = function(){
   var year = 1979;
   var type = DOC.A;
   function load(){
+    var query = {};
+    if(year >= 0) query.year = year;
+    if(type >= 0) query.type = year;
     return co(function*(){
       var db = yield mongo_client.connect(url);
       var col = db.collection('papers');
-      var data = yield col.find({year:year,type:type}).toArray();
+      var data = yield col.find(query).toArray();
       db.close();
       return Promise.resolve(data);
     }).catch(function(err){

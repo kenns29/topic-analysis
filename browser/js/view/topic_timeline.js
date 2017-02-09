@@ -12,7 +12,7 @@ function init(){
   return ret;
 }
 function update(){
-
+  
 }
 var ret = {};
 ret.init = init;
