@@ -61,7 +61,6 @@ module.exports = exports = function(){
       data.length * (timeline_height + timeline_y_space) + 5
     ]+')');
     label_enter.on('click', function(d, i){
-      console.log('d', d);
       remove_timeline(d.id);
       update();
     });

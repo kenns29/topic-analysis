@@ -12,21 +12,14 @@ module.exports = exports = function(req, res){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection(col_name);
     var aggr = yield col.aggregate([
-      {$match : {type : type}},
-      {$project : {year : 1, title_tokens : 1}},
-      {$group : {_id : '$year', count : {
-        $sum : {
-          $size : {
-            $filter : {
-              input : '$title_tokens',
-              as : 'token',
-              cond : {$eq :['$$token.lemma', keyword]}
-            }
-          }
-        }
+      {$unwind : '$title_tokens'},
+      {$match : {type :type, 'title_tokens.lemma' : {
+        $regex : keyword, $options : 'i'
       }}},
-      {$sort:{_id : 1}}
+      {$group : {_id : '$year', count : {$sum : 1}}},
+      {$sort : {_id : 1}}
     ]).toArray();
+
     db.close();
     var min_year = 1979;
     var max_year = 1989;
@@ -49,3 +42,21 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
+// function old_aggregate(){
+//   col.aggregate([
+//     {$match : {type : type}},
+//     {$project : {year : 1, title_tokens : 1}},
+//     {$group : {_id : '$year', count : {
+//       $sum : {
+//         $size : {
+//           $filter : {
+//             input : '$title_tokens',
+//             as : 'token',
+//             cond : {$eq :['$$token.lemma', keyword]}
+//           }
+//         }
+//       }
+//     }}},
+//     {$sort:{_id : 1}}
+//   ]).toArray();
+// }
