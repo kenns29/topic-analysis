@@ -11,6 +11,7 @@ module.exports = exports = function(){
   var timeline_y_space = 5;
   var min_year = 1979;
   var max_year = 1989;
+  var y_scale;
   var x_scale;
   var x_axis;
   var x_axis_g;
@@ -26,7 +27,18 @@ module.exports = exports = function(){
     x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + 50, 0]+')');
     return ret;
   }
+  function update_y_scale(){
+    var extent = [Infinity, -Infinity];
+    data.forEach(function(d){
+      d.data.forEach(function(obj){
+          if(extent[0] > obj.count) extent[0] = obj.count;
+          if(extent[1] < obj.count) extent[1] = obj.count;
+      });
+    });
+    y_scale = d3.scaleSqrt().domain(extent).range([0, timeline_height/2]);
+  }
   function update(){
+    update_y_scale();
     var timeline_sel = timeline_g.selectAll('.timeline').data(data, function(d){return d.id;});
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
     var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[45, 0]+')')
@@ -50,15 +62,15 @@ module.exports = exports = function(){
     return ret;
   }
   function update_line(d, i){
-    var y_extent = d3.extent(d.data, function(d){return d.count;});
-    var y_scale = d3.scaleLinear().domain(y_extent).range([0, timeline_height/2]);
+    // var y_extent = d3.extent(d.data, function(d){return d.count;});
+    // var y_scale = d3.scaleLinear().domain(y_extent).range([0, timeline_height/2]);
     var area_fun = d3.area().x(function(d){return x_scale(d.year);})
     .y(function(){return 0;})
     .y0(function(d){return -y_scale(d.count);})
-    .y1(function(d){return y_scale(d.count);});
+    .y1(function(d){return y_scale(d.count);}).curve(d3.curveCardinal);
     d3.select(this).select('path').transition().duration(500).attr('d', function(d){
       return area_fun(d.data);
-    }).attr('fill', 'blue').attr('stroke', 'black').attr('stroke-width', 1);
+    }).attr('fill', 'lightpink').attr('stroke', 'black').attr('stroke-width', 1);
   }
   function add_timeline(line_data){
     if(!id2data[line_data.id]){
