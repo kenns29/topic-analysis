@@ -11,7 +11,7 @@ module.exports = exports = function(){
   function load(){
     var query = {};
     if(year >= 0) query.year = year;
-    if(type >= 0) query.type = year;
+    if(type >= 0) query.type = type;
     return co(function*(){
       var db = yield mongo_client.connect(url);
       var col = db.collection('papers');
