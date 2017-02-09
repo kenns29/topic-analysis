@@ -5,6 +5,7 @@ var router_load_topic_model_stats = require('./router_load_topic_model_stats');
 var router_load_topic_model = require('./router_load_topic_model');
 var router_delete_topic_model = require('./router_delete_topic_model');
 var router_load_tfidf = require('./router_load_tfidf');
+var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_data');
 var express = require('express');
 router = express.Router();
 router.get('/', function(req, res) {
@@ -17,4 +18,5 @@ router.get('/loadtopicmodelstats', router_load_topic_model_stats);
 router.get('/loadtopicmodel', router_load_topic_model);
 router.get('/deletetopicmodel', router_delete_topic_model);
 router.get('/loadtfidf', router_load_tfidf);
+router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data);
 module.exports = router;

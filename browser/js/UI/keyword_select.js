@@ -2,8 +2,11 @@ var $ = require('jquery');
 var d3 = require('../load_d3');
 var DOC = require('../../../flags/doc_flags');
 var LoadTfidf = require('../load/load_tfidf');
+var LoadKeywordTimelineData = require('../load/load_keyword_timeline_data');
 module.exports = exports = function(){
   var select_container = '#keyword-select-div #select-keyword';
+  var select_button = '#keyword-select-div #btn-add-word';
+  var text_container = '#keyword-select-div #textbox-keyword'
   var data;
   function update(_data){
     if(_data) data = _data;
@@ -22,19 +25,25 @@ module.exports = exports = function(){
     return data.slice(0, 60);
   }
   function load(){
-    var level_str = $('#keyword-select-div #select-level').val();
-    var type_str = $('#keyword-select-div #select-type').val();
-    var field_str = $('#keyword-select-div #select-field').val();
-    var level = str2flag(level_str);
-    var type = str2flag(type_str);
-    var field = str2flag(field_str);
+    var flag = get_flags();
+    var level = flag.level, type = flag.type, field = flag.field;
     return LoadTfidf().type(type).level(level).field(field).load().then(function(dat){
       data = dat; return Promise.resolve(data);
     });
   }
   function init(){
-    load().then(function(data){
-      update();
+    // load().then(function(data){
+    //   update();
+    // });
+    $(select_button).click(function(){
+      var keyword = $(text_container).val();
+      var flag = get_flags();
+      var level = flag.level, type = flag.type, field = flag.field;
+      LoadKeywordTimelineData().type(type).level(level).load(keyword).then(function(data){
+        console.log('data', data);
+      }).catch(function(err){
+        console.log(err);
+      });
     });
     return ret;
   }
@@ -44,7 +53,15 @@ module.exports = exports = function(){
   ret.update = update;
   return ret;
 };
-
+function get_flags(){
+  var level_str = $('#keyword-select-div #select-level').val();
+  var type_str = $('#keyword-select-div #select-type').val();
+  var field_str = $('#keyword-select-div #select-field').val();
+  var level = str2flag(level_str);
+  var type = str2flag(type_str);
+  var field = str2flag(field_str);
+  return {level:level,type:type,field:field};
+}
 function str2flag(str){
   switch(str){
     case 'P' : return DOC.P;

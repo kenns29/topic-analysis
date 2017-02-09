@@ -48,24 +48,34 @@
         </div>
       </div>
       <div id = "keyword-select-div">
-        <label>P/PN</label><select id = "select-level">
-          <option value = "P" selected>papers</option>
-          <option value = "PN">panels</option>
-        </select>
-        <label>Type</label><select id="select-type">
-          <option value = "A" selected>academic</option>
-          <option value = "RW">roundtable/workshop</option>
-          <option value = "ALL">all</option>
-        </select>
-        <label>Title/Abstract</label><select id = "select-field">
-          <option value = "TITLE" selected>title</option>
-        </select>
-        <label>Keywords</label><select id = "select-keyword"></select>
+        <div class = "control">
+          <label>P/PN</label><select id = "select-level">
+            <option value = "P" selected>papers</option>
+            <option value = "PN">panels</option>
+          </select>
+        </div>
+        <div class = "control">
+          <label>Type</label><select id="select-type">
+            <option value = "A" selected>academic</option>
+            <option value = "RW">roundtable/workshop</option>
+            <option value = "ALL">all</option>
+          </select>
+        </div>
+        <div class = "control">
+          <label>Title/Abstract</label><select id = "select-field">
+            <option value = "TITLE" selected>title</option>
+          </select>
+        </div>
+        <!-- <label>Keywords</label><select id = "select-keyword"></select> -->
+        <div class = "control">
+          <label>Keywords</label><input type="text" id = "textbox-keyword">
+        </div>
+        <div class = "control">
+          <button class="btn btn-default" id = "btn-add-word">add word</button>
+        </div>
       </div>
-      <div id="keyword-timeline-view-div">
-      </div>
-      <div id="topic-timeline-view-div">
-      </div>
+      <div id="keyword-timeline-view-div"></div>
+      <div id="topic-timeline-view-div"></div>
     </div>
     <div id = "right-view">
       <div id = "document-viewer-div">

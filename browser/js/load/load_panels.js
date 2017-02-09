@@ -27,6 +27,6 @@ module.exports = exports = function(){
   ret.load = load;
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
-  ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
+  ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
   return ret;
 };

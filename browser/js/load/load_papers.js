@@ -27,7 +27,7 @@ module.exports = exports = function(){
   ret.load = load;
   ret.model_id = function(_){return arguments.length > 0 ? (model_id =_, ret):model_;};
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
-  ret.title = function(_){return arguments.length > 0 ? (title = _, ret) : title;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
+  ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
   return ret;
 };

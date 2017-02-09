@@ -59,6 +59,12 @@
     }
     #keyword-select-div{
       position: relative;
+      .control{
+        display : inline-block;
+      }
+      #textbox-keyword{
+        width : 50px;
+      }
     }
     #keyword-timeline-view-div{
       position: relative;
