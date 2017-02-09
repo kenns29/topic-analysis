@@ -24,6 +24,7 @@ module.exports = exports = function(){
     timeline_g = svg.append('g').attr('transform','translate('+[margin.left, margin.top]+')');
     x_scale = d3.scaleLinear().domain([min_year, max_year]).range([0, W]);
     x_axis = d3.axisBottom().scale(x_scale).ticks(max_year - min_year + 1);
+    x_axis.tickFormat(d3.format('d'));
     x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + 50, 0]+')');
     return ret;
   }
