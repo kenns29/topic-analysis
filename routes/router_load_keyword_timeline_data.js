@@ -24,10 +24,25 @@ module.exports = exports = function(req, res){
             }
           }
         }
-      }}}
+      }}},
+      {$sort:{_id : 1}}
     ]).toArray();
     db.close();
-    res.send(aggr);
+    var min_year = 1979;
+    var max_year = 1989;
+    var year2index = function(year){return year - min_year;};
+    var index2year = function(index){return min_year + index;}
+    var data_array = Array(max_year - min_year + 1);
+    for(let i = 0; i < data_array.length; i++)data_array[i] = {year:index2year(i),count:0};
+    for(let i = 0; i  < aggr.length; i++){
+      let dat = aggr[i];
+      data_array[year2index(dat._id)].count = dat.count;
+    }
+    var data = {
+      id : keyword,
+      data : data_array
+    };
+    res.send(data);
   }).catch(function(err){
     console.log(err);
     res.status(500);

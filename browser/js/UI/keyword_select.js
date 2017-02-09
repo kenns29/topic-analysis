@@ -41,6 +41,7 @@ module.exports = exports = function(){
       var level = flag.level, type = flag.type, field = flag.field;
       LoadKeywordTimelineData().type(type).level(level).load(keyword).then(function(data){
         console.log('data', data);
+        global.multi_keyword_timeline.add_timeline(data).update();
       }).catch(function(err){
         console.log(err);
       });
