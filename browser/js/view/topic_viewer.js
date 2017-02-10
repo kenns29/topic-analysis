@@ -36,14 +36,14 @@ function init(){
   return ret;
 }
 function update(){
-  order_topics();
-  var p1 = update_topics();
-  var p2 = update_labels();
+  var dat = order_topics();
+  var p1 = update_topics(dat);
+  var p2 = update_labels(dat);
   return Promise.all([p1, p2]);
 }
-function update_labels(){
+function update_labels(data){
   var topic_color = require('./topic_color');
-  var label_sel = label_g.selectAll('.label').data(data, function(d){return d.index;});
+  var label_sel = label_g.selectAll('.label').data(data, function(d){return d.id;});
   var label_enter = label_sel.enter().append('g').attr('class', 'label');
   label_enter.append('rect').attr('fill', function(d){
     return topic_color(d.id);
@@ -83,9 +83,9 @@ function update_labels(){
   });
   return Promise.resolve();
 }
-function update_topics(){
+function update_topics(data){
   var font_scale = font_scale_factory();
-  var topic_sel = topics_g.selectAll('.topic').data(data, function(d){return d.index;});
+  var topic_sel = topics_g.selectAll('.topic').data(data, function(d){return d.id;});
   var topic_enter = topic_sel.enter().append('g').attr('class', 'topic');
   topic_sel.exit().remove();
   var topic_update = topics_g.selectAll('.topic');
@@ -142,6 +142,9 @@ function update_topics(){
       selected_token = d;
       display_opt = 'token';
     }
+    else if(display_opt === 'token' && selected_token !== d){
+      selected_token = d;
+    }
     else if(display_opt === 'token'){
       display_opt = 'weight';
     }
@@ -189,23 +192,23 @@ function order_topics_by_weight(){
   return data;
 }
 function order_topics_by_token(token){
-  var id_weights = data.map(function(d){
+  var id2weight = [];
+  data.forEach(function(d){
     var t_idx = d.topic.length;
     for(let i = 0; i < d.topic.length; i++){
       if(d.topic[i].token === token.token) {t_idx = i; break;}
     }
-    return {id : d.id, weight:t_idx};
+    id2weight[d.id] = t_idx;
   });
-  id_weights.sort(function(a, b){return a.weight - b.weight;});
+  data.sort(function(a, b){
+    return id2weight[a.id] - id2weight[b.id];
+  });
   index2topic = Array(data.length);
-  id_weights.forEach(function(d, i){
-    var topic = id2topic[d.id];
-    topic.index = i;
-    index2topic[i] = topic;
+  data.forEach(function(d, i){
+    d.index = i;
+    index2topic[i] = d;
   });
-  data.sort(function(a, b){return a.index - b.index;});
-  console.log('data', data);
-  return data;
+  return data.filter(function(d){return id2weight[d.id] < d.topic.length;});
 }
 function order_tokens(t){
   // t.topic.sort(function(a, b){
