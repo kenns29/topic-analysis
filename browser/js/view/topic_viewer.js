@@ -242,17 +242,5 @@ ret.data = function(_){
 };
 ret.loading = function(){return loading;};
 ret.duration = function(){return duration;};
+ret.display_opt = function(_){return arguments.length > 0?(display_opt=_, ret):display_opt;};
 module.exports = init();
-
-
-
-// token_update.each(function(d){d.x = 0;});
-// token_update.each(function(d, i){
-//   d.width = d3.select(this).select('text').node().getComputedTextLength();
-//   if(d.index > 0){
-//     let topic_data = d3.select(this.parentNode).data()[0];
-//     let pre_data = id2index2token[topic_data.id][d.index - 1];
-//     let pre_x = pre_data.x, pre_width = pre_data.width;
-//     d.x += pre_x + text_x_space + pre_width;
-//   }
-// });

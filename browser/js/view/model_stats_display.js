@@ -67,7 +67,7 @@ function update(){
       $(global.topic_viewer.loading()).show();
       var topics = yield LoadTopicModel().id(d.id).load();
       $(global.topic_viewer.loading()).hide();
-      yield global.topic_viewer.data(topics).update();
+      yield global.topic_viewer.display_opt('weight').data(topics).update();
       var data = yield global.topic_document_viewer.year(d.year).type(d.type).level(d.level).load();
       global.topic_document_viewer.data(data).update();
     }).catch(function(err){
