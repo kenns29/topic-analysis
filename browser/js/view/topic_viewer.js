@@ -101,7 +101,12 @@ function update_topics(data){
     if(topic_data.height < d.height) topic_data.height = d.height;
     return d.font_size;
   })
-  .attr('fill', 'blue')
+  .attr('fill', function(d){
+    if(display_opt === 'weight') return 'blue';
+    if(display_opt === 'token'){
+      if(selected_token.id === d.id) return 'blue'; else return 'gray';
+    }
+  })
   .attr('text-anchor', 'start').attr('dominant-baseline', 'middle').text(function(d){
     return d.token;
   });
