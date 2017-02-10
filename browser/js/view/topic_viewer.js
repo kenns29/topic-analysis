@@ -61,9 +61,9 @@ function update_labels(){
   .on('mousemove', function(){tooltip.move(svg.node());})
   .on('mouseout', function(){tooltip.hide();});
   label_update.on('click', function(d){
-    var nodes = global.document_viewer.documents()._groups[0];
+    var nodes = global.topic_document_viewer.documents()._groups[0];
     var top = 0;
-    var documents_container = global.document_viewer.container();
+    var documents_container = global.topic_document_viewer.container();
     if(nodes){
       for(let i = 0; i < nodes.length; i++){
         let node = nodes[i];

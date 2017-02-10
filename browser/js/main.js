@@ -1,6 +1,7 @@
 global.service_url = require('./service');
 global.UI_year_select = require('./UI/year_select');
-global.document_viewer = require('./view/document_viewer');
+var TopicDocumentViewer = require('./view/document_viewer/topic_document_viewer');
+global.topic_document_viewer = TopicDocumentViewer().init();
 global.topic_viewer = require('./view/topic_viewer');
 global.model_stats_display = require('./view/model_stats_display');
 var MultiKeywordTimeline = require('./view/multi_keyword_timeline');
