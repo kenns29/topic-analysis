@@ -175,6 +175,7 @@ module.exports = function(){
       word = alphabet.lookupObjectSync(id);
       weight = idSorter.getWeightSync();
       topic_words.push({token:word,weight:weight,id:id,index:rank});
+      ++rank;
     }
     return topic_words;
   }

@@ -14,7 +14,7 @@ module.exports = exports = function(req, res){
     db.close();
     var m = data_array[0];
     var topic_model = TopicModel().load_from_binary(m.model.buffer);
-    return Promise.resolve(topic_model.get_topics_with_id(10));
+    return Promise.resolve(topic_model.get_topics_with_id(20));
   }).then(function(json){
     res.json(json);
   }).catch(function(err){

@@ -46,7 +46,7 @@ module.exports = exports = function(req, res){
       });
       yield bulk.execute();
       db.close();
-      var json = topic_model.get_topics_with_id(10);
+      var json = topic_model.get_topics_with_id(20);
       res.json(json);
     });
   }).catch(function(err){
