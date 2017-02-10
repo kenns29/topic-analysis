@@ -10,13 +10,16 @@ var margin = {top:10, left:10,bottom:10,right:10};
 var data = [];
 var text_x_space = 3;
 var text_y_space = 3;
-var index_to_topic = [];
-var index_to_token = [];
+var id2topic = [];
+var index2topic = [];
+var id2index2token = [];
 var loading = d3.select(container).select('.loading').node();
 var duration = 1000;
 var tooltip;
 var background;
 var zoom;
+var display_opt = 'weight';
+var selected_token;
 function init(){
   width = $(container).width() - 15, height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
@@ -102,21 +105,18 @@ function update_topics(){
   .attr('text-anchor', 'start').attr('dominant-baseline', 'middle').text(function(d){
     return d.token;
   });
-  topic_update.each(function(d){
+  token_update.each(function(d){d.x = 0, d.width = d3.select(this).select('text').node().getComputedTextLength();});
+  data.forEach(function(d){
     if(d.index > 0){
-      let pre_data = index_to_topic[d.index - 1];
+      let pre_data = index2topic[d.index - 1];
       let pre_y = pre_data.y, pre_height = pre_data.height;
       d.y += pre_y + text_y_space + pre_height;
     }
-  });
-  token_update.each(function(d){d.x = 0;});
-  token_update.each(function(d, i){
-    d.width = d3.select(this).select('text').node().getComputedTextLength();
-    if(d.index > 0){
-      let topic_data = d3.select(this.parentNode).data()[0];
-      let pre_data = index_to_token[topic_data.index][d.index - 1];
-      let pre_x = pre_data.x, pre_width = pre_data.width;
-      d.x += pre_x + text_x_space + pre_width;
+    for(let j = 1; j < d.topic.length; j++){
+      let token = d.topic[j];
+      let pre_token = id2index2token[d.id][token.index - 1];
+      let pre_x = pre_token.x, pre_width = pre_token.width;
+      token.x += pre_x + text_x_space + pre_width;
     }
   });
   var s_height = svg_height(data);
@@ -137,6 +137,16 @@ function update_topics(){
       }).on('end', resolve);
     });
   };
+  token_update.on('click', function(d){
+    if(display_opt === 'weight') {
+      selected_token = d;
+      display_opt = 'token';
+    }
+    else if(display_opt === 'token'){
+      display_opt = 'weight';
+    }
+    update();
+  });
   return Promise.all([t1(), t2()]);
 }
 function total_topic_height(data){
@@ -161,34 +171,80 @@ function font_scale_factory(){
   });
   return d3.scaleSqrt().domain(extent).range([10,50]);
 }
+
 function order_topics(){
+  order_all_tokens();
+  if(display_opt === 'weight') return order_topics_by_weight();
+  else if(display_opt === 'token') return order_topics_by_token(selected_token);
+}
+function order_topics_by_weight(){
   data.sort(function(a, b){
     return b.topic[0].weight - a.topic[0].weight;
   });
-  index_to_topic = Array(data.length);
-  index_to_token = [];
+  index2topic = Array(data.length);
   data.forEach(function(d, i){
     d.index = i;
-    index_to_topic[i] = d;
-    order_tokens(d);
+    index2topic[i] = d;
   });
   return data;
 }
-function order_tokens(t){
-  t.topic.sort(function(a, b){
-    return b.weight - a.weight;
+function order_topics_by_token(token){
+  var id_weights = data.map(function(d){
+    var t_idx = d.topic.length;
+    for(let i = 0; i < d.topic.length; i++){
+      if(d.topic[i].token === token.token) {t_idx = i; break;}
+    }
+    return {id : d.id, weight:t_idx};
   });
-  if(!index_to_token[t.index]) index_to_token[t.index] = [];
+  id_weights.sort(function(a, b){return a.weight - b.weight;});
+  index2topic = Array(data.length);
+  id_weights.forEach(function(d, i){
+    var topic = id2topic[d.id];
+    topic.index = i;
+    index2topic[i] = topic;
+  });
+  data.sort(function(a, b){return a.index - b.index;});
+  console.log('data', data);
+  return data;
+}
+function order_tokens(t){
+  // t.topic.sort(function(a, b){
+  //   return b.weight - a.weight;
+  // });
+  if(!id2index2token[t.id]) id2index2token[t.id] = [];
   t.topic.forEach(function(token, i){
     token.index = i;
-    index_to_token[t.index][i] = token;
+    id2index2token[t.id][i] = token;
   });
 }
 
+function order_all_tokens(){
+  id2index2token = [];
+  data.forEach(function(t){order_tokens(t);});
+}
 var ret = {};
 ret.init = init;
 ret.update = update;
-ret.data = function(_){return arguments.length > 0 ? (data = _, ret) : data;};
+ret.data = function(_){
+  if(arguments.length > 0){
+    data = _; id2topic = [];
+    data.forEach(function(d){id2topic[d.id] = d;});
+    return ret;
+  } else return data;
+};
 ret.loading = function(){return loading;};
 ret.duration = function(){return duration;};
 module.exports = init();
+
+
+
+// token_update.each(function(d){d.x = 0;});
+// token_update.each(function(d, i){
+//   d.width = d3.select(this).select('text').node().getComputedTextLength();
+//   if(d.index > 0){
+//     let topic_data = d3.select(this.parentNode).data()[0];
+//     let pre_data = id2index2token[topic_data.id][d.index - 1];
+//     let pre_x = pre_data.x, pre_width = pre_data.width;
+//     d.x += pre_x + text_x_space + pre_width;
+//   }
+// });

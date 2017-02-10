@@ -1,6 +1,7 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
 var Tooltip = require('./tooltip');
+
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -9,7 +10,7 @@ module.exports = exports = function(){
   var data = [];
   var id2data = [];
   var timeline_height = 30;
-  var timeline_y_space = 5;
+  var timeline_y_space = 7;
   var min_year = 1979;
   var max_year = 1989;
   var y_scale;
@@ -46,10 +47,11 @@ module.exports = exports = function(){
     update_y_scale();
     var timeline_sel = timeline_g.selectAll('.timeline').data(data, function(d){return d.id;});
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
-    var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[timeline_x_offset - 5, 0]+')')
+    var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[timeline_x_offset - 5, timeline_height/2]+')')
     .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10).style('cursor', 'pointer')
     .text(function(d){return d.id});
     var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[timeline_x_offset, 0]+ ')');
+    area_enter.append('rect').attr('width', W).attr('height', timeline_height).attr('fill','white');
     area_enter.append('path');
     timeline_sel.exit().remove();
     var timeline_update = timeline_g.selectAll('.timeline');
@@ -63,12 +65,13 @@ module.exports = exports = function(){
     x_axis_g.call(x_axis);
     x_axis_g.transition().duration(500).attr('transform', 'translate(' + [
       margin.left + 50,
-      data.length * (timeline_height + timeline_y_space) + 5
+      margin.top + data.length * (timeline_height + timeline_y_space) + 5
     ]+')');
     label_enter.on('click', function(d, i){
       remove_timeline(d.id);
       update();
     });
+    // area_enter.append('g').attr('class', 'brush').call(d3.brushX().extent([[0, -3], [W, timeline_height+3]]));
     return ret;
   }
   function area_mouseover(element){
@@ -96,9 +99,9 @@ module.exports = exports = function(){
     // var y_extent = d3.extent(d.data, function(d){return d.count;});
     // var y_scale = d3.scaleLinear().domain(y_extent).range([0, timeline_height/2]);
     var area_fun = d3.area().x(function(d){return x_scale(d.year);})
-    .y(function(){return 0;})
-    .y0(function(d){return -y_scale(d.count);})
-    .y1(function(d){return y_scale(d.count);}).curve(d3.curveCardinal);
+    .y(function(){return timeline_height/2;})
+    .y0(function(d){return timeline_height/2+y_scale(d.count);})
+    .y1(function(d){return timeline_height/2-y_scale(d.count);}).curve(d3.curveCardinal);
     d3.select(this).select('path').transition().duration(500).attr('d', function(d){
       return area_fun(d.data);
     }).attr('fill', 'lightpink').attr('stroke', 'black').attr('stroke-width', 1);

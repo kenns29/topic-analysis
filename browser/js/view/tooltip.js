@@ -43,8 +43,8 @@ module.exports = exports = function(_container){
 		tooltip.append('div')
 		.style('width', 'auto')
 		.style('height', 'auto')
-		.style('overflow-y', 'auto')
-		.style('overflow-x', 'hidden')
+		// .style('overflow-y', 'auto')
+		// .style('overflow-x', 'hidden')
 		.style('font-size', font_size)
 		.html(function(){return html_fun.call(this, data);});
 		tooltip.style('left', function(){return x_pos.call(this, x) + 'px';});
