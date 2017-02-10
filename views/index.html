@@ -78,9 +78,30 @@
       <div id="topic-timeline-view-div"></div>
     </div>
     <div id = "right-view">
-      <div id = "document-viewer-div">
-        <div id='loading' class='loading'>
-          <span class="loading-helper"></span><img src="loading.gif" />
+      <ul class="nav nav-tabs" role="tablist" data-tabs="tabs">
+        <li role = "presentation" name="doc-tab" class = "active">
+          <a id="topic-document-viewer-tab" href="#topic-document-viewer-panel"
+          aria-controls="topic-document-viewer-panel" role="tab" data-toggle="tab"><b>Topic Documents</b></a>
+        </li>
+        <li role = "presentation" name="doc-tab">
+          <a id="keyword-document-viewer-tab" href="#keyword-document-viewer-panel"
+          aria-controls="keyword-document-viewer-panel" role="tab" data-toggle="tab"><b>Keyword Documents</b></a>
+        </li>
+      </ul>
+      <div class = "tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="topic-document-viewer-panel">
+          <div id = "document-viewer-div">
+            <div id='loading' class='loading'>
+              <span class="loading-helper"></span><img src="loading.gif" />
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="keyword-document-viewer-panel">
+          <div id = "keyword-document-viewer-div">
+            <div id='loading' class='loading'>
+              <span class="loading-helper"></span><img src="loading.gif" />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -14,3 +14,5 @@ global.model_stats_display.load().then(function(data){
 });
 var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
+
+require('./UI/document_tab_nav');

@@ -35,7 +35,7 @@ module.exports = exports = function(req, res){
       id : keyword,
       data : data_array
     };
-    res.send(data);
+    res.json(data);
   }).catch(function(err){
     console.log(err);
     res.status(500);
