@@ -6,9 +6,7 @@ module.exports = exports = function(_container){
 	if(_container !== undefined){
 		container = _container;
 	}
-	function html_fun(){
-		return '';
-	}
+	function html_fun(d){return d;}
 	function init(){
 		tooltip = d3.select(container)
 		.append('div')
@@ -34,7 +32,6 @@ module.exports = exports = function(_container){
 			element = sel.node();
 		var mouse = d3.mouse(element);
 		var x = mouse[0], y = mouse[1];
-
 		tooltip.selectAll('div').remove();
 		tooltip
 		.style('width', 'auto')
@@ -42,7 +39,6 @@ module.exports = exports = function(_container){
 		.style("top", function(){
 			return y_pos.call(this, y) + 'px';
 		});
-
 		tooltip.append('div')
 		.style('width', 'auto')
 		.style('height', 'auto')
@@ -50,21 +46,13 @@ module.exports = exports = function(_container){
 		.style('overflow-x', 'hidden')
 		.style('font-size', '20px')
 		.html(function(){return html_fun.call(this, data);});
-
-		tooltip
-		.style('left', function(){
-			return x_pos.call(this, x) + 'px';
-		});
-
-		tooltip
-		.style('display', null)
-		.style("opacity", .9);
-
+		tooltip.style('left', function(){return x_pos.call(this, x) + 'px';});
+		tooltip.style('display', null).style("opacity", .9);
 		tooltip.moveToFront();
 		return ret;
 	}
 
-	function move(sel){
+	function move(sel, data){
 		var element = sel;
 		if(sel.node && typeof sel.node === 'function')
 			element = sel.node();
@@ -78,6 +66,9 @@ module.exports = exports = function(_container){
 		.style("top", function(){
 			return y_pos.call(this, y) + 'px';
 		});
+		if(data !== undefined && data !== null){
+			tooltip.select('div').html(function(){return html_fun.call(this, data);});
+		}
 		return ret;
 	}
 

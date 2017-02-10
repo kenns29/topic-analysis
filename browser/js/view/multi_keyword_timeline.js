@@ -1,5 +1,6 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
+var Tooltip = require('./tooltip');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -15,9 +16,11 @@ module.exports = exports = function(){
   var x_scale;
   var x_axis;
   var x_axis_g;
+  var tooltip;
+  var timeline_x_offset = 50;
   function init(){
     width = $(container).width(), height = $(container).height();
-    W = width - margin.left - margin.right - 50;
+    W = width - margin.left - margin.right - timeline_x_offset;
     H = height - margin.top - margin.bottom;
     svg = d3.select(container).attr('class', 'keyword-timeline')
     .append('svg').attr('width', width).attr('height', height);
@@ -25,7 +28,8 @@ module.exports = exports = function(){
     x_scale = d3.scaleLinear().domain([min_year, max_year]).range([0, W]);
     x_axis = d3.axisBottom().scale(x_scale).ticks(max_year - min_year + 1);
     x_axis.tickFormat(d3.format('d'));
-    x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + 50, 0]+')');
+    x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + timeline_x_offset, 0]+')');
+    tooltip = Tooltip().container(container)();
     return ret;
   }
   function update_y_scale(){
@@ -42,10 +46,10 @@ module.exports = exports = function(){
     update_y_scale();
     var timeline_sel = timeline_g.selectAll('.timeline').data(data, function(d){return d.id;});
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
-    var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[45, 0]+')')
+    var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[timeline_x_offset - 5, 0]+')')
     .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10).style('cursor', 'pointer')
     .text(function(d){return d.id});
-    var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[50, 0]+ ')');
+    var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[timeline_x_offset, 0]+ ')');
     area_enter.append('path');
     timeline_sel.exit().remove();
     var timeline_update = timeline_g.selectAll('.timeline');
@@ -55,6 +59,7 @@ module.exports = exports = function(){
       return 'translate('+[x, y]+')';
     });
     timeline_update.select('.area').each(update_line);
+    timeline_update.select('.area').call(area_mouseover);
     x_axis_g.call(x_axis);
     x_axis_g.transition().duration(500).attr('transform', 'translate(' + [
       margin.left + 50,
@@ -65,6 +70,20 @@ module.exports = exports = function(){
       update();
     });
     return ret;
+  }
+  function area_mouseover(element){
+    element.on('mouseover', function(d){
+      var v = value.call(this, d);
+      tooltip.show(svg.node(), v.year);
+    }).on('mousemove', function(d){
+      var v = value.call(this, d);
+      tooltip.move(svg.node(), v.year);
+    }).on('mouseout', function(d){tooltip.hide();});
+    function value(d){
+      var x = d3.mouse(this)[0];
+      var year = Math.floor(x_scale.invert(x));
+      return {year : year, value : value};
+    }
   }
   function update_line(d, i){
     // var y_extent = d3.extent(d.data, function(d){return d.count;});

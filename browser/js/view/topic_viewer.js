@@ -20,7 +20,7 @@ var zoom;
 function init(){
   width = $(container).width() - 15, height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
-  background = svg.append('rect').attr('width', width).attr('height', height).attr('fill', 'white');
+  background = svg.append('rect').attr('width', width).attr('height', height).attr('fill', 'white').style('cursor', 'grab');
   graph_g = svg.append('g').attr('class', 'topic-viewer-g').attr('transform', 'translate(' + [margin.left, margin.top]+')');
   topics_g = graph_g.append('g').attr('class', 'topics-g').attr('transform', 'translate('+ [50, 0] +')')
   label_g = graph_g.append('g').attr('class', 'labels-g');
@@ -88,7 +88,7 @@ function update_topics(){
   var topic_update = topics_g.selectAll('.topic');
   topic_update.each(function(d){d.height = 0; d.y = 0;});
   var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.index;});
-  var token_enter = token_sel.enter().append('g').attr('class', 'token');
+  var token_enter = token_sel.enter().append('g').attr('class', 'token').style('cursor', 'pointer');
   token_enter.append('text');
   token_sel.exit().remove();
   var token_update = topic_update.selectAll('.token');
