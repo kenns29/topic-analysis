@@ -6,6 +6,7 @@ module.exports = exports = function(_container){
 	if(_container !== undefined){
 		container = _container;
 	}
+	var font_size = '20px';
 	function html_fun(d){return d;}
 	function init(){
 		tooltip = d3.select(container)
@@ -44,7 +45,7 @@ module.exports = exports = function(_container){
 		.style('height', 'auto')
 		.style('overflow-y', 'auto')
 		.style('overflow-x', 'hidden')
-		.style('font-size', '20px')
+		.style('font-size', font_size)
 		.html(function(){return html_fun.call(this, data);});
 		tooltip.style('left', function(){return x_pos.call(this, x) + 'px';});
 		tooltip.style('display', null).style("opacity", .9);
@@ -115,5 +116,6 @@ module.exports = exports = function(_container){
 			return ret;
 		} else return y_pos;
 	};
+	ret.font_size = function(_){return arguments.length > 0? (font_size = _, ret) : font_size;};
 	return ret;
 };

@@ -29,7 +29,7 @@ module.exports = exports = function(){
     x_axis = d3.axisBottom().scale(x_scale).ticks(max_year - min_year + 1);
     x_axis.tickFormat(d3.format('d'));
     x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + timeline_x_offset, 0]+')');
-    tooltip = Tooltip().container(container)();
+    tooltip = Tooltip().container(container).font_size('15px')();
     return ret;
   }
   function update_y_scale(){
@@ -74,14 +74,21 @@ module.exports = exports = function(){
   function area_mouseover(element){
     element.on('mouseover', function(d){
       var v = value.call(this, d);
-      tooltip.show(svg.node(), v.year);
+      tooltip.show(svg.node(), 'year: ' + v.year + ', count: ' + v.value);
     }).on('mousemove', function(d){
       var v = value.call(this, d);
-      tooltip.move(svg.node(), v.year);
+      tooltip.move(svg.node(), 'year: ' + v.year + ', count: ' + v.value);
     }).on('mouseout', function(d){tooltip.hide();});
     function value(d){
       var x = d3.mouse(this)[0];
       var year = Math.floor(x_scale.invert(x));
+      var line_data = d3.select(this).data()[0];
+      let values = line_data.data;
+      let value = 0;
+      for(let i = 0; i < values.length; i++){
+        let v = values[i];
+        if(Number(v.year) === Number(year)) {value = v.count; break;}
+      }
       return {year : year, value : value};
     }
   }
