@@ -15,13 +15,21 @@ var index_to_token = [];
 var loading = d3.select(container).select('.loading').node();
 var duration = 1000;
 var tooltip;
+var background;
+var zoom;
 function init(){
   width = $(container).width() - 15, height = $(container).height();
   svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
+  background = svg.append('rect').attr('width', width).attr('height', height).attr('fill', 'white');
   graph_g = svg.append('g').attr('class', 'topic-viewer-g').attr('transform', 'translate(' + [margin.left, margin.top]+')');
   topics_g = graph_g.append('g').attr('class', 'topics-g').attr('transform', 'translate('+ [50, 0] +')')
   label_g = graph_g.append('g').attr('class', 'labels-g');
   tooltip = Tooltip().container(container).html(function(d){return d;}).init();
+  zoom = d3.zoom().on('zoom', function(){
+    var x = d3.event.transform.x + margin.left, y = margin.top;
+    graph_g.attr('transform', 'translate('+[x, y]+')');
+  });
+  background.call(zoom);
   return ret;
 }
 function update(){
@@ -111,7 +119,8 @@ function update_topics(){
       d.x += pre_x + text_x_space + pre_width;
     }
   });
-  height = svg_height(data);
+  var s_height = svg_height(data);
+  height = s_height > $(container).height() ? s_height : $(container).height();
   svg.attr('height',height);
   var t1 = function(){
     return new Promise(function(resolve, reject){
