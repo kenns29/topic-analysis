@@ -148,6 +148,7 @@ module.exports = exports = function(){
 
   function brushes_factory(){
     var id2brush = [];
+    var id2extent = [];
     function activate_brush(){
       timeline_g.selectAll('.timeline').select('.area').each(function(d){
         d3.select(this).append('g').attr('class', 'brush').call(id2brush[d.id]);
@@ -157,7 +158,7 @@ module.exports = exports = function(){
       timeline_g.selectAll('.timeline').select('.area').select('.brush').remove();
     }
     function add_brush(id){
-      id2brush[id] = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
+      id2brush[id] = brush_maker(id);
       return ret_brush;
     }
     function remove_brush(id){
@@ -166,6 +167,20 @@ module.exports = exports = function(){
     }
     function reset_brush(keyword){
 
+    }
+    function brush_maker(id){
+      id2extent[id] = [0, 0];
+      var brush = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
+      brush.on('brush', function(){
+        if (d3.event.sourceEvent.type === "brush") return;
+        if(d3.event.selection){
+          var extent = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
+          d3.select(this).call(d3.event.target.move, extent.map(x_scale));
+        }
+      }).on('end', function(){
+
+      });
+      return brush;
     }
     var ret_brush = {};
     ret_brush.activate = activate_brush;
