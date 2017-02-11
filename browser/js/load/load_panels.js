@@ -7,11 +7,12 @@ module.exports = exports = function(){
   var to_year = -1;
   var type = DOC.A;
   var field = DOC.TITLE;
+  var keywords;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
       url : service_url + '/loadpanels',
-      data : {model_id:model_id,year:year,to_year:to_year,type:type, field:field},
+      data : {model_id:model_id,year:year,to_year:to_year,type:type,field:field,keywords:keywords},
       dataType: 'json',
       success : function(data){
         callback(data);
@@ -30,5 +31,6 @@ module.exports = exports = function(){
   ret.to_year = function(_){return arguments.length > 0 ? (to_year = _, ret) : to_year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
+  ret.keywords = function(_){return arguments.length > 0 ? (keywords = _, ret) : keywords;};
   return ret;
 };

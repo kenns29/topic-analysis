@@ -1,7 +1,8 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
 var Tooltip = require('./tooltip');
-
+var LoadPapers = require('../load/load_papers');
+var LoadPanels = require('../load/load_panels');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -148,7 +149,6 @@ module.exports = exports = function(){
 
   function brushes_factory(){
     var id2brush = [];
-    var id2extent = [];
     function activate_brush(){
       timeline_g.selectAll('.timeline').select('.area').each(function(d){
         d3.select(this).append('g').attr('class', 'brush').call(id2brush[d.id]);
@@ -169,17 +169,21 @@ module.exports = exports = function(){
 
     }
     function brush_maker(id){
-      id2extent[id] = [0, 0];
       var brush = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
       brush.on('brush', function(){
         if (d3.event.sourceEvent.type === "brush") return;
         if(d3.event.selection){
-          var domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
-          var extent = domain.map(x_scale);
+          let domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
+          let extent = domain.map(x_scale);
+          d3.select(this).call(d3.event.target.move, extent);
           timeline_g.selectAll('.timeline').select('.area').select('.brush').call(d3.event.target.move, extent);
         }
       }).on('end', function(){
+        if (d3.event.sourceEvent.type === "brush") return;
+        if(d3.event.selection){
+          let domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
 
+        }
       });
       return brush;
     }

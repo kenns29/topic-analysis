@@ -13,7 +13,10 @@ module.exports = exports = function(req, res){
   var year = Number(req.query.year);
   var type = Number(req.query.type);
   var to_year = Number(req.query.to_year); if(!to_year) to_year = -1;
-  var get_panels = GetPanels().year(year).to_year(to_year).type(type);
+  var keywords = [];
+  var keywords_str = req.query.keywords;
+  if(keywords_str) keywords = keywords_str.split(',');
+  var get_panels = GetPanels().year(year).to_year(to_year).keywords(keywords).type(type);
   var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
   get_panels().then(function(data){
     if(model_id) return model_data_promise(data, model_id, token_field);
