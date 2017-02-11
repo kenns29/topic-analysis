@@ -19,6 +19,7 @@ module.exports = exports = function(){
   var x_axis_g;
   var tooltip;
   var timeline_x_offset = 50;
+  var brushes = brushes_factory();
   function init(){
     width = $(container).width(), height = $(container).height();
     W = width - margin.left - margin.right - timeline_x_offset;
@@ -71,7 +72,6 @@ module.exports = exports = function(){
       remove_timeline(d.id);
       update();
     });
-    // area_enter.append('g').attr('class', 'brush').call(d3.brushX().extent([[0, -3], [W, timeline_height+3]]));
     return ret;
   }
   function area_mouseover(element){
@@ -111,6 +111,7 @@ module.exports = exports = function(){
       line_data.index = data.length;
       id2data[line_data.id] = line_data;
       data.push(line_data);
+      brushes.add(line_data.id);
     }
     return ret;
   }
@@ -125,6 +126,7 @@ module.exports = exports = function(){
       }
       --i;
     }
+    brushes.remove(id);
     return ret;
   }
   var ret = {};
@@ -140,5 +142,37 @@ module.exports = exports = function(){
   ret.update = update;
   ret.add_timeline = add_timeline;
   ret.remove_timeline = remove_timeline;
+  ret.activate_brushes = function(_){brushes.activate();};
+  ret.deactivate_brushes = function(){brushes.deactivate();};
   return ret;
+
+  function brushes_factory(){
+    var id2brush = [];
+    function activate_brush(){
+      timeline_g.selectAll('.timeline').select('.area').each(function(d){
+        d3.select(this).append('g').attr('class', 'brush').call(id2brush[d.id]);
+      });
+    }
+    function deactivate_brush(){
+      timeline_g.selectAll('.timeline').select('.area').select('.brush').remove();
+    }
+    function add_brush(id){
+      id2brush[id] = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
+      return ret_brush;
+    }
+    function remove_brush(id){
+      delete id2brush[id];
+      return ret_brush;
+    }
+    function reset_brush(keyword){
+
+    }
+    var ret_brush = {};
+    ret_brush.activate = activate_brush;
+    ret_brush.deactivate = deactivate_brush;
+    ret_brush.add = add_brush;
+    ret_brush.remove = remove_brush;
+    ret_brush.reset = reset_brush;
+    return ret_brush;
+  }
 };

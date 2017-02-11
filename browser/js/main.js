@@ -17,3 +17,4 @@ var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
 
 require('./UI/document_tab_nav');
+require('./UI/checkbox-timeline-brush');
