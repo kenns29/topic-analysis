@@ -6,13 +6,17 @@ var co = require('co');
 var ConnStat = require('../db_mongo/connection');
 var model_col = require('../db_mongo/model_col');
 var DOC = require('../flags/doc_flags');
+var model_data_promise = require('../db_mongo/model_data_promise');
 module.exports = exports = function(req, res){
   var model_id = Number(req.query.model_id);
   var field = Number(req.query.field);
   var year = Number(req.query.year);
   var to_year = Number(req.query.to_year); if(!to_year) to_year = -1;
   var type = Number(req.query.type);
-  var get_papers = GetPapers().year(year).to_year(to_year).type(type);
+  var keywords = [];
+  var keywords_str = req.query.keywords;
+  if(keywords_str) keywords = keywords_str.split(',');
+  var get_papers = GetPapers().year(year).to_year(to_year).keywords(keywords).type(type);
   var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
   get_papers().then(function(data){
     if(model_id) return model_data_promise(data, model_id, token_field);
@@ -24,22 +28,3 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
-
-function model_data_promise(data, model_id, token_field){
-  return co(function*(){
-    var db = yield MongoClient.connect(ConnStat().url());
-    var col = db.collection(model_col);
-    var data_array = yield col.find({id : model_id}).toArray();
-    db.close();
-    var m = data_array[0];
-    let topic_model = TopicModel().load_from_binary(m.model.buffer);
-    let id2pos2token = topic_model.id2pos2token(data, token_field);
-    let id2distr = topic_model.id2distr();
-    let id2tokens = topic_model.id2tokens(id2pos2token);
-    data.forEach(function(d){
-      d.topic_distr = id2distr[d.id];
-      d.topic_tokens = id2tokens[d.id];
-    });
-    return Promise.resolve(data);
-  });
-}

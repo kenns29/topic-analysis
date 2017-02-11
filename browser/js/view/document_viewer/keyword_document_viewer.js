@@ -11,16 +11,14 @@ module.exports = exports = function(){
   var level = DOC.P;
   var type = DOC.A;
   var loading;
-  var year = global.UI_year_select.year();
+  var year;
   function init(){
     width = $(container).width();
     d3.select(container).attr('class', 'keyword-document-viewer');
     loading = d3.select(container).select('.loading').node();
     return ret;
   }
-  function load(){
 
-  }
   function update(){
     var div_sel =  d3.select(container).selectAll('.document').data(data, function(d){return d.id;});
     var div_enter = div_sel.enter().append('div')
@@ -50,10 +48,34 @@ module.exports = exports = function(){
   function update_title_span(d, i){
 
   }
-
   function order_documents(){
 
     return data;
+  }
+  function load(){
+    if(level === DOC.P){
+      $(loading).show();
+      return LoadPapers().model_id(model_id).year(year).type(type).load().then(function(data){
+        $(loading).hide();
+        return Promise.resolve(data);
+      })
+      .catch(function(err){
+        console.log(err);
+        $(loading).hide();
+      });
+    }
+    else if(level === DOC.PN){
+      $(loading).show();
+      return LoadPanels().model_id(model_id).year(year).type(type).load().then(function(data){
+        $(loading).hide();
+        return Promise.resolve(data);
+      })
+      .catch(function(err){
+        console.log(err);
+        $(loading).hide();
+      });
+    }
+    return Promise.resove([]);
   }
   var ret = {};
   ret.container = function(_){return arguments.length > 0 ? (container = _, ret) : container;};
