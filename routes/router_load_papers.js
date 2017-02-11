@@ -15,7 +15,7 @@ module.exports = exports = function(req, res){
   var get_papers = GetPapers().year(year).to_year(to_year).type(type);
   var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
   get_papers().then(function(data){
-    if(model_id) return model_data_promise(model_id);
+    if(model_id) return model_data_promise(data, model_id, token_field);
     else return Promise.resolve(data);
   }).then(function(data){
     res.json(data);
@@ -25,7 +25,7 @@ module.exports = exports = function(req, res){
   });
 };
 
-function model_data_promise(model_id){
+function model_data_promise(data, model_id, token_field){
   return co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection(model_col);
