@@ -174,8 +174,9 @@ module.exports = exports = function(){
       brush.on('brush', function(){
         if (d3.event.sourceEvent.type === "brush") return;
         if(d3.event.selection){
-          var extent = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
-          d3.select(this).call(d3.event.target.move, extent.map(x_scale));
+          var domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
+          var extent = domain.map(x_scale);
+          timeline_g.selectAll('.timeline').select('.area').select('.brush').call(d3.event.target.move, extent);
         }
       }).on('end', function(){
 
