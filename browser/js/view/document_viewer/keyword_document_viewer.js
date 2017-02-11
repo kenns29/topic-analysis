@@ -4,6 +4,7 @@ var util = require('../../util.js');
 var DOC = require('../../../../flags/doc_flags');
 var LoadPapers = require('../../load/load_papers');
 var LoadPanels = require('../../load/load_panels');
+var co = require('co');
 module.exports = exports = function(){
   var container = '#keyword-document-viewer-div';
   var data = [];
@@ -12,6 +13,8 @@ module.exports = exports = function(){
   var type = DOC.A;
   var loading;
   var year;
+  var to_year;
+  var keywords;
   function init(){
     width = $(container).width();
     d3.select(container).attr('class', 'keyword-document-viewer');
@@ -49,33 +52,25 @@ module.exports = exports = function(){
 
   }
   function order_documents(){
-
     return data;
   }
   function load(){
-    if(level === DOC.P){
-      $(loading).show();
-      return LoadPapers().model_id(model_id).year(year).type(type).load().then(function(data){
+    return co(function*(){
+      if(level === DOC.P){
+        $(loading).show();
+        let data = yield LoadPapers().year(year).to_year(to_year).type(type).keywords(keywords).load();
         $(loading).hide();
-        return Promise.resolve(data);
-      })
-      .catch(function(err){
-        console.log(err);
+        return Promise.resovle(data);
+      } else if(level === DOC.PN){
+        $(loading).show();
+        let data = yield LoadPanels().year(year).to_year(to_year).type(type).keywords(keywords).load();
         $(loading).hide();
-      });
-    }
-    else if(level === DOC.PN){
-      $(loading).show();
-      return LoadPanels().model_id(model_id).year(year).type(type).load().then(function(data){
-        $(loading).hide();
-        return Promise.resolve(data);
-      })
-      .catch(function(err){
-        console.log(err);
-        $(loading).hide();
-      });
-    }
-    return Promise.resove([]);
+        return Promise.resovle(data);
+      } else return Promise.resolve([]);
+    }).catch(function(err){
+      console.log(err);
+      $(loading).hide();
+    });
   }
   var ret = {};
   ret.container = function(_){return arguments.length > 0 ? (container = _, ret) : container;};
@@ -91,8 +86,10 @@ module.exports = exports = function(){
     } else return data;
   };
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
+  ret.to_year = function(_){return arguments.length > 0 ? (to_year = _, ret) : to_year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
+  ret.keywords = function(_){return arguments.length > 0 ? (keywords = _, ret) : keywords;};
   ret.loading = function(){return loading;};
   ret.load = load;
   ret.documents = function(){return d3.select(container).selectAll('.document');};
