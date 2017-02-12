@@ -1,15 +1,16 @@
 var ConnStat = require('./connection');
 var co = require('co');
 var mongodb = require('mongodb');
+var mongo_client = mongodb.MongoClient;
 var DOC = require('../flags/doc_flags');
 var keywords_query = require('./querys').keywords_query;
 module.exports = exports = function(){
-  var mongo_client = mongodb.MongoClient;
   var url = ConnStat().url();
   var data;
   var year = 1979;
   var type = DOC.A;
   var to_year = -1;
+  var field = DOC.TITLE;
   var keywords = [];
   function load(){
     var token_field = field === DOC.ABSTRACT ? 'abstract_tokens' : 'title_tokens';
@@ -33,6 +34,7 @@ module.exports = exports = function(){
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.to_year = function(_){return arguments.length > 0 ?(to_year =_, ret) : to_year;};
+  ret.field = function(_){return arguments.length > 0? (field=_, ret) : field;};
   ret.keywords = function(_){return arguments.length > 0 ? (keywords = _, ret) : keywords;};
   ret.load = load;
   return ret;

@@ -7,6 +7,7 @@ var ConnStat = require('../db_mongo/connection');
 var model_col = require('../db_mongo/model_col');
 var DOC = require('../flags/doc_flags');
 var model_data_promise = require('../db_mongo/model_data_promise');
+var keyword_data_promise = require('../db_mongo/keyword_data_promise');
 module.exports = exports = function(req, res){
   var model_id = Number(req.query.model_id);
   var field = Number(req.query.field);
@@ -20,7 +21,8 @@ module.exports = exports = function(req, res){
   var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
   get_papers().then(function(data){
     if(model_id) return model_data_promise(data, model_id, token_field);
-    else return Promise.resolve(data);
+    if(keywords.length > 0) return keyword_data_promise(data, keywords, token_field);
+    return Promise.resolve(data);
   }).then(function(data){
     res.json(data);
   }).catch(function(err){
