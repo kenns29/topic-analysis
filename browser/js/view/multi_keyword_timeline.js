@@ -189,6 +189,7 @@ module.exports = exports = function(){
           .year(domain[0]).to_year(domain[1])
           .type(flags.type).field(flags.field).level(flags.level).load().then(function(data){
             console.log('keyword doc data', data);
+            global.keyword_document_viewer.data(data).update();
           });
         }
       });

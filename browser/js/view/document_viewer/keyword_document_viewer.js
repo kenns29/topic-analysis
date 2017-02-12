@@ -17,7 +17,7 @@ module.exports = exports = function(){
   var keywords;
   var field = DOC.TITLE;
   function init(){
-    width = $(container).width();
+    width = $(global.topic_document_viewer.container()).width();
     d3.select(container).attr('class', 'keyword-document-viewer');
     loading = d3.select(container).select('.loading').node();
     return ret;
@@ -49,7 +49,33 @@ module.exports = exports = function(){
     return ret;
   }
   function update_title_span(d, i){
-    
+    var span_array = [];
+    var title = d.title;
+    if(!d.keyword_tokens || d.keyword_tokens.length === 0){
+      span_array.push({span : title, topic : -1});
+    } else {
+      let len = d.keyword_tokens.length;
+      let pre_charindex = [0, 0];
+      for(let j = 0; j < len; j++){
+        let token = d.keyword_tokens[j];
+        let charindex = [token.begin_position, token.end_position];
+        if(charindex[0] > pre_charindex[1]) span_array.push({span : title.substring(pre_charindex[1], charindex[0]), keyword : null});
+        span_array.push({span : title.substring(charindex[0], charindex[1]), keyword : token.lemma});
+        if(j === len - 1 && charindex[1] < len)span_array.push({span : title.substring(charindex[1], len), keyword : token.lemma});
+        pre_charindex = charindex;
+      }
+    }
+    var span_sel = d3.select(this).selectAll('span').data(span_array);
+    var span_enter = span_sel.enter().append('span');
+    span_sel.exit().remove();
+    var span_update = d3.select(this).selectAll('span');
+    span_update.style('background-color', function(d){
+      if(d.keyword === null) return 'white';
+      else{
+        return 'rgba(' + [0, 0, 255, 0.3] + ')';
+      }
+    });
+    span_update.html(function(d){return d.span;});
   }
   function order_documents(){
     return data.sort(function(a, b){return a.year - b.year;});
