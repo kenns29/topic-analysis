@@ -52,7 +52,7 @@ module.exports = exports = function(){
     var span_array = [];
     var title = d.title;
     if(!d.keyword_tokens || d.keyword_tokens.length === 0){
-      span_array.push({span : title, topic : -1});
+      span_array.push({span : title, keyword : null});
     } else {
       let len = d.keyword_tokens.length;
       let pre_charindex = [0, 0];
@@ -61,7 +61,7 @@ module.exports = exports = function(){
         let charindex = [token.begin_position, token.end_position];
         if(charindex[0] > pre_charindex[1]) span_array.push({span : title.substring(pre_charindex[1], charindex[0]), keyword : null});
         span_array.push({span : title.substring(charindex[0], charindex[1]), keyword : token.lemma});
-        if(j === len - 1 && charindex[1] < len)span_array.push({span : title.substring(charindex[1], len), keyword : token.lemma});
+        if(j === len - 1 && charindex[1] < title.length)span_array.push({span : title.substring(charindex[1], title.length), keyword : null});
         pre_charindex = charindex;
       }
     }

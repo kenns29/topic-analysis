@@ -89,7 +89,7 @@ module.exports = exports = function(){
         }
         if(charindex[0] > pre_charindex[1]) span_array.push({span : title.substring(pre_charindex[1], charindex[0]), topic : -1});
         span_array.push({span : title.substring(charindex[0], charindex[1]), topic : token.topic});
-        if(j === len - 1 && charindex[1] < len)span_array.push({span : title.substring(charindex[1], len), topic : -1});
+        if(j === len - 1 && charindex[1] < title.length)span_array.push({span : title.substring(charindex[1], title.length), topic : -1});
         pre_charindex = charindex;
       }
     }
