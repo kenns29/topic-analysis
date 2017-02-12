@@ -3,6 +3,7 @@ var $ = require('jquery');
 var Tooltip = require('./tooltip');
 var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
+var KeywordSelect = require('../UI/keyword_select');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -170,6 +171,7 @@ module.exports = exports = function(){
     }
     function brush_maker(id){
       var brush = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
+      let get_flags = KeywordSelect.get_flags;
       brush.on('brush', function(){
         if (d3.event.sourceEvent.type === "brush") return;
         if(d3.event.selection){
@@ -182,7 +184,11 @@ module.exports = exports = function(){
         if (d3.event.sourceEvent.type === "brush") return;
         if(d3.event.selection){
           let domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
-
+          var flags = get_flags();
+          LoadPapers().keywords(data.map(function(d){return d.id;})).year(domain[0]).to_year(domain[1])
+          .type(flags.type).field(flags.field).load().then(function(data){
+            console.log('keyword doc data', data);
+          });
         }
       });
       return brush;

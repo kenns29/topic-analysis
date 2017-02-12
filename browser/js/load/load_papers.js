@@ -10,8 +10,13 @@ module.exports = exports = function(){
   var keywords;
   function callback(data){}
   function load(){
-    var keywords_str;
-    // if(keywords
+    var keywords_str = '';
+    if(keywords && keywords.length > 0){
+      keywords_str = keywords.reduce(function(pre, cur){
+        if(pre === '') return cur;
+        else return pre + ',' + cur;
+      }, '');
+    }
     var deferred = $.ajax({
       url : service_url + '/loadpapers',
       data : {model_id:model_id,year:year,to_year:to_year,type:type,field:field,keywords:keywords_str},

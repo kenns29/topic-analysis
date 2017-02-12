@@ -53,6 +53,8 @@ module.exports = exports = function(){
   ret.update = update;
   return ret;
 };
+module.exports.get_flags = get_flags;
+module.exports.str2flag = str2flag;
 function get_flags(){
   var level_str = $('#keyword-select-div #select-level').val();
   var type_str = $('#keyword-select-div #select-type').val();
