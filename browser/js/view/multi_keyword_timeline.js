@@ -185,8 +185,9 @@ module.exports = exports = function(){
         if(d3.event.selection){
           let domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
           var flags = get_flags();
-          LoadPapers().keywords(data.map(function(d){return d.id;})).year(domain[0]).to_year(domain[1])
-          .type(flags.type).field(flags.field).load().then(function(data){
+          global.keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
+          .year(domain[0]).to_year(domain[1])
+          .type(flags.type).field(flags.field).level(flags.level).load().then(function(data){
             console.log('keyword doc data', data);
           });
         }

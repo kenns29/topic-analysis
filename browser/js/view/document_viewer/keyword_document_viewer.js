@@ -15,14 +15,15 @@ module.exports = exports = function(){
   var year;
   var to_year;
   var keywords;
+  var field = DOC.TITLE;
   function init(){
     width = $(container).width();
     d3.select(container).attr('class', 'keyword-document-viewer');
     loading = d3.select(container).select('.loading').node();
     return ret;
   }
-
   function update(){
+    order_documents();
     var div_sel =  d3.select(container).selectAll('.document').data(data, function(d){return d.id;});
     var div_enter = div_sel.enter().append('div')
     .attr('class', 'document')
@@ -40,7 +41,6 @@ module.exports = exports = function(){
     .style('vertical-align', 'inline-block')
     .style('width', (width - 50 - 30) + 'px');
     div_main_enter.append('div').attr('class', 'title').style('width', '100%').style('background-color', '#F8F8F8');
-    div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
     div_sel.exit().remove();
     var div_update = d3.select(container).selectAll('.document');
     div_update.sort(function(a, b){return a.index - b.index;});
@@ -49,10 +49,10 @@ module.exports = exports = function(){
     return ret;
   }
   function update_title_span(d, i){
-
+    
   }
   function order_documents(){
-    return data;
+    return data.sort(function(a, b){return a.year - b.year;});
   }
   function load(){
     return co(function*(){
@@ -60,12 +60,12 @@ module.exports = exports = function(){
         $(loading).show();
         let data = yield LoadPapers().year(year).to_year(to_year).type(type).keywords(keywords).load();
         $(loading).hide();
-        return Promise.resovle(data);
+        return Promise.resolve(data);
       } else if(level === DOC.PN){
         $(loading).show();
         let data = yield LoadPanels().year(year).to_year(to_year).type(type).keywords(keywords).load();
         $(loading).hide();
-        return Promise.resovle(data);
+        return Promise.resolve(data);
       } else return Promise.resolve([]);
     }).catch(function(err){
       console.log(err);
@@ -90,6 +90,7 @@ module.exports = exports = function(){
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
   ret.keywords = function(_){return arguments.length > 0 ? (keywords = _, ret) : keywords;};
+  ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
   ret.loading = function(){return loading;};
   ret.load = load;
   ret.documents = function(){return d3.select(container).selectAll('.document');};
