@@ -27,7 +27,7 @@ module.exports = exports = function(){
     }).catch(function(err){
       console.log(err);
     });
-  }
+  };
   function ret(){return load();}
   ret.data = function(){return data;};
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};

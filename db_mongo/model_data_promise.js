@@ -21,4 +21,4 @@ module.exports = exports = function model_data_promise(data, model_id, token_fie
     });
     return Promise.resolve(data);
   });
-}
+};
