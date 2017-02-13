@@ -16,7 +16,7 @@ function keyword_tokens(tokens, keywords){
     key2keyword[keyword.toLowerCase()] = keyword;
   });
   tokens.forEach(function(d){
-    if(key2keyword[d.lemma.toLowerCase()]) keyword_tokens.push(d);
+    if(key2keyword.hasOwnProperty(d.lemma.toLowerCase())) keyword_tokens.push(d);
   });
   return keyword_tokens;
 }

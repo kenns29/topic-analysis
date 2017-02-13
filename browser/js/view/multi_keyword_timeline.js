@@ -169,6 +169,7 @@ module.exports = exports = function(){
         var brush_g = d3.select(this).select('.brush');
         if(brush_g.empty()) brush_g = d3.select(this).append('g').attr('class', 'brush');
         brush_g.call(id2brush[d.id]);
+        if(extent) brush_g.call(id2brush[d.id].move, extent);
       });
     }
     function activate_brush(){
