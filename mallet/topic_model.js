@@ -129,7 +129,7 @@ module.exports = function(){
         v.topic = t.getTopicSync();
         v.index = j;
         v.text = alphabet.lookupObjectSync(v.id);
-        if(id2pos2token && id2pos2token[index2id[i]]){
+        if(id2pos2token && id2pos2token.hasOwnProperty(index2id[i])){
           v.orig_token = id2pos2token[index2id[i]][v.charindex[0]];
         }
       }
