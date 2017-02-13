@@ -27,7 +27,7 @@
   },
   "scripts": {
     "build-js": "browserify browser/js/main.js > public/bundle.js",
-    "build": "npm run build-js",
+    "build": "npm run build-js & npm run build-css",
     "watch-js": "watchify browser/js/main.js -o public/bundle.js -dv",
     "watch": "npm run watch-js",
     "start": "node app.js",
