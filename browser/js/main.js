@@ -17,6 +17,7 @@ global.model_stats_display.load().then(function(data){
 });
 var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
+KeywordSelect.disable_opts();
 
 require('./UI/document_tab_nav');
 require('./UI/checkbox-timeline-brush');

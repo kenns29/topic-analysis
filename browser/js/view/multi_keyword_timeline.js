@@ -117,6 +117,7 @@ module.exports = exports = function(){
       brushes.add(line_data.id);
     }
     if(brushes.is_activated())update_keyword_document_viewer(brushes.domain());
+    KeywordSelect.disable_opts();
     return ret;
   }
   function remove_timeline(id){
@@ -132,6 +133,7 @@ module.exports = exports = function(){
     }
     brushes.remove(id);
     if(brushes.is_activated())update_keyword_document_viewer(brushes.domain());
+    if(data.length === 0) KeywordSelect.enable_opts();
     return ret;
   }
   function update_keyword_document_viewer(domain){
@@ -221,7 +223,6 @@ module.exports = exports = function(){
     ret_brush.deactivate = deactivate_brush;
     ret_brush.add = add_brush;
     ret_brush.remove = remove_brush;
-    ret_brush.reset = reset_brush;
     ret_brush.is_activated = function(){return activated;};
     ret_brush.domain = function(){return domain;};
     ret_brush.extent = function(){return extent;};
