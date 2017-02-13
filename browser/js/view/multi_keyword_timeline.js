@@ -74,6 +74,7 @@ module.exports = exports = function(){
       remove_timeline(d.id);
       update();
     });
+    if(brushes.is_activated())brushes.activate();
     return ret;
   }
   function area_mouseover(element){
@@ -115,6 +116,7 @@ module.exports = exports = function(){
       data.push(line_data);
       brushes.add(line_data.id);
     }
+    if(brushes.is_activated())update_keyword_document_viewer(brushes.domain());
     return ret;
   }
   function remove_timeline(id){
@@ -129,7 +131,16 @@ module.exports = exports = function(){
       --i;
     }
     brushes.remove(id);
+    if(brushes.is_activated())update_keyword_document_viewer(brushes.domain());
     return ret;
+  }
+  function update_keyword_document_viewer(domain){
+    var flags = KeywordSelect.get_flags();
+    global.keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
+    .year(domain[0]).to_year(domain[1])
+    .type(flags.type).field(flags.field).level(flags.level).load().then(function(data){
+      global.keyword_document_viewer.data(data).update();
+    });
   }
   var ret = {};
   ret.data = function(_){
@@ -150,13 +161,28 @@ module.exports = exports = function(){
 
   function brushes_factory(){
     var id2brush = [];
+    var activated = false;
+    var domain = null;
+    var extent = null;
+    function activate_one_brush(id){
+      timeline_g.selectAll('.timeline').select('.area').filter(function(d){return d.id === id;}).each(function(d){
+        var brush_g = d3.select(this).select('.brush');
+        if(brush_g.empty()) brush_g = d3.select(this).append('g').attr('class', 'brush');
+        brush_g.call(id2brush[d.id]);
+      });
+    }
     function activate_brush(){
       timeline_g.selectAll('.timeline').select('.area').each(function(d){
-        d3.select(this).append('g').attr('class', 'brush').call(id2brush[d.id]);
+        var brush_g = d3.select(this).select('.brush');
+        if(brush_g.empty()) brush_g = d3.select(this).append('g').attr('class', 'brush');
+        brush_g.call(id2brush[d.id]);
+        if(extent) brush_g.call(id2brush[d.id].move, extent);
       });
+      activated = true;
     }
     function deactivate_brush(){
       timeline_g.selectAll('.timeline').select('.area').select('.brush').remove();
+      activated = false;
     }
     function add_brush(id){
       id2brush[id] = brush_maker(id);
@@ -171,8 +197,8 @@ module.exports = exports = function(){
     }
     function brush_maker(id){
       var brush = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
-      let get_flags = KeywordSelect.get_flags;
       brush.on('brush', function(){
+        if(!d3.event.sourceEvent) return;
         if (d3.event.sourceEvent.type === "brush") return;
         if(d3.event.selection){
           let domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
@@ -181,26 +207,26 @@ module.exports = exports = function(){
           timeline_g.selectAll('.timeline').select('.area').select('.brush').call(d3.event.target.move, extent);
         }
       }).on('end', function(){
+        if(!d3.event.sourceEvent) return;
         if (d3.event.sourceEvent.type === "brush") return;
         if(d3.event.selection){
-          let domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
-          var flags = get_flags();
-          global.keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
-          .year(domain[0]).to_year(domain[1])
-          .type(flags.type).field(flags.field).level(flags.level).load().then(function(data){
-            console.log('keyword doc data', data);
-            global.keyword_document_viewer.data(data).update();
-          });
+          domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
+          extent = domain.map(x_scale);
+          update_keyword_document_viewer(domain);
         }
       });
       return brush;
     }
     var ret_brush = {};
     ret_brush.activate = activate_brush;
+    ret_brush.activate_one = activate_one_brush;
     ret_brush.deactivate = deactivate_brush;
     ret_brush.add = add_brush;
     ret_brush.remove = remove_brush;
     ret_brush.reset = reset_brush;
+    ret_brush.is_activated = function(){return activated;};
+    ret_brush.domain = function(){return domain;};
+    ret_brush.extent = function(){return extent;};
     return ret_brush;
   }
 };
