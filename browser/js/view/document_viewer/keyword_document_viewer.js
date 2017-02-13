@@ -78,7 +78,8 @@ module.exports = exports = function(){
     span_update.html(function(d){return d.span;});
   }
   function order_documents(){
-    return data.sort(function(a, b){return a.year - b.year;});
+    data.sort(function(a, b){return a.year - b.year;});
+    data.forEach(function(d, i){d.index = i;});
   }
   function load(){
     return co(function*(){
