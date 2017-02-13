@@ -193,9 +193,6 @@ module.exports = exports = function(){
       delete id2brush[id];
       return ret_brush;
     }
-    function reset_brush(keyword){
-
-    }
     function brush_maker(id){
       var brush = d3.brushX().extent([[0, -3], [W, timeline_height+3]]);
       brush.on('brush', function(){
