@@ -122,7 +122,6 @@ module.exports = exports = function(){
     if(brushes.is_activated())
       UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
       .update_domain(brushes.domain());
-    // KeywordSelect.disable_opts();
     return ret;
   }
   function replace_timeline(line_data){
@@ -148,7 +147,6 @@ module.exports = exports = function(){
     if(brushes.is_activated())
       UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
       .update_domain(brushes.domain());
-    // if(data.length === 0) KeywordSelect.enable_opts();
     return ret;
   }
   var ret = {};
