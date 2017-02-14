@@ -3,16 +3,14 @@ var d3 = require('../load_d3');
 var DOC = require('../../../flags/doc_flags');
 var LoadTfidf = require('../load/load_tfidf');
 var LoadKeywordTimelineData = require('../load/load_keyword_timeline_data');
+var co = require('co');
 module.exports = exports = function(){
-  var select_container = '#keyword-select-div #select-keyword';
-  var select_button = '#keyword-select-div #btn-add-word';
-  var text_container = '#keyword-select-div #textbox-keyword'
   var data;
   function update(_data){
     if(_data) data = _data;
     sort_words();
     var dat = trunk_words(data);
-    var word_sel = d3.select(select_container).selectAll('option').data(dat, function(d){return d.word;});
+    var word_sel = d3.select('#keyword-select-div #select-keyword').selectAll('option').data(dat, function(d){return d.word;});
     var word_enter = word_sel.enter().append('option').attr('value', function(d){return d.word;})
     .html(function(d){return d.word;});
     word_sel.exit().remove();
@@ -35,19 +33,12 @@ module.exports = exports = function(){
     // load().then(function(data){
     //   update();
     // });
-    $(select_button).click(function(){
-      var keyword = $(text_container).val();
-      if(keyword !== null && keyword !== undefined && keyword !== ''){
-        keyword = keyword.toLowerCase();
-        var flag = get_flags();
-        var level = flag.level, type = flag.type, field = flag.field;
-        LoadKeywordTimelineData().type(type).level(level).load(keyword).then(function(data){
-          global.multi_keyword_timeline.add_timeline(data).update();
-        }).catch(function(err){
-          console.log(err);
-        });
-      }
+    $('#keyword-select-div #btn-add-word').click(function(){
+      insert_keyword_timeline($('#keyword-select-div #textbox-keyword').val());
     });
+    $('#keyword-select-div #select-level').change(update_all_keyword_timeline);
+    $('#keyword-select-div #select-type').change(update_all_keyword_timeline);
+    $('#keyword-select-div #select-field').change(update_all_keyword_timeline);
     return ret;
   }
   var ret = {};
@@ -56,6 +47,32 @@ module.exports = exports = function(){
   ret.update = update;
   return ret;
 };
+function update_all_keyword_timeline(){
+  var flag = get_flags();
+  var data = global.multi_keyword_timeline.data();
+  co(function*(){
+    for(let i = 0; i < data.length; i++){
+      let keyword = data[i].id;
+      let line_data = yield LoadKeywordTimelineData().type(flag.type).level(flag.level).load(keyword);
+      global.multi_keyword_timeline.replace_timeline(line_data);
+    }
+    global.multi_keyword_timeline.update();
+  }).catch(function(err){
+    console.log(err);
+  });
+}
+function insert_keyword_timeline(keyword){
+  if(keyword !== null && keyword !== undefined && keyword !== ''){
+    keyword = keyword.toLowerCase();
+    var flag = get_flags();
+    var level = flag.level, type = flag.type, field = flag.field;
+    LoadKeywordTimelineData().type(type).level(level).load(keyword).then(function(data){
+      global.multi_keyword_timeline.add_timeline(data).update();
+    }).catch(function(err){
+      console.log(err);
+    });
+  }
+}
 module.exports.get_flags = get_flags;
 module.exports.str2flag = str2flag;
 module.exports.disable_opts = disable_opts;
