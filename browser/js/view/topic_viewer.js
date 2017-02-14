@@ -60,9 +60,9 @@ function update_labels(data){
     d3.select(this).transition().duration(duration).attr('width', rect_w).attr('height', rect_h)
     .attr('y', -rect_h/2);
   });
-  label_update.on('mouseover', function(d){tooltip.show(svg.node(), d.id);})
-  .on('mousemove', function(){tooltip.move(svg.node());})
-  .on('mouseout', function(){tooltip.hide();});
+  // label_update.on('mouseover', function(d){tooltip.show(svg.node(), d.id);})
+  // .on('mousemove', function(){tooltip.move(svg.node());})
+  // .on('mouseout', function(){tooltip.hide();});
   label_update.on('click', function(d){
     var nodes = global.topic_document_viewer.documents()._groups[0];
     var top = 0;
@@ -155,6 +155,9 @@ function update_topics(data){
     }
     update();
   });
+  token_update.on('mouseover', function(d){tooltip.show(svg.node(), d.token + ': '+ d.weight);})
+  .on('mousemove', function(){tooltip.move(svg.node());})
+  .on('mouseout', function(){tooltip.hide();});
   return Promise.all([t1(), t2()]);
 }
 function total_topic_height(data){
