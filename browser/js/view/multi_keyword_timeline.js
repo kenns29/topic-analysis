@@ -4,6 +4,7 @@ var Tooltip = require('./tooltip');
 var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
 var KeywordSelect = require('../UI/keyword_select');
+var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -22,6 +23,7 @@ module.exports = exports = function(){
   var tooltip;
   var timeline_x_offset = 50;
   var brushes = brushes_factory();
+  var loading;
   function init(){
     width = $(container).width(), height = $(container).height();
     W = width - margin.left - margin.right - timeline_x_offset;
@@ -34,6 +36,7 @@ module.exports = exports = function(){
     x_axis.tickFormat(d3.format('d'));
     x_axis_g = svg.append('g').attr('class', 'x-axis').attr('transform', 'translate('+[margin.left + timeline_x_offset, 0]+')');
     tooltip = Tooltip().container(container).font_size('15px')();
+    loading = d3.select(container).select('.loading').node();
     return ret;
   }
   function update_y_scale(){
@@ -116,9 +119,18 @@ module.exports = exports = function(){
       data.push(line_data);
       brushes.add(line_data.id);
     }
-    if(brushes.is_activated())update_keyword_document_viewer(brushes.domain());
-    KeywordSelect.disable_opts();
+    if(brushes.is_activated())
+      UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
+      .update_domain(brushes.domain());
     return ret;
+  }
+  function replace_timeline(line_data){
+    if(id2data[line_data.id]){
+      let index = id2data[line_data.id].index;
+      line_data.index = index;
+      data[index] = line_data;
+      id2data[line_data.id] = line_data;
+    }
   }
   function remove_timeline(id){
     var i = data.length - 1;
@@ -132,17 +144,10 @@ module.exports = exports = function(){
       --i;
     }
     brushes.remove(id);
-    if(brushes.is_activated())update_keyword_document_viewer(brushes.domain());
-    if(data.length === 0) KeywordSelect.enable_opts();
+    if(brushes.is_activated())
+      UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
+      .update_domain(brushes.domain());
     return ret;
-  }
-  function update_keyword_document_viewer(domain){
-    var flags = KeywordSelect.get_flags();
-    global.keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
-    .year(domain[0]).to_year(domain[1])
-    .type(flags.type).field(flags.field).level(flags.level).load().then(function(data){
-      global.keyword_document_viewer.data(data).update();
-    });
   }
   var ret = {};
   ret.data = function(_){
@@ -156,9 +161,12 @@ module.exports = exports = function(){
   ret.init = init;
   ret.update = update;
   ret.add_timeline = add_timeline;
+  ret.replace_timeline = replace_timeline;
   ret.remove_timeline = remove_timeline;
-  ret.activate_brushes = function(_){brushes.activate();};
+  ret.activate_brushes = function(){brushes.activate();};
   ret.deactivate_brushes = function(){brushes.deactivate();};
+  ret.loading = function(){return loading;};
+  ret.brushes = function(){return brushes;};
   return ret;
 
   function brushes_factory(){
@@ -212,7 +220,8 @@ module.exports = exports = function(){
         if(d3.event.selection){
           domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
           extent = domain.map(x_scale);
-          update_keyword_document_viewer(domain);
+          UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
+          .update_domain(domain);
         }
       });
       return brush;

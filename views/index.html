@@ -33,7 +33,7 @@
         <option value = "PN">panel</option>
       </select></div>
       <div><label>Number of Topics:</label><input type="text" id="input_num_topics" value = "10"></div>
-      <div><label>Number of Iterations:</label><input type="text" id = "input_num_iterations" value = "300"></div>
+      <div><label>Number of Iterations:</label><input type="text" id = "input_num_iterations" value = "2000"></div>
     </div>
     <div id = "topic-model-display-loading">Training Topics..</div>
     <div id = "topic-model-display-div">
@@ -77,7 +77,11 @@
           <input type="checkbox" id="checkbox-brush"><label>brush timeline</label>
         </div>
       </div>
-      <div id="keyword-timeline-view-div"></div>
+      <div id="keyword-timeline-view-div">
+        <div id='loading' class='loading'>
+          <span class="loading-helper"></span><img src="loading.gif" />
+        </div>
+      </div>
       <!-- <div id="topic-timeline-view-div"></div> -->
     </div>
     <div id = "right-view">
