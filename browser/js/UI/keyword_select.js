@@ -69,7 +69,7 @@ function update_all_keyword_timeline(){
       global.multi_keyword_timeline.replace_timeline(line_data);
     }
     $(loading).hide();
-    global.multi_keyword_timeline.update();
+    yield global.multi_keyword_timeline.update();
     var brushes = global.multi_keyword_timeline.brushes();
     if(brushes.is_activated()){
       UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))

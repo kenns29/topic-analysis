@@ -24,6 +24,7 @@ module.exports = exports = function(){
   var timeline_x_offset = 50;
   var brushes = brushes_factory();
   var loading;
+  var duration = 500;
   function init(){
     width = $(container).width(), height = $(container).height();
     W = width - margin.left - margin.right - timeline_x_offset;
@@ -61,24 +62,32 @@ module.exports = exports = function(){
     area_enter.append('path');
     timeline_sel.exit().remove();
     var timeline_update = timeline_g.selectAll('.timeline');
-    timeline_update.transition().duration(500)
-    .attr('transform', function(d){
-      var x = 0, y = d.index * (timeline_height + timeline_y_space);
-      return 'translate('+[x, y]+')';
-    });
     timeline_update.select('.area').each(update_line);
     timeline_update.select('.area').call(area_mouseover);
     x_axis_g.call(x_axis);
-    x_axis_g.transition().duration(500).attr('transform', 'translate(' + [
-      margin.left + 50,
-      margin.top + data.length * (timeline_height + timeline_y_space) + 5
-    ]+')');
     label_enter.on('click', function(d, i){
       remove_timeline(d.id);
       update();
     });
     if(brushes.is_activated())brushes.activate();
-    return ret;
+    var t1 = function(){
+      return new Promise(function(resolve, reject){
+        timeline_update.transition().duration(duration)
+        .attr('transform', function(d){
+          var x = 0, y = d.index * (timeline_height + timeline_y_space);
+          return 'translate('+[x, y]+')';
+        }).on('end', resolve);
+      });
+    };
+    var t2 = function(){
+      return new Promise(function(resolve, reject){
+        x_axis_g.transition().duration(duration).attr('transform', 'translate(' + [
+          margin.left + 50,
+          margin.top + data.length * (timeline_height + timeline_y_space) + 5
+        ]+')').on('end', resolve);
+      });
+    };
+    return Promise.all([t1(), t2()]);
   }
   function area_mouseover(element){
     element.on('mouseover', function(d){
