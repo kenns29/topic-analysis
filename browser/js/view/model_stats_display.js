@@ -15,20 +15,26 @@ function init(){
   table = d3.select(container).append('table')
   .attr('class', 'table')
   .style('width', '90%')
+  .style('text-align', 'inherit')
+  .style('overflow-wrap', 'break-word')
+  .style('word-break', 'break-all')
+  .style('word-wrap', 'break-word')
+  .style('white-space', 'pre-wrap')
+  .style('table-layout', 'fixed')
   .style('padding-right', '0px')
   .style('padding-left', '0px')
   .style('position', 'relative')
   .attr('border', 1);
 
   var header = table.append('tr').attr('class', 'header');
-  header.append('td').attr('class', 'name').attr('align', 'center').style('width', '20%').html('name');
-  header.append('td').attr('class', 'year').attr('align', 'center').style('width', '20%').html('year');
-  header.append('td').attr('class', 'type').attr('align', 'center').style('width', '10%').html('type');
-  header.append('td').attr('class', 'level').attr('align', 'center').style('width', '10%').html('P/PN');
-  header.append('td').attr('class', 'field').attr('align', 'center').style('width', '10%').html('title-abs');
-  header.append('td').attr('class', 'num-topics').attr('align', 'center').style('width', '10%').html('num-topics');
-  header.append('td').attr('class', 'radio-td').attr('align', 'center').style('width', '10%').html('sel');
-  header.append('td').attr('class', 'trash').attr('align', 'center').style('width', '10%').html('del');
+  header.append('th').attr('class', 'name').attr('align', 'center').style('width', '20%').style('display', 'table-cell').html('name');
+  header.append('th').attr('class', 'year').attr('align', 'center').style('width', '20%').style('display', 'table-cell').html('year');
+  header.append('th').attr('class', 'type').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('type');
+  header.append('th').attr('class', 'level').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('P/PN');
+  header.append('th').attr('class', 'field').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('title-abs');
+  header.append('th').attr('class', 'num-topics').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('num-topics');
+  header.append('th').attr('class', 'radio-td').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('sel');
+  header.append('th').attr('class', 'trash').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('del');
   return ret;
 }
 
