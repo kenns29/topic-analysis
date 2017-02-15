@@ -1,3 +1,6 @@
+body{
+  min-width: 1588px;
+}
 #wrapper {
   position:relative;
   width : 100%;
@@ -60,7 +63,7 @@
     }
     #keyword-select-div{
       position: relative;
-      height : 30px;
+      height : auto;
       .control{
         display : inline-block;
       }
@@ -84,17 +87,29 @@
     width : 40%;
     height: 100%;
     float: left;
-    #topic-document-viewer-div {
+    .tab-content{
       position: relative;
-      height:calc(100% - 45px);
-      width:100%;
-      overflow-y: auto;
-    }
-    #keyword-document-viewer-div{
-      position: relative;
-      height:calc(100% - 45px);
-      width:100%;
-      overflow-y:auto;
+      height: calc(100% - 45px);
+      #topic-document-viewer-panel{
+        position: relative;
+        height: 100%;
+        #topic-document-viewer-div {
+          position: relative;
+          height:100%;
+          width:100%;
+          overflow-y: auto;
+        }
+      }
+      #keyword-document-viewer-panel{
+        position: relative;
+        height: 100%;
+        #keyword-document-viewer-div{
+          position: relative;
+          height:100%;
+          width:100%;
+          overflow-y:auto;
+        }
+      }
     }
   }
 }

@@ -112,7 +112,7 @@ module.exports = exports = function(){
   function update_topic_distr(d, i){
     var sel = d3.select(this);
     var dat = d;
-    var topic_weight_scale = d3.scaleLinear().domain([0, 1]).range([0, width - 50 - 30]);
+    var topic_weight_scale = d3.scaleLinear().domain([0, 1]).range([0, width - 50 - 30 - 1]);
     if(dat.topic_distr){
       let topic_array = [];
       for(let i in dat.topic_distr){
@@ -125,7 +125,7 @@ module.exports = exports = function(){
       topic_sel.exit().remove();
       let topic_update = sel.selectAll('.topic');
       topic_update.sort(function(a, b){return b.weight - a.weight;});
-      topic_update.style('display', 'inline-block').style('vertical-align', 'top')
+      topic_update.style('float', 'left')
       .style('width', function(d){return topic_weight_scale(d.weight) + 'px';})
       .style('height', '10px').style('background-color', function(d){return topic_color(d.id);});
     }
