@@ -9,7 +9,19 @@ var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_
 var express = require('express');
 router = express.Router();
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Topic Analysis' });
+});
+router.get('/login', function(req, res){
+  res.render('login', { title : 'Login', message: req.flash('loginMessage') });
+});
+router.get('/signup', function(req, res){
+  res.render('signup', { message: req.flash('signupMessage') });
+});
+router.get('/userprofile', function(req, res){
+
+});
+router.get('/logout', function(req, res){
+  req.logout(); req.redirect('/');
 });
 router.get('/loadpapers', router_load_papers);
 router.get('/loadpanels', router_load_panels);
