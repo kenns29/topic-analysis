@@ -5,10 +5,12 @@
   "dependencies": {
     "assert": "^1.4.1",
     "atob": "^2.0.3",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "*",
     "bootstrap": "^3.3.7",
     "btoa": "^1.1.2",
     "co": "^4.6.0",
+    "connect-flash": "^0.1.1",
     "console-remote-client": "^0.4.3",
     "d3": "^4.4.4",
     "ejs": "*",
@@ -19,8 +21,10 @@
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
     "mongodb": "^2.2.22",
+    "morgan": "^1.8.1",
     "multer": "*",
     "mysql2": "^1.1.2",
+    "passport": "^0.3.2",
     "path": "*",
     "q": "^1.4.1",
     "when": "^3.7.7"
@@ -32,6 +36,6 @@
     "watch": "npm run watch-js",
     "start": "node app.js",
     "build-css": "sass browser/css/main.scss:public/css/main.css --style compressed",
-    "watch-css" : "sass --watch browser/css/main.scss:public/css/main.css --style compressed"
+    "watch-css": "sass --watch browser/css/main.scss:public/css/main.css --style compressed"
   }
 }

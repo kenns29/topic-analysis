@@ -8,3 +8,4 @@ public/bundle.js
 .sass-cache/
 browser/css/.sass-cache/
 public/css/
+access.log
