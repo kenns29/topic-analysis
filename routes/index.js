@@ -7,28 +7,36 @@ var router_delete_topic_model = require('./router_delete_topic_model');
 var router_load_tfidf = require('./router_load_tfidf');
 var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_data');
 var express = require('express');
-router = express.Router();
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Topic Analysis' });
-});
-router.get('/login', function(req, res){
-  res.render('login', { title : 'Login', message: req.flash('loginMessage') });
-});
-router.get('/signup', function(req, res){
-  res.render('signup', { message: req.flash('signupMessage') });
-});
-router.get('/userprofile', function(req, res){
+module.exports = exports = function(passport){
+  var router = express.Router();
+  router.get('/', function(req, res) {
+    res.render('index', { title: 'Topic Analysis' });
+  });
+  router.get('/login', function(req, res){
+    res.render('login', { title : 'Login', message: req.flash('loginMessage') });
+  });
+  router.get('/signup', function(req, res){
+    res.render('signup', { message: req.flash('signupMessage') });
+  });
+  router.get('/userprofile', function(req, res){
 
-});
-router.get('/logout', function(req, res){
-  req.logout(); req.redirect('/');
-});
-router.get('/loadpapers', router_load_papers);
-router.get('/loadpanels', router_load_panels);
-router.get('/topictrainer', router_topic_trainer);
-router.get('/loadtopicmodelstats', router_load_topic_model_stats);
-router.get('/loadtopicmodel', router_load_topic_model);
-router.get('/deletetopicmodel', router_delete_topic_model);
-router.get('/loadtfidf', router_load_tfidf);
-router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data);
-module.exports = router;
+  });
+  router.get('/logout', function(req, res){
+    req.logout(); req.redirect('/');
+  });
+  // process the signup form
+  router.post('/signup', passport.authenticate('local-signup', {
+      successRedirect : '/', // redirect to the secure profile section
+      failureRedirect : '/signup', // redirect back to the signup page if there is an error
+      failureFlash : true // allow flash messages
+  }));
+  router.get('/loadpapers', router_load_papers);
+  router.get('/loadpanels', router_load_panels);
+  router.get('/topictrainer', router_topic_trainer);
+  router.get('/loadtopicmodelstats', router_load_topic_model_stats);
+  router.get('/loadtopicmodel', router_load_topic_model);
+  router.get('/deletetopicmodel', router_delete_topic_model);
+  router.get('/loadtfidf', router_load_tfidf);
+  router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data);
+  return router;
+};
