@@ -18,11 +18,14 @@ module.exports = exports = function(passport){
   router.get('/signup', function(req, res){
     res.render('signup', { message: req.flash('signupMessage') });
   });
-  router.get('/userprofile', isLoggedIn, function(req, res){
+  router.get('/userprofile', function isLoggedIn(req, res, next) {
+      if (req.isAuthenticated()) return next();
+      res.redirect('/');
+  }, function(req, res){
     res.render('userprofile', {user : req.user});
   });
   router.get('/logout', function(req, res){
-    req.logout(); req.redirect('/');
+    req.logout(); res.redirect('/login');
   });
   router.post('/signup', passport.authenticate('local-signup', {
       successRedirect : '/login', // redirect to the secure profile section
@@ -44,10 +47,3 @@ module.exports = exports = function(passport){
   router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data);
   return router;
 };
-function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}

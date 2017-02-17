@@ -26,7 +26,7 @@ module.exports = exports = function(){
     return co(function*(){
       var db = yield MongoClient.connect(ConnStat().url());
       var col = db.collection('users');
-      var user = yield col.findOne({'_id' : id});
+      var user = yield col.findOne({'_id' : new mongodb.ObjectID(id)});
       db.close();
       if(user){
         password = user.local.password;
