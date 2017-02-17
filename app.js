@@ -11,6 +11,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var ConnStat = require('./db_mongo/connection');
 var fs = require('fs');
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -18,7 +19,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-require('./config/passport')(passport);
+require('./auth/passport')(passport);
 app.use(express.static(path.join(__dirname, 'public')));
 var access_log_stream = fs.createWriteStream(path.join(__dirname, 'access.log'),{flags: 'a'});
 app.use(morgan('combined', {stream : access_log_stream}));
@@ -26,7 +27,8 @@ app.use(morgan('combined', {stream : access_log_stream}));
 app.use(session({
   secret: 'secretsecretsession',
   resave : false,
-  saveUninitialized : false
+  saveUninitialized : false,
+  store : new MongoStore({url : ConnStat().url()})
 })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

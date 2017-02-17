@@ -18,17 +18,21 @@ module.exports = exports = function(passport){
   router.get('/signup', function(req, res){
     res.render('signup', { message: req.flash('signupMessage') });
   });
-  router.get('/userprofile', function(req, res){
-
+  router.get('/userprofile', isLoggedIn, function(req, res){
+    res.render('userprofile', {user : req.user});
   });
   router.get('/logout', function(req, res){
     req.logout(); req.redirect('/');
   });
-  // process the signup form
   router.post('/signup', passport.authenticate('local-signup', {
-      successRedirect : '/', // redirect to the secure profile section
+      successRedirect : '/login', // redirect to the secure profile section
       failureRedirect : '/signup', // redirect back to the signup page if there is an error
       failureFlash : true // allow flash messages
+  }));
+  router.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/userprofile', // redirect to the secure profile section
+    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
   }));
   router.get('/loadpapers', router_load_papers);
   router.get('/loadpanels', router_load_panels);
@@ -40,3 +44,10 @@ module.exports = exports = function(passport){
   router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data);
   return router;
 };
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
