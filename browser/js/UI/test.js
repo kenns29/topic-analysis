@@ -1,0 +1,13 @@
+var $ = require('jquery');
+var d3 = require('../load_d3');
+var DOC = require('../../../flags/doc_flags');
+var LoadWordTree = require('../load/load_word_tree');
+var co = require('co');
+module.exports = exports = $('#test').click(function(){
+  co(function*(){
+    var data = yield LoadWordTree().load();
+    console.log('data', JSON.stringify(data));
+  }).catch(function(err){
+    console.log(err);
+  });
+});
