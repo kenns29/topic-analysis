@@ -8,6 +8,7 @@ function word_tree(){
   var use_stop_words = false;
   var to_lower_case = true;
   var stopwords = new Set();
+  var reverse = false;
   var root_word = 'studies';
   function token_acc(d){return d.text;}
   function tokens_acc(d){return d.title_tokens;};
@@ -15,7 +16,10 @@ function word_tree(){
     var add_flag = false;
     var pre_node = root;
     var root_word_lower = root_word.toLowerCase();
-    tokens.forEach(function(token){
+    if(!reverse) tokens.forEach(each_token);
+    else for(let i = tokens.length - 1; i>=0; i--) each_token(tokens[i]);
+
+    function each_token(token){
       var word = token_acc(token);
       if(to_lower_case) word = word.toLowerCase();
       if((use_stop_pattern && word.match(token_stop_pattern)) ||
@@ -47,7 +51,7 @@ function word_tree(){
           pre_node = root;
         }
       }
-    });
+    }
   }
   function create(docs){
     docs.forEach(function(doc){
@@ -66,5 +70,12 @@ function word_tree(){
   ret.tokens = function(_){
     if(arguments.length > 0) {tokens_acc = _; return ret;}
   };
+  ret.use_stop_pattern = function(_){return arguments.length > 0 ? (use_stop_pattern = _, ret) : use_stop_pattern;};
+  ret.use_stop_words = function(_){return arguments.length > 0 ? (use_stop_words = _, ret) : use_stop_words;};
+  ret.stop_pattern = function(_){return arguments.length > 0 ? (token_stop_pattern = _, ret) : token_stop_pattern;};
+  ret.stopwords = function(_){return arguments.length > 0 ? (stopwords = _, ret) : stopwords;};
+  ret.to_lower_case = function(_){return arguments.length > 0 ? (to_lower_case = _, ret) : to_lower_case;};
+  ret.reverse = function(_){return arguments.length > 0 ? (reverse = _, ret) : reverse;};
+  ret.root_word = function(_){return arguments.length > 0 ? (root_word = _, ret) : root_word;};
   return ret;
 }
