@@ -19,8 +19,8 @@ module.exports = exports = function(passport){
     res.render('signup', { message: req.flash('signupMessage') });
   });
   router.get('/userprofile', function isLoggedIn(req, res, next) {
-      if (req.isAuthenticated()) return next();
-      res.redirect('/');
+    if (req.isAuthenticated()) return next();
+    res.redirect('/');
   }, function(req, res){
     res.render('userprofile', {user : req.user});
   });
@@ -28,14 +28,14 @@ module.exports = exports = function(passport){
     req.logout(); res.redirect('/login');
   });
   router.post('/signup', passport.authenticate('local-signup', {
-      successRedirect : '/login', // redirect to the secure profile section
-      failureRedirect : '/signup', // redirect back to the signup page if there is an error
-      failureFlash : true // allow flash messages
+    successRedirect : '/login',
+    failureRedirect : '/signup',
+    failureFlash : true
   }));
   router.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/userprofile', // redirect to the secure profile section
-    failureRedirect : '/login', // redirect back to the signup page if there is an error
-    failureFlash : true // allow flash messages
+    successRedirect : '/userprofile',
+    failureRedirect : '/login',
+    failureFlash : true
   }));
   router.get('/loadpapers', router_load_papers);
   router.get('/loadpanels', router_load_panels);
