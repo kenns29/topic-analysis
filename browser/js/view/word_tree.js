@@ -21,15 +21,22 @@ function word_tree(){
   var partition;
   var svg, width, height;
   var graph_g, W, H;
+  var last_id = 0;
   function init(){
     width = $(container).width(), height = $(container).height();
-    svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
+    svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', width).attr('height', height);
     graph_g = svg.append('g');
     return ret;
   }
   function update(source){
-    partition = d3.partition(hierarchy);
-    
+    partition = d3.partition(hierarchy).size([height, width]);
+    console.log('hierachy', hierarchy);
+    hierarchy.x0 = height / 2;
+    hierarchy.y0 = 0;
+    var nodes = hierarchy.descendants(),
+        links = hierarchy.descendants().slice(1);
+    var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || d.id = ++last_id;});
+
     return ret;
   }
   var ret = {};
