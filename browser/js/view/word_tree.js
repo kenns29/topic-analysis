@@ -1,6 +1,6 @@
 
 
-
+module.exports = exports = word_tree;
 
 
 
@@ -18,7 +18,7 @@ var margin = {top:20, right:120, bottom:20, left:120};
 function word_tree(){
   var data;
   function update(source){
-    
+
   }
   var ret = {};
   ret.data = function(_){return arguments.length > 0 ? (data = _ : ret) : data;};

@@ -53,7 +53,6 @@ function word_tree(){
       }
     }
   }
-
   function create(docs){
     docs.forEach(function(doc){
       var tokens = tokens_acc(doc);
