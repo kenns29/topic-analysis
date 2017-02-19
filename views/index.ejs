@@ -77,12 +77,36 @@
           <input type="checkbox" id="checkbox-brush"><label>brush timeline</label>
         </div>
       </div>
-      <div id="keyword-timeline-view-div">
-        <div id='loading' class='loading'>
-          <span class="loading-helper"></span><img src="loading.gif" />
+      <div id = "keyword-contents">
+        <ul class = "nav nav-tabs" role="tablist" data-tabs="tabs">
+          <li role="presentation" name="keyword-tab" class="active">
+            <a id = "keyword-timeline-view-tab" href="#keyword-timeline-view-panel"
+            aria-controls="keyword-timeline-view-panel" role="tab" data-toggle="tab">
+            <b>Keyword Timeline</b></a>
+          </li>
+          <li role="presentation" name="keyword-tab">
+            <a id = "keyword-tree-view-tab" href="#keyword-tree-view-panel"
+            aria-controls="keyword-tree-view-panel" role="tab" data-toggle="tab">
+            <b>Word Tree</b></a>
+          </li>
+        </ul>
+        <div class = "tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="keyword-timeline-view-panel">
+            <div id="keyword-timeline-view-div">
+              <div id='loading' class='loading'>
+                <span class="loading-helper"></span><img src="loading.gif" />
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class ="tab-pane fade" id = "keyword-tree-view-panel">
+            <div id = "keyword-tree-view-div">
+              <div id='loading' class='loading'>
+                <span class="loading-helper"></span><img src="loading.gif" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- <div id="topic-timeline-view-div"></div> -->
     </div>
     <div id = "right-view">
       <ul class="nav nav-tabs" role="tablist" data-tabs="tabs">
