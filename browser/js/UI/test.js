@@ -7,7 +7,7 @@ var DIRECTION = require('../../../flags/word_tree_direction_flags');
 module.exports = exports = $('#test').click(function(){
   co(function*(){
     var data = yield LoadWordTree().root_word('womans').year(-1)
-    .direction(DIRECTION.FORWARD).load();
+    .direction(DIRECTION.REVERSE).load();
     console.log('data', JSON.stringify(data));
   }).catch(function(err){
     console.log(err);
