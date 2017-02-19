@@ -29,12 +29,12 @@ function word_tree(){
         let found = false;
         for(let i = 0; i < pre_node.children.length; i++){
           let node = pre_node.children[i];
-          if(node.words[0].toLowerCase() === word.toLowerCase()){
+          if(token_acc(node.tokens[0]).toLowerCase() === word.toLowerCase()){
             ++node.value; found = true; pre_node = node; break;
           }
         }
         if(!found){
-          let new_node = {words : [word], value : 1, children : []};
+          let new_node = {tokens : [token], value : 1, children : []};
           pre_node.children.push(new_node);
           pre_node = new_node;
         }
@@ -44,7 +44,7 @@ function word_tree(){
         if(root_word_lower === word.toLowerCase()){
           add_flag = true;
           if(root === null){
-            root = {words : [word], value : 1, children:[]};
+            root = {tokens : [token], value : 1, children:[]};
           } else {
             ++root.value;
           }
@@ -53,11 +53,13 @@ function word_tree(){
       }
     }
   }
+
   function create(docs){
     docs.forEach(function(doc){
       var tokens = tokens_acc(doc);
       append_tree(root_word, tokens);
     });
+    compress(root, reverse);
     return ret;
   }
   var ret = {};
@@ -78,4 +80,21 @@ function word_tree(){
   ret.reverse = function(_){return arguments.length > 0 ? (reverse = _, ret) : reverse;};
   ret.root_word = function(_){return arguments.length > 0 ? (root_word = _, ret) : root_word;};
   return ret;
+}
+function compress(root, reverse){
+  recurse(root);
+  return root;
+  function recurse(r){
+    if(!is_leaf(r)){
+      if(r.children.length === 1){
+        r.tokens[reverse ? 'unshift' : 'push'](r.children[0].tokens[0]);
+        r.children = r.children[0].children;
+        recurse(r);
+      }
+      else r.children.forEach(recurse);
+    }
+  }
+}
+function is_leaf(r){
+  return !r.children || r.children.length === 0;
 }
