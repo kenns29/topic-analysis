@@ -9,6 +9,7 @@ module.exports = exports = $('#test').click(function(){
     var data = yield LoadWordTree().root_word('lesbian').year(-1)
     .direction(DIRECTION.FORWARD).load();
     console.log('data', JSON.stringify(data));
+    global.word_tree.data(data).update();
   }).catch(function(err){
     console.log(err);
   });

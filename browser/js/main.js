@@ -8,6 +8,8 @@ global.topic_viewer = require('./view/topic_viewer');
 global.model_stats_display = require('./view/model_stats_display');
 var MultiKeywordTimeline = require('./view/multi_keyword_timeline');
 global.multi_keyword_timeline = MultiKeywordTimeline().init();
+var WordTree = require('./view/word_tree');
+global.word_tree = WordTree().init();
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')
 require('./UI/btn_train_topics');

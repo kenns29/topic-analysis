@@ -15,12 +15,22 @@ var tiny_text_scale = d3.scaleThreshold()
 
 var margin = {top:20, right:120, bottom:20, left:120};
 function word_tree(){
+  var container = "#keyword-tree-view-div";
   var data;
   var hierarchy;
   var partition;
+  var svg, width, height;
+  var graph_g, W, H;
+  function init(){
+    width = $(container).width(), height = $(container).height();
+    svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
+    graph_g = svg.append('g');
+    return ret;
+  }
   function update(source){
     partition = d3.partition(hierarchy);
-
+    
+    return ret;
   }
   var ret = {};
   ret.data = function(_){
@@ -31,5 +41,7 @@ function word_tree(){
     }
     return data;
   };
+  ret.init = init;
+  ret.update = update;
   return ret;
 }
