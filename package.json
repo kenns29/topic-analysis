@@ -5,6 +5,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "atob": "^2.0.3",
+    "babelify": "^7.3.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "*",
     "bootstrap": "^3.3.7",
@@ -34,9 +35,9 @@
     "when": "^3.7.7"
   },
   "scripts": {
-    "build-js": "browserify browser/js/main.js > public/bundle.js",
+    "build-js": "browserify browser/js/main.js -o public/bundle.js -t [babelify --presets [es2015 async-to-generator async-generator-functions]]",
     "build": "npm run build-js & npm run build-css",
-    "watch-js": "watchify browser/js/main.js -o public/bundle.js -dv",
+    "watch-js": "watchify browser/js/main.js -o public/bundle.js -t [babelify --presets [es2015 async-to-generator async-generator-functions]] -dv",
     "watch": "npm run watch-js",
     "start": "node app.js",
     "build-css": "sass browser/css/main.scss:public/css/main.css --style compressed",
