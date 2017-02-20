@@ -1,5 +1,5 @@
 body{
-  min-width: 1588px;
+  // min-width: 1588px;
 }
 #wrapper {
   position:relative;
@@ -12,8 +12,7 @@ body{
   float:left;
   width:300px;
   height:calc(100%-5px);
-  margin-top: 5px;
-  padding-top:0px;
+  padding: 10px;
   #data-select {
     position: relative;
     width: 100%;
@@ -54,6 +53,8 @@ body{
     height: 100%;
     width: 60%;
     float : left;
+    padding: 0px 10px;
+    border-left: 1px solid #ddd;
     #topic-viewer-div {
       position: relative;
       height: 40%;
@@ -86,10 +87,12 @@ body{
     position: relative;
     width : 40%;
     height: 100%;
-    float: left;
+    float: right;
     .tab-content{
       position: relative;
       height: calc(100% - 45px);
+      padding: 10px;
+      border-left: 1px solid #ddd;
       #topic-document-viewer-panel{
         position: relative;
         height: 100%;
@@ -114,4 +117,18 @@ body{
   }
 }
 
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-container>svg {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 @import 'util'

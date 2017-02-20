@@ -53,16 +53,18 @@ module.exports = exports = function(){
     .style('margin', '0px 0px 0px 0px')
     .style('padding', '0px 0px 0px 0px');
     div_enter.append('div').attr('class', 'year')
-    .style('display', 'inline-block')
+    // .style('display', 'inline-block')
     .style('vertical-align', 'top')
     .style('height', 'auto')
     .style('width', '50px')
+    .style('float', 'left')
     .html(function(d){return d.year;});
     var div_main_enter = div_enter.append('div').attr('class', 'main')
     .style('position', 'relative')
-    .style('display', 'inline-block')
-    .style('vertical-align', 'inline-block')
-    .style('width', (width - 50 - 30) + 'px');
+    // .style('display', 'inline-block')
+    .style('overflow', 'hidden')
+    .style('vertical-align', 'inline-block');
+    // .style('width', (width - 50 - 30) + 'px');
     div_main_enter.append('div').attr('class', 'title').style('width', '100%').style('background-color', '#F8F8F8');
     div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
     div_sel.exit().remove();
@@ -112,7 +114,7 @@ module.exports = exports = function(){
   function update_topic_distr(d, i){
     var sel = d3.select(this);
     var dat = d;
-    var topic_weight_scale = d3.scaleLinear().domain([0, 1]).range([0, width - 50 - 30 - 1]);
+    var topic_weight_scale = d3.scaleLinear().domain([0, 1]).range([0, 100]);
     if(dat.topic_distr){
       let topic_array = [];
       for(let i in dat.topic_distr){
@@ -126,7 +128,7 @@ module.exports = exports = function(){
       let topic_update = sel.selectAll('.topic');
       topic_update.sort(function(a, b){return b.weight - a.weight;});
       topic_update.style('float', 'left')
-      .style('width', function(d){return topic_weight_scale(d.weight) + 'px';})
+      .style('width', function(d){return topic_weight_scale(d.weight) + '%';})
       .style('height', '10px').style('background-color', function(d){return topic_color(d.id);});
     }
   }

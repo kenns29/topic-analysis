@@ -22,8 +22,8 @@ var display_opt = 'weight';
 var selected_token;
 function init(){
   width = $(container).width() - 15, height = $(container).height();
-  svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
-  background = svg.append('rect').attr('width', width).attr('height', height).attr('fill', 'white').style('cursor', 'grab');
+  svg = d3.select(container).append('svg').attr('width', '100%').attr('height', '100%');
+  background = svg.append('rect').attr('width', '100%').attr('height', '100%').attr('fill', 'white').style('cursor', 'grab');
   graph_g = svg.append('g').attr('class', 'topic-viewer-g').attr('transform', 'translate(' + [margin.left, margin.top]+')');
   topics_g = graph_g.append('g').attr('class', 'topics-g').attr('transform', 'translate('+ [50, 0] +')')
   label_g = graph_g.append('g').attr('class', 'labels-g');
@@ -125,8 +125,7 @@ function update_topics(data){
     }
   });
   var s_height = svg_height(data);
-  height = s_height > $(container).height() ? s_height : $(container).height();
-  svg.attr('height',height);
+  svg.attr('height','100%').style('min-height', s_height);
   var t1 = function(){
     return new Promise(function(resolve, reject){
       topic_update.transition().duration(duration).attr('transform', function(d){
