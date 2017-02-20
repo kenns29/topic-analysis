@@ -72,15 +72,27 @@ body{
         width : 50px;
       }
     }
-    #keyword-timeline-view-div{
+    #keyword-contents{
       position: relative;
-      height : calc(60% - 35px);
       width : 100%;
-    }
-    #topic-timeline-view-div {
-      position: relative;
-      height : 0%;
-      width: 100%;
+      height: calc(60% - 35px);
+      .tab-content{
+        position: relative;
+        height : calc(100% - 45px);
+        width : 100%;
+        #keyword-timeline-view-panel{
+          height: 100%; width: 100%;
+          #keyword-timeline-view-div{
+            height: 100%; width: 100%;
+          }
+        }
+        #keyword-tree-view-panel{
+          height: 100%; width: 100%;
+          #keyword-tree-view-div{
+            height: 100%; width: 100%;
+          }
+        }
+      }
     }
   }
   #right-view {
