@@ -35,7 +35,7 @@ function word_tree(){
     hierarchy.y0 = 0;
     var nodes = hierarchy.descendants(),
         links = hierarchy.descendants().slice(1);
-    var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || d.id = ++last_id;});
+    var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
 
     return ret;
   }
