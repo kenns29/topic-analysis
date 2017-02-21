@@ -30,11 +30,11 @@ function word_tree(){
         for(let i = 0; i < pre_node.children.length; i++){
           let node = pre_node.children[i];
           if(token_acc(node.tokens[0]).toLowerCase() === word.toLowerCase()){
-            ++node.value; found = true; pre_node = node; break;
+            ++node.count; found = true; pre_node = node; break;
           }
         }
         if(!found){
-          let new_node = {tokens : [token], value : 1, children : []};
+          let new_node = {tokens : [token], count : 1, children : []};
           pre_node.children.push(new_node);
           pre_node = new_node;
         }
@@ -44,9 +44,9 @@ function word_tree(){
         if(root_word_lower === word.toLowerCase()){
           add_flag = true;
           if(root === null){
-            root = {tokens : [token], value : 1, children:[]};
+            root = {tokens : [token], count : 1, children:[]};
           } else {
-            ++root.value;
+            ++root.count;
           }
           pre_node = root;
         }
