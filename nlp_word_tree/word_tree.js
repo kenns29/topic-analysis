@@ -22,9 +22,6 @@ function word_tree(){
     function each_token(token){
       var word = token_acc(token);
       var word_lower = word.toLowerCase();
-      if(word_lower === 'community'){
-        console.log('word_lower', word_lower);
-      }
       if(to_lower_case) word = word_lower;
       if((use_stop_pattern && word.match(token_stop_pattern)) ||
         (use_stop_words && stopwords.has(word))) return;
@@ -63,9 +60,9 @@ function word_tree(){
     root = null;
     docs.forEach(function(doc){
       var tokens = tokens_acc(doc);
-      console.log('doc title', doc.title);
       append_tree(root_word, tokens);
     });
+    add_end(root);
     compress(root, reverse);
     return ret;
   }
@@ -88,6 +85,21 @@ function word_tree(){
   ret.root_word = function(_){return arguments.length > 0 ? (root_word = _, ret) : root_word;};
   return ret;
 }
+function add_end(root){
+  recurse(root);
+  return root;
+  function recurse(r){
+    if(!is_leaf(r)){
+      r.children.forEach(recurse);
+      let children_count = r.children.reduce(function(pre, cur){
+        return pre + cur.count;
+      }, 0);
+      if(r.count > children_count){
+        r.children.push({tokens : [make_token('.', '.')], count : r.count - children_count, children:[]});
+      }
+    }
+  }
+}
 function compress(root, reverse){
   recurse(root);
   return root;
@@ -104,4 +116,7 @@ function compress(root, reverse){
 }
 function is_leaf(r){
   return !r.children || r.children.length === 0;
+}
+function make_token(text, lemma){
+  return {text: text, lemma:lemma};
 }

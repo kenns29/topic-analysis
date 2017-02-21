@@ -41,8 +41,6 @@ function word_tree(){
   function update(source){
     width = $(container).width(), height = $(container).height();
     var layout_height = partition_height > height ? partition_height : height;
-    console.log('partition_height', partition_height);
-    console.log('layout_height', layout_height);
     root.x0 = 0;
     root.y0 = 0;
     partition = d3.partition().size([layout_height, width]);
@@ -114,7 +112,7 @@ function word_tree(){
         var leave = leaf_values(root, count2font);
         partition_height = height_by_leave(leave);
         root.sum(function(d){return d.value;});
-        root.sort(function(a, b){return b.value - a.value;});
+        root.sort(function(a, b){return b.data.count - a.data.count;});
         return ret;
     }
     return data;
