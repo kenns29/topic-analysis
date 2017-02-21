@@ -27,6 +27,9 @@ function word_tree(){
   var partition_height;
   var count2font;
   var node_x_space = 40;
+
+  var hierarchy_forward;
+  var hierarchy_reverse;
   function init(){
     svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', '100%').attr('height', '100%');
     graph_g = svg.append('g');
@@ -38,7 +41,7 @@ function word_tree(){
     tooltip = Tooltip().container(container).html(function(d){return d;})();
     return ret;
   }
-  function update(source){
+  function update(source, reverse){
     width = $(container).width(), height = $(container).height();
     var layout_height = partition_height > height ? partition_height : height;
     root.x0 = 0;
@@ -51,7 +54,6 @@ function word_tree(){
         links = root.descendants().slice(1);
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
     var node_enter = node_sel.enter().append('g').attr('class', 'node');
-    // node_enter.append('rect');
     node_enter.append('text');
     var node_exit = node_sel.exit();
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
@@ -103,7 +105,7 @@ function word_tree(){
     return ret;
   }
   var ret = {};
-  ret.data = function(_){
+  ret.data = function(_data, _reverse){
     if(arguments.length > 0){
         data = _;
         root = d3.hierarchy(data);
@@ -113,6 +115,8 @@ function word_tree(){
         partition_height = height_by_leave(leave);
         root.sum(function(d){return d.value;});
         root.sort(function(a, b){return b.data.count - a.data.count;});
+        if(!_reverse) hierarchy_forward = Hierarchy().make(data);
+        else hierarchy_reverse = Hierarchy().make(data);
         return ret;
     }
     return data;
@@ -150,6 +154,28 @@ function node_hori_adjust(root, node_x_space){
     }
   });
 }
+function Hierarchy(){
+  var data, root, height, count2font, count_extent;
+  function make(_){
+    if(arguments.length > 0) data = _;
+    root = d3.hierarchy(data);
+    count_extent = d3.extent(root.descendants(), function(d){return d.data.count;});
+    count2font = count2font_factory(count_extent);
+    var leave = leaf_values(root, count2font);
+    height = height_by_leave(leave);
+    root.sum(function(d){return d.value;});
+    root.sort(function(a, b){return b.data.count - a.data.count;});
+    return ret;
+  }
+  function ret(_){return make(_);}
+  ret.make = make;
+  ret.data = function(_){return arguments.length > 0 ?(data =_, ret) : data;};
+  ret.root = function(_){return arguments.length > 0 ?(root =_, ret) : root;};
+  ret.height = function(_){return arguments.length > 0 ?(height =_, ret) : height;};
+  ret.count2font = function(_){return arguments.length > 0 ?(count2font =_, ret) : count2font;};
+  ret.count_extent = function(_){return arguments.length > 0 ?(count_extent =_, ret) : count_extent;};
+  return ret;
+}
 function count2font_factory(extent){
   var scale = d3.scaleLinear().domain(extent).range([0, 50]);
   return function(count){
@@ -161,7 +187,6 @@ function leaf_values(root, count2font){
   var leaves = root.leaves();
   leaves.forEach(function(d){
     d.data.value = d.value = count2font(d.data.count);
-
   });
   return leaves;
 }
