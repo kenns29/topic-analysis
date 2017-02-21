@@ -5,9 +5,8 @@ module.exports = exports = word_tree;
 
 var text_scale = d3.scaleThreshold()
 .domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
-.range([ 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ].map(function(d) {
-  return d;
-}));
+.range([ 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ]);
+
 var tiny_text_scale = d3.scaleThreshold()
 .domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
 .range([ 0, 15, 20, 25, 30, 35, 40, 45, 50, 55 ].map(function(d) {
@@ -26,6 +25,8 @@ function word_tree(){
   var duration = 700;
   var zoom;
   var tooltip;
+  var partition_height;
+  var count2font;
   function init(){
     svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', '100%').attr('height', '100%');
     graph_g = svg.append('g');
@@ -39,9 +40,12 @@ function word_tree(){
   }
   function update(source){
     width = $(container).width(), height = $(container).height();
+    var layout_height = partition_height > height ? partition_height : height;
+    console.log('partition_height', partition_height);
+    console.log('layout_height', layout_height);
     root.x0 = 0;
     root.y0 = 0;
-    partition = d3.partition().size([height, width]);
+    partition = d3.partition().size([layout_height, width]);
     partition(root);
     re_pos_nodes_vert(root);
     re_pos_nodes_hori(root);
@@ -50,6 +54,7 @@ function word_tree(){
     console.log('nodes', nodes);
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
     var node_enter = node_sel.enter().append('g').attr('class', 'node');
+    // node_enter.append('rect');
     node_enter.append('text');
     var node_exit = node_sel.exit();
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
@@ -60,7 +65,7 @@ function word_tree(){
       return 'translate('+[d.y, d.x]+')';
     });
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
-      return Math.min(20, (d.x1 - d.x0)/2);
+      return count2font(d.data.count);
     });
     var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
     var tspan_enter = tspan_sel.enter().append('tspan');
@@ -74,7 +79,7 @@ function word_tree(){
       d.text_length = d3.select(this).select('text').node().getComputedTextLength();
     });
     node_update.on('mouseover', function(d){
-      tooltip.show(svg.node(), d.data.tokens[0].text + ', ' + d.value);
+      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + count2font(d.data.count));
     }).on('mousemove', function(){
       tooltip.move(svg.node());
     }).on('mouseout', function(){
@@ -93,7 +98,7 @@ function word_tree(){
     if(!link_exit.empty()) link_exit.remove();
     var link_update = link_sel.merge(link_enter);
     link_update.transition().duration(duration).attr('d', function(d){
-      var s = {x:d.parent.x, y : d.parent.y + d.parent.text_length};
+      var s = {x:d.parent.x, y : d.parent.y + d.parent.text_length + 5};
       var t = {x:d.x, y:d.y};
       return diagonal(s, t);
     });
@@ -104,7 +109,10 @@ function word_tree(){
     if(arguments.length > 0){
         data = _;
         root = d3.hierarchy(data);
-        leaf_values(root);
+        var extent = d3.extent(root.descendants(), function(d){return d.data.count;});
+        count2font = count2font_factory(extent);
+        var leave = leaf_values(root, count2font);
+        partition_height = height_by_leave(leave);
         root.sum(function(d){return d.value;});
         root.sort(function(a, b){return b.value - a.value;});
         return ret;
@@ -131,15 +139,21 @@ function re_pos_nodes_hori(root){
     r.y = (r.y0 + r.y1)/2;
   });
 }
-function leaf_values(root){
+function count2font_factory(extent){
+  var scale = d3.scaleLinear().domain(extent).range([0, 50]);
+  return function(count){
+    var v = scale(count);
+    return text_scale(v);
+  };
+}
+function leaf_values(root, count2font){
   var leaves = root.leaves();
-  var max = d3.max(leaves, function(d){return d.data.count;});
-  var scale = d3.scaleSqrt().domain([0, max]).range([0, 50]);
-  function to_value(d){
-    var v = scale(d);
-    return (v < 50) ? Math.ceil(v) : v;
-  }
   leaves.forEach(function(d){
-    d.data.value = d.value = to_value(d.data.count);
+    d.data.value = d.value = count2font(d.data.count);
+
   });
+  return leaves;
+}
+function height_by_leave(leave){
+  return d3.sum(leave, function(d){return d.data.value;});
 }

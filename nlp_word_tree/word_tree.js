@@ -21,7 +21,11 @@ function word_tree(){
 
     function each_token(token){
       var word = token_acc(token);
-      if(to_lower_case) word = word.toLowerCase();
+      var word_lower = word.toLowerCase();
+      if(word_lower === 'community'){
+        console.log('word_lower', word_lower);
+      }
+      if(to_lower_case) word = word_lower;
       if((use_stop_pattern && word.match(token_stop_pattern)) ||
         (use_stop_words && stopwords.has(word))) return;
       //after the first encounter of the root word
@@ -29,8 +33,10 @@ function word_tree(){
         let found = false;
         for(let i = 0; i < pre_node.children.length; i++){
           let node = pre_node.children[i];
-          if(token_acc(node.tokens[0]).toLowerCase() === word.toLowerCase()){
-            ++node.count; found = true; pre_node = node; break;
+          let pre_word_lower = token_acc(node.tokens[0]).toLowerCase();
+          if(pre_word_lower === word_lower){
+            ++node.count; found = true; pre_node = node;
+            break;
           }
         }
         if(!found){
@@ -54,8 +60,10 @@ function word_tree(){
     }
   }
   function create(docs){
+    root = null;
     docs.forEach(function(doc){
       var tokens = tokens_acc(doc);
+      console.log('doc title', doc.title);
       append_tree(root_word, tokens);
     });
     compress(root, reverse);
