@@ -70,6 +70,9 @@ function word_tree(){
     tspan_update.html(function(d, i){
       if(i === 0) return d.text; else return '&nbsp;' + d.text;
     });
+    node_update.each(function(d){
+      d.text_length = d3.select(this).select('text').node().getComputedTextLength();
+    });
     node_update.on('mouseover', function(d){
       tooltip.show(svg.node(), d.data.tokens[0].text + ', ' + d.value);
     }).on('mousemove', function(){
@@ -78,6 +81,22 @@ function word_tree(){
       tooltip.hide();
     });
 
+    var link_sel = graph_g.selectAll('.link').data(links, function(d){return d.id;});
+    var link_enter = link_sel.enter().append('path').attr('class', 'link')
+    .attr('d', function(d){
+      var o = {x : 0, y:0};
+      return diagonal(o, o);
+    }).attr('fill', 'none')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 1);
+    var link_exit = link_sel.exit();
+    if(!link_exit.empty()) link_exit.remove();
+    var link_update = link_sel.merge(link_enter);
+    link_update.transition().duration(duration).attr('d', function(d){
+      var s = {x:d.parent.x, y : d.parent.y + d.parent.text_length};
+      var t = {x:d.x, y:d.y};
+      return diagonal(s, t);
+    });
     return ret;
   }
   var ret = {};
@@ -95,6 +114,12 @@ function word_tree(){
   ret.init = init;
   ret.update = update;
   return ret;
+}
+function diagonal(s, d) {
+  return `M ${s.y} ${s.x}
+          C ${(s.y + d.y) / 2} ${s.x},
+            ${(s.y + d.y) / 2} ${d.x},
+            ${d.y} ${d.x}`;
 }
 function re_pos_nodes_vert(root){
   root.eachBefore(function(r){
