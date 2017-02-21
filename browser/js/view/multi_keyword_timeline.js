@@ -64,7 +64,7 @@ module.exports = exports = function(){
     area_enter.append('rect').attr('width', W).attr('height', timeline_height).attr('fill','white');
     area_enter.append('path');
     timeline_sel.exit().remove();
-    var timeline_update = timeline_g.selectAll('.timeline');
+    var timeline_update = timeline_sel.merge(timeline_enter);
     timeline_update.select('.area').each(update_line);
     timeline_update.select('.area').call(area_mouseover);
     x_axis_g.call(x_axis);
@@ -73,10 +73,10 @@ module.exports = exports = function(){
       update();
     });
     if(brushes.is_activated())brushes.activate();
+    var t = d3.transition().duration(duration);
     var t1 = function(){
       return new Promise(function(resolve, reject){
-        timeline_update.transition().duration(duration)
-        .attr('transform', function(d){
+        timeline_update.transition(t).attr('transform', function(d){
           var x = 0, y = d.index * (timeline_height + timeline_y_space);
           return 'translate('+[x, y]+')';
         }).on('end', resolve);
@@ -84,7 +84,7 @@ module.exports = exports = function(){
     };
     var t2 = function(){
       return new Promise(function(resolve, reject){
-        x_axis_g.transition().duration(duration).attr('transform', 'translate(' + [
+        x_axis_g.transition(t).attr('transform', 'translate(' + [
           margin.left + 50,
           margin.top + data.length * (timeline_height + timeline_y_space) + 5
         ]+')').on('end', resolve);
@@ -120,7 +120,7 @@ module.exports = exports = function(){
     .y(function(){return timeline_height/2;})
     .y0(function(d){return timeline_height/2+y_scale(d.count);})
     .y1(function(d){return timeline_height/2-y_scale(d.count);}).curve(d3.curveCardinal);
-    d3.select(this).select('path').transition().duration(500).attr('d', function(d){
+    d3.select(this).select('path').transition().duration(duration).attr('d', function(d){
       return area_fun(d.data);
     }).attr('fill', 'lightpink').attr('stroke', 'black').attr('stroke-width', 1);
   }

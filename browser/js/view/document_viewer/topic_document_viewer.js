@@ -68,7 +68,7 @@ module.exports = exports = function(){
     div_main_enter.append('div').attr('class', 'title').style('width', '100%').style('background-color', '#F8F8F8');
     div_main_enter.append('div').attr('class', 'distr').style('width', '100%');
     div_sel.exit().remove();
-    var div_update = d3.select(container).selectAll('.document');
+    var div_update = div_sel.merge(div_enter);
     div_update.sort(function(a, b){return a.index - b.index;});
     div_update.select('.year').html(function(d){return d.year;});
     div_update.select('.main').select('.title').each(update_title_span);
@@ -98,7 +98,7 @@ module.exports = exports = function(){
     var span_sel = d3.select(this).selectAll('span').data(span_array);
     var span_enter = span_sel.enter().append('span');
     span_sel.exit().remove();
-    var span_update = d3.select(this).selectAll('span');
+    var span_update = span_sel.merge(span_enter);
     span_update.style('background-color', function(d){
       if(d.topic === -1) return 'white';
       else{
@@ -125,7 +125,7 @@ module.exports = exports = function(){
       let topic_sel = sel.selectAll('.topic').data(topic_array, function(d){return d.id;});
       let topic_enter = topic_sel.enter().append('div').attr('class', 'topic');
       topic_sel.exit().remove();
-      let topic_update = sel.selectAll('.topic');
+      let topic_update = topic_sel.merge(topic_enter);
       topic_update.sort(function(a, b){return b.weight - a.weight;});
       topic_update.style('float', 'left')
       .style('width', function(d){return topic_weight_scale(d.weight) + '%';})

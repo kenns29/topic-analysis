@@ -42,7 +42,7 @@ module.exports = exports = function(){
     .style('width', (width - 50 - 30) + 'px');
     div_main_enter.append('div').attr('class', 'title').style('width', '100%').style('background-color', '#F8F8F8');
     div_sel.exit().remove();
-    var div_update = d3.select(container).selectAll('.document');
+    var div_update = div_sel.merge(div_enter);
     div_update.sort(function(a, b){return a.index - b.index;});
     div_update.select('.year').html(function(d){return d.year;});
     div_update.select('.main').select('.title').each(update_title_span);
@@ -68,7 +68,7 @@ module.exports = exports = function(){
     var span_sel = d3.select(this).selectAll('span').data(span_array);
     var span_enter = span_sel.enter().append('span');
     span_sel.exit().remove();
-    var span_update = d3.select(this).selectAll('span');
+    var span_update = span_sel.merge(span_enter);
     span_update.style('background-color', function(d){
       if(d.keyword === null) return 'white';
       else{

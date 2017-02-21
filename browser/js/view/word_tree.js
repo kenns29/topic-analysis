@@ -55,7 +55,7 @@ function word_tree(){
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
       return 'translate('+[0, 0]+')';
     });
-    var node_update = graph_g.selectAll('.node');
+    var node_update = node_sel.merge(node_enter);
     node_update.transition().duration(duration).attr('transform', function(d){
       return 'translate('+[d.y, d.x]+')';
     });
@@ -66,7 +66,7 @@ function word_tree(){
     var tspan_enter = tspan_sel.enter().append('tspan');
     var tspan_exit = tspan_sel.exit();
     if(!tspan_exit.empty()) tspan_exit.remove();
-    var tspan_update = node_update.select('text').selectAll('tspan');
+    var tspan_update = tspan_sel.merge(tspan_enter);
     tspan_update.html(function(d, i){
       if(i === 0) return d.text; else return '&nbsp;' + d.text;
     });
@@ -77,7 +77,7 @@ function word_tree(){
     }).on('mouseout', function(){
       tooltip.hide();
     });
-    
+
     return ret;
   }
   var ret = {};

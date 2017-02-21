@@ -55,7 +55,7 @@ function update(){
   .append('div').style('text-align', 'center')
   .append('i').attr('class', 'fa fa-trash-o fa-cog fa-1x').style('cursor', 'pointer');
   model_sel.exit().remove();
-  var model_update = table.selectAll('.model');
+  var model_update = model_sel.merge(model_enter);
   model_update.select('.name').html(function(d){return d.name;});
   model_update.select('.year').html(function(d){return d.year;});
   model_update.select('.type').html(function(d){return flag2str(d.type);});
