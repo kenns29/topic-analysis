@@ -1,18 +1,17 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
 var Tooltip = require('./tooltip');
+
 module.exports = exports = word_tree;
 
 var text_scale = d3.scaleThreshold()
 .domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
 .range([ 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ]);
-
 var tiny_text_scale = d3.scaleThreshold()
 .domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
 .range([ 0, 15, 20, 25, 30, 35, 40, 45, 50, 55 ].map(function(d) {
   return d * 0.5;
 }));
-
 var margin = {top:20, right:120, bottom:20, left:120};
 function word_tree(){
   var container = "#keyword-tree-view-div";
@@ -27,6 +26,7 @@ function word_tree(){
   var tooltip;
   var partition_height;
   var count2font;
+  var node_x_space = 40;
   function init(){
     svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', '100%').attr('height', '100%');
     graph_g = svg.append('g');
@@ -42,14 +42,13 @@ function word_tree(){
     width = $(container).width(), height = $(container).height();
     var layout_height = partition_height > height ? partition_height : height;
     root.x0 = 0;
-    root.y0 = 0;
-    partition = d3.partition().size([layout_height, width]);
+    root.y0 = width/2;
+    partition = d3.partition().size([layout_height, width/2]);
     partition(root);
-    re_pos_nodes_vert(root);
-    re_pos_nodes_hori(root);
+    node_x(root);
+    node_y(root);
     var nodes = root.descendants(),
         links = root.descendants().slice(1);
-    console.log('nodes', nodes);
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
     var node_enter = node_sel.enter().append('g').attr('class', 'node');
     // node_enter.append('rect');
@@ -59,9 +58,6 @@ function word_tree(){
       return 'translate('+[0, 0]+')';
     });
     var node_update = node_sel.merge(node_enter);
-    node_update.transition().duration(duration).attr('transform', function(d){
-      return 'translate('+[d.y, d.x]+')';
-    });
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
       return count2font(d.data.count);
     });
@@ -75,6 +71,10 @@ function word_tree(){
     });
     node_update.each(function(d){
       d.text_length = d3.select(this).select('text').node().getComputedTextLength();
+    });
+    node_hori_adjust(root, node_x_space);
+    node_update.transition().duration(duration).attr('transform', function(d){
+      return 'translate('+[d.y, d.x]+')';
     });
     node_update.on('mouseover', function(d){
       tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + count2font(d.data.count));
@@ -97,7 +97,7 @@ function word_tree(){
     var link_update = link_sel.merge(link_enter);
     link_update.transition().duration(duration).attr('d', function(d){
       var s = {x:d.parent.x, y : d.parent.y + d.parent.text_length + 5};
-      var t = {x:d.x, y:d.y};
+      var t = {x:d.x, y:d.y - 5};
       return diagonal(s, t);
     });
     return ret;
@@ -127,14 +127,27 @@ function diagonal(s, d) {
             ${(s.y + d.y) / 2} ${d.x},
             ${d.y} ${d.x}`;
 }
-function re_pos_nodes_vert(root){
+function node_x(root){
   root.eachBefore(function(r){
     r.x = (r.x0 + r.x1)/2;
   });
 }
-function re_pos_nodes_hori(root){
+function node_y(root){
   root.eachBefore(function(r){
-    r.y = (r.y0 + r.y1)/2;
+    r.y = r.y0;
+  });
+}
+function node_hori_adjust(root, node_x_space){
+  root.each(function(r){
+    if(r.children && r.children.length > 0){
+      var end_y = r.text_length + r.y;
+      r.children.forEach(function(child){
+        let diff = child.y - end_y;
+        if(diff < node_x_space){
+          child.y += node_x_space - diff;
+        }
+      });
+    }
   });
 }
 function count2font_factory(extent){
