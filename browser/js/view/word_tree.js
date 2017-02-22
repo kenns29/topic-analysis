@@ -29,6 +29,8 @@ function word_tree(){
 
   var hierarchy_forward;
   var hierarchy_reverse;
+  var partition_forward;
+  var partition_reverse;
   var loading;
   function init(){
     svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', '100%').attr('height', '100%');
@@ -43,13 +45,19 @@ function word_tree(){
     return ret;
   }
   function update(){
-    update_tree(hierarchy_forward, null, null);
-    // update_tree(hierarchy_reverse, null, true);
+    return update_all();
   }
-  function update_tree(hierarchy, source, reverse){
-    var root = hierarchy.root();
-    var nodes = root.descendants(),
-        links = root.descendants().slice(1);
+
+  function update_all(source){
+    var root_forward = hierarchy_forward.root();
+    var root_reverse = hierarchy_reverse.root();
+    var nodes_forward = root_forward.descendants();
+    var nodes_reverse = root_reverse.descendants();
+    var links_forward = root_forward.descendants().slice(1);
+    var links_reverse = root_reverse.descendants().slice(1);
+    var nodes = nodes_forward.concat(links_reverse);
+    var links = links_forward.concat(links_reverse);
+
     //Entering the necessary nodes and append texts, and compute the font and text length for each node
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
     var node_enter = node_sel.enter().append('g').attr('class', 'node');
@@ -60,8 +68,8 @@ function word_tree(){
     });
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
-      return hierarchy.count2font(d.data.count);
-    });
+      return d.reverse ? hierarchy_reverse.count2font(d.data.count) : hierarchy_forward.count2font(d.data.count);
+    }).attr('text-anchor', function(d){return d.reverse ? 'end' : 'start';});
     var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
     var tspan_enter = tspan_sel.enter().append('tspan');
     var tspan_exit = tspan_sel.exit();
@@ -71,55 +79,33 @@ function word_tree(){
       if(i === 0) return d.text; else return '&nbsp;' + d.text;
     });
     node_update.each(function(d){
-      d.text_length = d3.select(this).select('text').node().getComputedTextLength();
+      d.data.text_length = d.text_length = d3.select(this).select('text').node().getComputedTextLength();
     });
 
     //update the layout
     width = $(container).width(), height = $(container).height();
-    var layout_height = hierarchy.height() > height ? hierarchy.height() : height;
-    var partition = Partition().hierarchy(hierarchy).reverse(reverse).height(height).width(width).update();
-    partition.move_y(width/2);
+    var layout_height_forward = hierarchy_forward.height() > height ? hierarchy_forward.height() : height;
+    var layout_height_reverse = hierarchy_reverse.height() > height ? hierarchy_reverse.height() : height;
+    var partition_forward = Partition().hierarchy(hierarchy_forward).reverse(false).height(layout_height_forward).width(width/2).update();
+    partition_forward.move_y(width/2);
+    var partition_reverse = Partition().hierarchy(hierarchy_reverse).reverse(true).height(layout_height_reverse).width(width/2).update();
+    root_reverse.text_length = root_forward.text_length;
+    partition_reverse.move_y(root_forward.y1);
+    partition_reverse.move_x(root_forward.x);
 
-    // partition = d3.partition().size([layout_height, width/2]);
-    // partition(root);
-    // node_x(root);
-    // node_y(root);
-    // var nodes = root.descendants(),
-    //     links = root.descendants().slice(1);
-    // var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
-    // var node_enter = node_sel.enter().append('g').attr('class', 'node');
-    // node_enter.append('text');
-    // var node_exit = node_sel.exit();
-    // if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
-    //   return 'translate('+[0, 0]+')';
-    // });
-    // var node_update = node_sel.merge(node_enter);
-    // node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
-    //   return hierarchy.count2font(d.data.count);
-    // });
-    // var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
-    // var tspan_enter = tspan_sel.enter().append('tspan');
-    // var tspan_exit = tspan_sel.exit();
-    // if(!tspan_exit.empty()) tspan_exit.remove();
-    // var tspan_update = tspan_sel.merge(tspan_enter);
-    // tspan_update.html(function(d, i){
-    //   if(i === 0) return d.text; else return '&nbsp;' + d.text;
-    // });
-    // node_update.each(function(d){
-    //   d.text_length = d3.select(this).select('text').node().getComputedTextLength();
-    // });
-    // node_hori_adjust(root, node_x_space);
+    //update nodes
     node_update.transition().duration(duration).attr('transform', function(d){
       return 'translate('+[d.y, d.x]+')';
     });
     node_update.on('mouseover', function(d){
-      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + hierarchy.count2font(d.data.count));
+      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count);
     }).on('mousemove', function(){
       tooltip.move(svg.node());
     }).on('mouseout', function(){
       tooltip.hide();
     });
 
+    //update links
     var link_sel = graph_g.selectAll('.link').data(links, function(d){return d.id;});
     var link_enter = link_sel.enter().append('path').attr('class', 'link')
     .attr('d', function(d){
@@ -132,8 +118,10 @@ function word_tree(){
     if(!link_exit.empty()) link_exit.remove();
     var link_update = link_sel.merge(link_enter);
     link_update.transition().duration(duration).attr('d', function(d){
-      var s = {x:d.parent.x, y : d.parent.y + d.parent.text_length + 5};
-      var t = {x:d.x, y:d.y - 5};
+      var sy_offset = d.reverse ? -(d.parent.text_length + 5) : (d.parent.text_length + 5);
+      var ty_offset = d.reverse ? 5 : -5;
+      var s = {x:d.parent.x, y : d.parent.y + sy_offset};
+      var t = {x:d.x, y:d.y + ty_offset};
       return diagonal(s, t);
     });
     return ret;
@@ -142,8 +130,8 @@ function word_tree(){
   ret.data = function(_data, _reverse){
     if(arguments.length > 0){
         data = _data;
-        if(!_reverse) hierarchy_forward = Hierarchy().make(data);
-        else hierarchy_reverse = Hierarchy().make(data);
+        if(!_reverse) hierarchy_forward = Hierarchy().reverse(false).make(data);
+        else hierarchy_reverse = Hierarchy().reverse(true).make(data);
         return ret;
     }
     return data;
@@ -158,29 +146,6 @@ function diagonal(s, d) {
           C ${(s.y + d.y) / 2} ${s.x},
             ${(s.y + d.y) / 2} ${d.x},
             ${d.y} ${d.x}`;
-}
-function node_x(root){
-  root.eachBefore(function(r){
-    r.x = (r.x0 + r.x1)/2;
-  });
-}
-function node_y(root){
-  root.eachBefore(function(r){
-    r.y = r.y0;
-  });
-}
-function node_hori_adjust(root, node_x_space){
-  root.each(function(r){
-    if(r.children && r.children.length > 0){
-      var end_y = r.text_length + r.y;
-      r.children.forEach(function(child){
-        let diff = child.y - end_y;
-        if(diff < node_x_space){
-          child.y += node_x_space - diff;
-        }
-      });
-    }
-  });
 }
 function Partition(){
   var hierarchy;
@@ -209,19 +174,32 @@ function Partition(){
   }
   function adjust_y(root){
     root.each(function(r){
-      var offset = reverse ? -r.text_length : r.text_length;
+      var offset = r.reverse ? -r.text_length : r.text_length;
+      var y_space = r.reverse ? -node_y_space : node_y_space;
       if(r.children && r.children.length > 0){
         let end_y = offset + r.y;
         r.children.forEach(function(child){
-          child.y = end_y + node_y_space;
+          child.y0 = child.y = end_y + y_space;
+          child.y1 = child.y0 + offset;
         });
       }
     });
     return ret;
   }
   function move_y(root, y){
-    root.y = y;
+    var offset = root.reverse ? -root.text_length : root.text_length;
+    root.y0 = root.y = y;
+    root.y1 = y + offset;
     adjust_y(root);
+    return ret;
+  }
+  function move_x(root, x){
+    var x_shift = x - root.x;
+    root.eachBefore(function(r){
+      r.x += x_shift;
+      r.x0 += x_shift;
+      r.x1 += x_shift;
+    });
     return ret;
   }
   function update(){
@@ -237,7 +215,8 @@ function Partition(){
   ret.height = function(_){return arguments.length > 0 ?(height =_, ret) : height;};
   ret.width = function(_){return arguments.length > 0 ?(width =_, ret) : width;};
   ret.adjust_y = function(){return adjust_y(hierarchy.root());};
-  ret.move_y = function(y){return move_y(hierarchy.root(), y);}
+  ret.move_y = function(y){return move_y(hierarchy.root(), y);};
+  ret.move_x = function(x){return move_x(hierarchy.root(), x);};
   return ret;
 }
 function Hierarchy(){
@@ -253,7 +232,13 @@ function Hierarchy(){
     root.sum(function(d){return d.value;});
     root.sort(function(a, b){return b.data.count - a.data.count;});
     ret.count2font = count2font;
+    assign_reverse(reverse);
     return ret;
+  }
+  function assign_reverse(reverse){
+    root.eachBefore(function(r){
+      r.reverse = reverse;
+    });
   }
   function ret(_){return make(_);}
   ret.make = make;
@@ -261,6 +246,7 @@ function Hierarchy(){
   ret.root = function(_){return arguments.length > 0 ?(root =_, ret) : root;};
   ret.height = function(_){return arguments.length > 0 ?(height =_, ret) : height;};
   ret.count_extent = function(_){return arguments.length > 0 ?(count_extent =_, ret) : count_extent;};
+  ret.reverse = function(_){return arguments.length > 0 ?(reverse =_, ret) : reverse;};
   return ret;
 }
 function count2font_factory(extent){
@@ -278,7 +264,5 @@ function leaf_values(root, count2font){
   return leaves;
 }
 function height_by_leave(leave){
-  var padding = 10;
-  var sum = d3.sum(leave, function(d){return d.data.value;});
-  return sum;
+  return d3.sum(leave, function(d){return d.data.value;});
 }
