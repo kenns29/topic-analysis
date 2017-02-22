@@ -25,5 +25,6 @@ require('./UI/btn_draw_wordtree');
 require('./UI/document_tab_nav');
 require('./UI/keyword_tab_nav');
 require('./UI/checkbox-timeline-brush');
-require('./test_code/draw_keyword_timelines')();
-require('./UI/test');
+require('./init/draw_keyword_timelines')();
+// require('./init/draw_word_tree')();
+// require('./UI/test');

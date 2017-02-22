@@ -33,6 +33,7 @@ function word_tree(){
   var partition_reverse;
   var loading;
   function init(){
+    width = 800, height = 600;
     svg = d3.select(container).append('svg')
     .attr('class', 'word-tree').attr('width', '100%').attr('height', '100%')
     .attr("preserveAspectRatio", "xMinYMin meet")
@@ -86,7 +87,7 @@ function word_tree(){
     });
 
     //update the layout
-    width = $(container).width(), height = $(container).height();
+    // width = $(container).width(), height = $(container).height();
     var layout_height_forward = hierarchy_forward.height() > height ? hierarchy_forward.height() : height;
     var layout_height_reverse = hierarchy_reverse.height() > height ? hierarchy_reverse.height() : height;
     var partition_forward = Partition().hierarchy(hierarchy_forward).reverse(false).height(layout_height_forward).width(width/2).update();
