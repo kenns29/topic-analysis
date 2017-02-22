@@ -44,22 +44,13 @@ function word_tree(){
   }
   function update(){
     update_tree(hierarchy_forward, null, null);
-    update_tree(hierarchy_reverse, null, true);
+    // update_tree(hierarchy_reverse, null, true);
   }
   function update_tree(hierarchy, source, reverse){
     var root = hierarchy.root();
-    width = $(container).width(), height = $(container).height();
-    var layout_height = hierarchy.height() > height ? hierarchy.height() : height;
-    root.x0 = 0;
-    root.y0 = width/2;
-    root.x1 = layout_height;
-    root.y1 = 20;
-    partition = d3.partition().size([layout_height, width/2]);
-    partition(root);
-    node_x(root);
-    node_y(root);
     var nodes = root.descendants(),
         links = root.descendants().slice(1);
+    //Entering the necessary nodes and append texts, and compute the font and text length for each node
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
     var node_enter = node_sel.enter().append('g').attr('class', 'node');
     node_enter.append('text');
@@ -82,7 +73,42 @@ function word_tree(){
     node_update.each(function(d){
       d.text_length = d3.select(this).select('text').node().getComputedTextLength();
     });
-    node_hori_adjust(root, node_x_space);
+
+    //update the layout
+    width = $(container).width(), height = $(container).height();
+    var layout_height = hierarchy.height() > height ? hierarchy.height() : height;
+    var partition = Partition().hierarchy(hierarchy).reverse(reverse).height(height).width(width).update();
+    partition.move_y(width/2);
+
+    // partition = d3.partition().size([layout_height, width/2]);
+    // partition(root);
+    // node_x(root);
+    // node_y(root);
+    // var nodes = root.descendants(),
+    //     links = root.descendants().slice(1);
+    // var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
+    // var node_enter = node_sel.enter().append('g').attr('class', 'node');
+    // node_enter.append('text');
+    // var node_exit = node_sel.exit();
+    // if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
+    //   return 'translate('+[0, 0]+')';
+    // });
+    // var node_update = node_sel.merge(node_enter);
+    // node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
+    //   return hierarchy.count2font(d.data.count);
+    // });
+    // var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
+    // var tspan_enter = tspan_sel.enter().append('tspan');
+    // var tspan_exit = tspan_sel.exit();
+    // if(!tspan_exit.empty()) tspan_exit.remove();
+    // var tspan_update = tspan_sel.merge(tspan_enter);
+    // tspan_update.html(function(d, i){
+    //   if(i === 0) return d.text; else return '&nbsp;' + d.text;
+    // });
+    // node_update.each(function(d){
+    //   d.text_length = d3.select(this).select('text').node().getComputedTextLength();
+    // });
+    // node_hori_adjust(root, node_x_space);
     node_update.transition().duration(duration).attr('transform', function(d){
       return 'translate('+[d.y, d.x]+')';
     });
@@ -165,10 +191,11 @@ function Partition(){
   function init(){
     var root = hierarchy.root();
     root.x0 = 0;
-    root.y0 = width/2;
-    root.x1 = layout_height;
+    root.y0 = 0;
+    root.x1 = height;
     root.y1 = 20;
     partition = d3.partition().size([height, width]);
+    return ret;
   }
   function init_x(root){
     root.eachBefore(function(r){
@@ -190,16 +217,27 @@ function Partition(){
         });
       }
     });
+    return ret;
   }
   function move_y(root, y){
     root.y = y;
     adjust_y(root);
+    return ret;
   }
-  function run(){
+  function update(){
+    init();
     var root = hierarchy.root();
     partition(root);init_x(root);init_y(root);
+    return ret;
   }
-  function ret(){return partition(hierarchy.root());}
+  function ret(){return update();}
+  ret.update = update;
+  ret.hierarchy = function(_){return arguments.length > 0 ?(hierarchy =_, ret) : hierarchy;};
+  ret.reverse = function(_){return arguments.length > 0 ?(reverse =_, ret) : reverse;};
+  ret.height = function(_){return arguments.length > 0 ?(height =_, ret) : height;};
+  ret.width = function(_){return arguments.length > 0 ?(width =_, ret) : width;};
+  ret.adjust_y = function(){return adjust_y(hierarchy.root());};
+  ret.move_y = function(y){return move_y(hierarchy.root(), y);}
   return ret;
 }
 function Hierarchy(){
@@ -240,5 +278,7 @@ function leaf_values(root, count2font){
   return leaves;
 }
 function height_by_leave(leave){
-  return d3.sum(leave, function(d){return d.data.value;});
+  var padding = 10;
+  var sum = d3.sum(leave, function(d){return d.data.value;});
+  return sum;
 }
