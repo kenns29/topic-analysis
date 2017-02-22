@@ -26,7 +26,6 @@ module.exports = exports = function(){
   var loading;
   var duration = 500;
   function init(){
-    console.log('hey')
     width = $(container).width(), height = $(container).height();
     W = width - margin.left - margin.right - timeline_x_offset;
     H = height - margin.top - margin.bottom;

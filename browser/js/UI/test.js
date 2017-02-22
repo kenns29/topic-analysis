@@ -10,9 +10,14 @@ module.exports = exports = $('#test').click(function(){
     $(loading).show();
     var data = yield LoadWordTree().root_word('lesbian').year(-1)
     .direction(DIRECTION.FORWARD).load();
-    $(loading).hide();
+
     // console.log('data', JSON.stringify(data));
-    global.word_tree.data(data).update();
+    global.word_tree.data(data);
+    data = yield LoadWordTree().root_word('lesbian').year(-1)
+    .direction(DIRECTION.REVERSE).load();
+    $(loading).hide();
+    global.word_tree.data(data, true);
+    global.word_tree.update();
   }).catch(function(err){
     console.log(err);
   });

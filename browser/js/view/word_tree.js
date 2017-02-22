@@ -42,10 +42,14 @@ function word_tree(){
     loading = d3.select(container).select('.loading').node();
     return ret;
   }
-  function update(source, reverse){
-    var root = hierarchy_forward.root();
+  function update(){
+    update_tree(hierarchy_forward, null, null);
+    update_tree(hierarchy_reverse, null, true);
+  }
+  function update_tree(hierarchy, source, reverse){
+    var root = hierarchy.root();
     width = $(container).width(), height = $(container).height();
-    var layout_height = hierarchy_forward.height() > height ? hierarchy_forward.height() : height;
+    var layout_height = hierarchy.height() > height ? hierarchy.height() : height;
     root.x0 = 0;
     root.y0 = width/2;
     root.x1 = layout_height;
@@ -65,7 +69,7 @@ function word_tree(){
     });
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
-      return hierarchy_forward.count2font(d.data.count);
+      return hierarchy.count2font(d.data.count);
     });
     var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
     var tspan_enter = tspan_sel.enter().append('tspan');
@@ -83,7 +87,7 @@ function word_tree(){
       return 'translate('+[d.y, d.x]+')';
     });
     node_update.on('mouseover', function(d){
-      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + hierarchy_forward.count2font(d.data.count));
+      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + hierarchy.count2font(d.data.count));
     }).on('mousemove', function(){
       tooltip.move(svg.node());
     }).on('mouseout', function(){
