@@ -33,7 +33,10 @@ function word_tree(){
   var partition_reverse;
   var loading;
   function init(){
-    svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', '100%').attr('height', '100%');
+    svg = d3.select(container).append('svg')
+    .attr('class', 'word-tree').attr('width', '100%').attr('height', '100%')
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 800 600");
     graph_g = svg.append('g');
     zoom = d3.zoom().on('zoom', function(d){
       var x = d3.event.transform.x, y = d3.event.transform.y, k = d3.event.transform.k;
@@ -217,6 +220,7 @@ function Partition(){
   ret.adjust_y = function(){return adjust_y(hierarchy.root());};
   ret.move_y = function(y){return move_y(hierarchy.root(), y);};
   ret.move_x = function(x){return move_x(hierarchy.root(), x);};
+  ret.svg = function(){return svg;};
   return ret;
 }
 function Hierarchy(){
