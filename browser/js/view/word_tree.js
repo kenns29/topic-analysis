@@ -29,6 +29,7 @@ function word_tree(){
 
   var hierarchy_forward;
   var hierarchy_reverse;
+  var loading;
   function init(){
     svg = d3.select(container).append('svg').attr('class', 'word-tree').attr('width', '100%').attr('height', '100%');
     graph_g = svg.append('g');
@@ -38,6 +39,7 @@ function word_tree(){
     });
     svg.call(zoom);
     tooltip = Tooltip().container(container).html(function(d){return d;})();
+    loading = d3.select(container).select('.loading').node();
     return ret;
   }
   function update(source, reverse){
@@ -46,6 +48,8 @@ function word_tree(){
     var layout_height = hierarchy_forward.height() > height ? hierarchy_forward.height() : height;
     root.x0 = 0;
     root.y0 = width/2;
+    root.x1 = layout_height;
+    root.y1 = 20;
     partition = d3.partition().size([layout_height, width/2]);
     partition(root);
     node_x(root);
@@ -116,6 +120,7 @@ function word_tree(){
   };
   ret.init = init;
   ret.update = update;
+  ret.loading = function(){return loading;};
   return ret;
 }
 function diagonal(s, d) {
