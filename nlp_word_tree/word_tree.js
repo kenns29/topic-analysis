@@ -6,7 +6,6 @@ function word_tree(){
   var token_stop_pattern = /\n|\r\n|\r|(?:http[s]?|ftp|file):\/\/\S+(\/\S+)*/i;
   var use_stop_pattern = false;
   var use_stop_words = false;
-  var to_lower_case = true;
   var stopwords = new Set();
   var reverse = false;
   var root_word = 'studies';
@@ -22,7 +21,6 @@ function word_tree(){
     function each_token(token){
       var word = token_acc(token);
       var word_lower = word.toLowerCase();
-      if(to_lower_case) word = word_lower;
       if((use_stop_pattern && word.match(token_stop_pattern)) ||
         (use_stop_words && stopwords.has(word))) return;
       //after the first encounter of the root word
