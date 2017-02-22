@@ -5,14 +5,30 @@ module.exports.get_flags = get_flags;
 module.exports.str2flag = str2flag;
 module.exports.disable_opts = disable_opts;
 module.exports.enable_opts = enable_opts;
+module.exports.init_year_select = function(){
+  var start_year = 1979;
+  var end_year = 1989;
+  d3.select('#keyword-tree-from-year').selectAll('option').data(d3.range(start_year, end_year+1, 1))
+  .enter().append('option').attr('value', function(d){return d;})
+  .html(function(d){return d;});
+  d3.select('#keyword-tree-to-year').selectAll('option').data(d3.range(start_year, end_year+1, 1))
+  .enter().append('option').attr('value', function(d){return d;})
+  .html(function(d){return d;});
+  d3.select('#keyword-tree-to-year').selectAll('option').filter(function(d){return d === end_year;})
+  .attr('selected', '');
+};
 function get_flags(){
   var level_str = $('#keyword-tree-control-div #select-level').val();
   var type_str = $('#keyword-tree-control-div #select-type').val();
   var field_str = $('#keyword-tree-control-div #select-field').val();
+  var year_str = $('#keyword-tree-from-year').val();
+  var to_year_str = $('#keyword-tree-to-year').val();
   var level = str2flag(level_str);
   var type = str2flag(type_str);
   var field = str2flag(field_str);
-  return {level:level,type:type,field:field};
+  var year = Number(year_str);
+  var to_year = Number(to_year_str);
+  return {level:level,type:type,field:field,year:year,to_year:to_year};
 }
 function str2flag(str){
   switch(str){

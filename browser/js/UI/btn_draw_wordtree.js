@@ -7,12 +7,12 @@ var co = require('co');
 var DIRECTION = require('../../../flags/word_tree_direction_flags');
 module.exports = exports = $('#keyword-tree-control-div #btn-draw-wordtree').click(function(){
   var flags = WordtreeControls.get_flags();
-  var level = flags.level, type = flags.type, field = flags.field;
+  var level = flags.level, type = flags.type, field = flags.field, year = flags.year, to_year = flags.to_year;
   var text = $('#keyword-tree-control-div #textbox-keyword').val();
   co(function*(){
     var loading = global.word_tree.loading();
-    var load_forward = LoadWordTree().type(type).field(field).level(level).root_word(text).year(-1).direction(DIRECTION.FORWARD);
-    var load_reverse = LoadWordTree().type(type).field(field).level(level).root_word(text).year(-1).direction(DIRECTION.REVERSE);
+    var load_forward = LoadWordTree().type(type).field(field).level(level).root_word(text).year(year).to_year(to_year).direction(DIRECTION.FORWARD);
+    var load_reverse = LoadWordTree().type(type).field(field).level(level).root_word(text).year(year).to_year(to_year).direction(DIRECTION.REVERSE);
     $(loading).show();
     var data_both = yield Promise.all([load_forward(), load_reverse()]);
     $(loading).hide();
