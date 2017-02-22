@@ -84,6 +84,7 @@ body{
             }
           }
           #keyword-timeline-view-div{
+            position: relative;
             height: calc(100% - 65px);
             width: 100%;
           }
@@ -102,6 +103,7 @@ body{
             }
           }
           #keyword-tree-view-div{
+            position: relative;
             height: calc(100% - 65px); width: 100%;
           }
         }

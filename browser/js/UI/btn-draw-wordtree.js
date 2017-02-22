@@ -9,7 +9,6 @@ module.exports = exports = $('#keyword-tree-control-div #btn-draw-wordtree').cli
   var flags = WordtreeControls.get_flags();
   var level = flags.level, type = flags.type, field = flags.field;
   var text = $('#keyword-tree-control-div #textbox-keyword').val();
-  console.log(level, type, field, text);
   co(function*(){
     var loading = global.word_tree.loading();
     var load_forward = LoadWordTree().type(type).field(field).level(level).root_word(text).year(-1).direction(DIRECTION.FORWARD);
