@@ -156,8 +156,55 @@ function node_hori_adjust(root, node_x_space){
     }
   });
 }
+function Partition(){
+  var hierarchy;
+  var reverse;
+  var height, width;
+  var partition;
+  var node_y_space = 40;
+  function init(){
+    var root = hierarchy.root();
+    root.x0 = 0;
+    root.y0 = width/2;
+    root.x1 = layout_height;
+    root.y1 = 20;
+    partition = d3.partition().size([height, width]);
+  }
+  function init_x(root){
+    root.eachBefore(function(r){
+      r.x = (r.x0 + r.x1)/2;
+    });
+  }
+  function init_y(root){
+    root.eachBefore(function(r){
+      r.y = r.y0;
+    });
+  }
+  function adjust_y(root){
+    root.each(function(r){
+      var offset = reverse ? -r.text_length : r.text_length;
+      if(r.children && r.children.length > 0){
+        let end_y = offset + r.y;
+        r.children.forEach(function(child){
+          child.y = end_y + node_y_space;
+        });
+      }
+    });
+  }
+  function move_y(root, y){
+    root.y = y;
+    adjust_y(root);
+  }
+  function run(){
+    var root = hierarchy.root();
+    partition(root);init_x(root);init_y(root);
+  }
+  function ret(){return partition(hierarchy.root());}
+  return ret;
+}
 function Hierarchy(){
   var data, root, height, count2font, count_extent;
+  var reverse;
   function make(_){
     if(arguments.length > 0) data = _;
     root = d3.hierarchy(data);
