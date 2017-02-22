@@ -25,7 +25,6 @@ function word_tree(){
   var zoom;
   var tooltip;
   var partition_height;
-  var count2font;
   var node_x_space = 40;
 
   var hierarchy_forward;
@@ -42,8 +41,9 @@ function word_tree(){
     return ret;
   }
   function update(source, reverse){
+    var root = hierarchy_forward.root();
     width = $(container).width(), height = $(container).height();
-    var layout_height = partition_height > height ? partition_height : height;
+    var layout_height = hierarchy_forward.height() > height ? hierarchy_forward.height() : height;
     root.x0 = 0;
     root.y0 = width/2;
     partition = d3.partition().size([layout_height, width/2]);
@@ -61,7 +61,7 @@ function word_tree(){
     });
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
-      return count2font(d.data.count);
+      return hierarchy_forward.count2font(d.data.count);
     });
     var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
     var tspan_enter = tspan_sel.enter().append('tspan');
@@ -79,7 +79,7 @@ function word_tree(){
       return 'translate('+[d.y, d.x]+')';
     });
     node_update.on('mouseover', function(d){
-      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + count2font(d.data.count));
+      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count + ', font ' + hierarchy_forward.count2font(d.data.count));
     }).on('mousemove', function(){
       tooltip.move(svg.node());
     }).on('mouseout', function(){
@@ -107,14 +107,7 @@ function word_tree(){
   var ret = {};
   ret.data = function(_data, _reverse){
     if(arguments.length > 0){
-        data = _;
-        root = d3.hierarchy(data);
-        var extent = d3.extent(root.descendants(), function(d){return d.data.count;});
-        count2font = count2font_factory(extent);
-        var leave = leaf_values(root, count2font);
-        partition_height = height_by_leave(leave);
-        root.sum(function(d){return d.value;});
-        root.sort(function(a, b){return b.data.count - a.data.count;});
+        data = _data;
         if(!_reverse) hierarchy_forward = Hierarchy().make(data);
         else hierarchy_reverse = Hierarchy().make(data);
         return ret;
@@ -165,6 +158,7 @@ function Hierarchy(){
     height = height_by_leave(leave);
     root.sum(function(d){return d.value;});
     root.sort(function(a, b){return b.data.count - a.data.count;});
+    ret.count2font = count2font;
     return ret;
   }
   function ret(_){return make(_);}
@@ -172,7 +166,6 @@ function Hierarchy(){
   ret.data = function(_){return arguments.length > 0 ?(data =_, ret) : data;};
   ret.root = function(_){return arguments.length > 0 ?(root =_, ret) : root;};
   ret.height = function(_){return arguments.length > 0 ?(height =_, ret) : height;};
-  ret.count2font = function(_){return arguments.length > 0 ?(count2font =_, ret) : count2font;};
   ret.count_extent = function(_){return arguments.length > 0 ?(count_extent =_, ret) : count_extent;};
   return ret;
 }
