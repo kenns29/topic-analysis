@@ -38,7 +38,7 @@
     <div id = "topic-model-display-div">
       <h4>Models</h4>
     </div>
-    <button id = "test" class = "btn btn-default">Test</button>
+    <!-- <button id = "test" class = "btn btn-default">Test</button> -->
   </div>
   <div id = "center-view">
     <div id = "middle-view">
@@ -47,36 +47,7 @@
           <span class="loading-helper"></span><img src="loading.gif" />
         </div>
       </div>
-      <div id = "keyword-select-div">
-        <div class = "control">
-          <label>P/PN</label><select id = "select-level">
-            <option value = "P" selected>papers</option>
-            <option value = "PN">panels</option>
-          </select>
-        </div>
-        <div class = "control">
-          <label>Type</label><select id="select-type">
-            <option value = "A" selected>academic</option>
-            <option value = "RW">roundtable/workshop</option>
-            <option value = "ALL">all</option>
-          </select>
-        </div>
-        <div class = "control">
-          <label>Title/Abstract</label><select id = "select-field">
-            <option value = "TITLE" selected>title</option>
-          </select>
-        </div>
-        <!-- <label>Keywords</label><select id = "select-keyword"></select> -->
-        <div class = "control">
-          <label>Keywords</label><input type="text" id = "textbox-keyword">
-        </div>
-        <div class = "control">
-          <button class="btn btn-default" id = "btn-add-word">add word</button>
-        </div>
-        <div class = "control">
-          <input type="checkbox" id="checkbox-brush"><label>brush timeline</label>
-        </div>
-      </div>
+
       <div id = "keyword-contents">
         <ul class = "nav nav-tabs" role="tablist" data-tabs="tabs">
           <li role="presentation" name="keyword-tab" class="active">
@@ -92,6 +63,36 @@
         </ul>
         <div class = "tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="keyword-timeline-view-panel">
+            <div id = "keyword-select-div">
+              <div class = "control">
+                <label>P/PN</label><select id = "select-level">
+                  <option value = "P" selected>papers</option>
+                  <option value = "PN">panels</option>
+                </select>
+              </div>
+              <div class = "control">
+                <label>Type</label><select id="select-type">
+                  <option value = "A" selected>academic</option>
+                  <option value = "RW">roundtable/workshop</option>
+                  <option value = "ALL">all</option>
+                </select>
+              </div>
+              <div class = "control">
+                <label>Title/Abstract</label><select id = "select-field">
+                  <option value = "TITLE" selected>title</option>
+                </select>
+              </div>
+              <!-- <label>Keywords</label><select id = "select-keyword"></select> -->
+              <div class = "control">
+                <label>Keywords</label><input type="text" id = "textbox-keyword">
+              </div>
+              <div class = "control">
+                <button class="btn btn-default" id = "btn-add-word">add word</button>
+              </div>
+              <div class = "control">
+                <input type="checkbox" id="checkbox-brush"><label>brush timeline</label>
+              </div>
+            </div>
             <div id="keyword-timeline-view-div">
               <div id='loading' class='loading'>
                 <span class="loading-helper"></span><img src="loading.gif" />
@@ -99,6 +100,32 @@
             </div>
           </div>
           <div role="tabpanel" class ="tab-pane fade" id = "keyword-tree-view-panel">
+            <div id="keyword-tree-control-div">
+              <div class = "control">
+                <label>P/PN</label><select id = "select-level">
+                  <option value = "P" selected>papers</option>
+                  <option value = "PN">panels</option>
+                </select>
+              </div>
+              <div class = "control">
+                <label>Type</label><select id="select-type">
+                  <option value = "A" selected>academic</option>
+                  <option value = "RW">roundtable/workshop</option>
+                  <option value = "ALL">all</option>
+                </select>
+              </div>
+              <div class = "control">
+                <label>Title/Abstract</label><select id = "select-field">
+                  <option value = "TITLE" selected>title</option>
+                </select>
+              </div>
+              <div class = "control">
+                <label>Keywords</label><input type="text" id = "textbox-keyword">
+              </div>
+              <div class = "control">
+                <button class="btn btn-default" id = "btn-draw-wordtree">Draw Wordtree</button>
+              </div>
+            </div>
             <div id = "keyword-tree-view-div">
               <div id='loading' class='loading'>
                 <span class="loading-helper"></span><img src="loading.gif" />

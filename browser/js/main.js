@@ -19,10 +19,10 @@ global.model_stats_display.load().then(function(data){
 });
 var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
+require('./UI/btn-draw-wordtree');
 
 require('./UI/document_tab_nav');
 require('./UI/keyword_tab_nav');
 require('./UI/checkbox-timeline-brush');
 require('./test_code/draw_keyword_timelines')();
 require('./UI/test');
-

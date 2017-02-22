@@ -65,7 +65,7 @@ function word_tree(){
     var node_exit = node_sel.exit();
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
       return 'translate('+[0, 0]+')';
-    });
+    }).remove();
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){
       return d.reverse ? hierarchy_reverse.count2font(d.data.count) : hierarchy_forward.count2font(d.data.count);
