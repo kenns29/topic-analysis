@@ -11,11 +11,13 @@ module.exports = exports = function(req, res){
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection(col_name);
+    var match = {'title_tokens.lemma' : {
+      $regex : keyword, $options : 'i'
+    }};
+    if(type >= 0) match.type = type;
     var aggr = yield col.aggregate([
       {$unwind : '$title_tokens'},
-      {$match : {type :type, 'title_tokens.lemma' : {
-        $regex : keyword, $options : 'i'
-      }}},
+      {$match : match},
       {$group : {_id : '$year', count : {$sum : 1}}},
       {$sort : {_id : 1}}
     ]).toArray();

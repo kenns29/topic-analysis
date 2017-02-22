@@ -12,8 +12,8 @@ module.exports = exports = $('#keyword-tree-control-div #btn-draw-wordtree').cli
   console.log(level, type, field, text);
   co(function*(){
     var loading = global.word_tree.loading();
-    var load_forward = LoadWordTree().root_word(text).year(-1).direction(DIRECTION.FORWARD);
-    var load_reverse = LoadWordTree().root_word(text).year(-1).direction(DIRECTION.REVERSE);
+    var load_forward = LoadWordTree().type(type).field(field).level(level).root_word(text).year(-1).direction(DIRECTION.FORWARD);
+    var load_reverse = LoadWordTree().type(type).field(field).level(level).root_word(text).year(-1).direction(DIRECTION.REVERSE);
     $(loading).show();
     var data_both = yield Promise.all([load_forward(), load_reverse()]);
     $(loading).hide();

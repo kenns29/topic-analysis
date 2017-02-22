@@ -9,15 +9,14 @@ module.exports = exports = function(){
   var to_year = -1;
   var type = DOC.A;
   var field = DOC.TITLE;
-  var keywords;
   var root_word = 'womens';
   var direction = DIRECTION.FORWARD;
+  var level = DOC.P;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
       url : service_url + '/loadwordtree',
-      data : {root_word: root_word,year:year,to_year:to_year,type:type,field:field,
-        keywords:keywords2str(keywords), direction:direction},
+      data : {root_word: root_word,year:year,to_year:to_year,type:type,field:field,direction:direction, level:level},
       dataType: 'json',
       success : function(data){
         callback(data);
@@ -34,8 +33,8 @@ module.exports = exports = function(){
   ret.to_year = function(_){return arguments.length > 0 ? (to_year = _, ret) : to_year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
-  ret.keywords = function(_){return arguments.length > 0 ? (keywords = _, ret) : keywords;};
   ret.root_word = function(_){return arguments.length > 0 ? (root_word = _, ret) : root_word;};
   ret.direction = function(_){return arguments.length > 0 ? (direction = _, ret) : direction;};
+  ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
   return ret;
 };
