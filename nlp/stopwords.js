@@ -5,11 +5,10 @@ module.exports = exports = stopwords;
 function stopwords(){
   function load(){
     var file = path.join(global.__base, 'mallet_resources', 'stoplists', 'en.txt');
-    console.log('file', file);
     return co(function*(){
       var text = yield fsp.readFile(file, {encoding:'utf8'});
       var array = text.split(/\n|\r\n|\n\r|\r/);
-      console.log('array', array);
+      return Promise.resolve(new Set(array));
     }).catch(function(err){
       console.log(err);
     });
@@ -17,4 +16,4 @@ function stopwords(){
   function ret(){return load();}
   ret.load = load;
   return ret;
-}
+};
