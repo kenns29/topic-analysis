@@ -26,13 +26,13 @@ module.exports = exports = function(){
   var loading;
   var duration = 500;
   function init(){
-    width = 800, height = 600;
+    width = 800, height = 400;
     W = width - margin.left - margin.right - timeline_x_offset;
     H = height - margin.top - margin.bottom;
     svg = d3.select(container).attr('class', 'keyword-timeline')
     .append('svg').attr('width', '100%').attr('height', '100%')
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 800 600");
+    .attr("viewBox", '0 0 '+width+' '+ height);
     timeline_g = svg.append('g').attr('transform','translate('+[margin.left, margin.top]+')');
     x_scale = d3.scaleLinear().domain([min_year, max_year]).range([0, W]);
     x_axis = d3.axisBottom().scale(x_scale).ticks(max_year - min_year + 1);
@@ -84,7 +84,7 @@ module.exports = exports = function(){
     var t2 = function(){
       return new Promise(function(resolve, reject){
         x_axis_g.transition(t).attr('transform', 'translate(' + [
-          margin.left + 50,
+          margin.left + timeline_x_offset,
           margin.top + data.length * (timeline_height + timeline_y_space) + 5
         ]+')').on('end', resolve);
       });
@@ -94,10 +94,10 @@ module.exports = exports = function(){
   function area_mouseover(element){
     element.on('mouseover', function(d){
       var v = value.call(this, d);
-      tooltip.show(svg.node(), 'year: ' + v.year + ', count: ' + v.value);
+      tooltip.show(d3.select(container).node(), 'year: ' + v.year + ', count: ' + v.value);
     }).on('mousemove', function(d){
       var v = value.call(this, d);
-      tooltip.move(svg.node(), 'year: ' + v.year + ', count: ' + v.value);
+      tooltip.move(d3.select(container).node(), 'year: ' + v.year + ', count: ' + v.value);
     }).on('mouseout', function(d){tooltip.hide();});
     function value(d){
       var x = d3.mouse(this)[0];
