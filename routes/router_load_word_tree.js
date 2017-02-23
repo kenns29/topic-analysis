@@ -14,6 +14,10 @@ module.exports = exports = function(req, res){
   var level = Number(req.query.level);
   var direction = Number(req.query.direction);
   var root_word = req.query.root_word;
+  var use_stopwords = req.query.use_stopwords;
+  if(use_stopwords == 'true') use_stopwords = true;
+  else use_stopwords = false;
+  if(root_word === '') {res.json({}); return;};
   var get_fun = level === DOC.PN ? GetPanels() : GetPapers();
   get_fun.year(year).to_year(to_year).type(type);
   var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';

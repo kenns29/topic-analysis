@@ -1,7 +1,6 @@
 var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
 var DIRECTION = require('../../../flags/word_tree_direction_flags');
-var keywords2str = require('./keywords2str');
 module.exports = exports = function(){
   var data;
   var model_id;
@@ -12,11 +11,13 @@ module.exports = exports = function(){
   var root_word = 'womens';
   var direction = DIRECTION.FORWARD;
   var level = DOC.P;
+  var use_stopwords = false;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
       url : service_url + '/loadwordtree',
-      data : {root_word: root_word,year:year,to_year:to_year,type:type,field:field,direction:direction, level:level},
+      data : {root_word:root_word,year:year,to_year:to_year,type:type,field:field,
+        direction:direction,level:level,use_stopwords:use_stopwords},
       dataType: 'json',
       success : function(data){
         callback(data);
@@ -36,5 +37,6 @@ module.exports = exports = function(){
   ret.root_word = function(_){return arguments.length > 0 ? (root_word = _, ret) : root_word;};
   ret.direction = function(_){return arguments.length > 0 ? (direction = _, ret) : direction;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
+  ret.use_stopwords = function(_){return arguments.length > 0 ? (use_stopwords = _, ret) : use_stopwords;};
   return ret;
 };

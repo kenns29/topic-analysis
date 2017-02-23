@@ -28,7 +28,8 @@ function get_flags(){
   var field = str2flag(field_str);
   var year = Number(year_str);
   var to_year = Number(to_year_str);
-  return {level:level,type:type,field:field,year:year,to_year:to_year};
+  var use_stopwords = $('#checkbox-word-tree-filter-stop-words').is(':checked');
+  return {level:level,type:type,field:field,year:year,to_year:to_year,use_stopwords:use_stopwords};
 }
 function str2flag(str){
   switch(str){
