@@ -164,7 +164,7 @@ function word_tree(){
       //if the node was collapsed before
       if(node._collapsed){
         expand_sibling(node);
-        expand_font(node);
+        expand_font(node, root);
         expand_value(node);
       } else if(node.parent && !node._collapsed){
         collapse_sibling(node);
@@ -215,18 +215,30 @@ function collapse_font(node, root){
   var font = root.font;
   var r = node;
   while(r.parent){
-    r._font = r.font; r.font = font; r = r.parent;
+    r.font = font; r = r.parent;
   }
+  node.eachBefore(function(r){
+    r.children && r.children.forEach(function(c){
+      var t = Math.min(r.font, 10);
+      c.font = Math.max(t, c.ofont);
+    });
+  });
   return node;
 }
-function expand_font(node){
-  recurse(node);
-  return node;
-  function recurse(r){
-    r && r.children && r.children.forEach(recurse);
-    if(r._font) r.font = r._font;
-    delete r._font;
+function expand_font(node, root){
+  if(node === root){
+    node.eachBefore(function(r){
+      r.font = r.ofont;
+    });
+  } else {
+    node.eachBefore(function(r){
+      r.children && r.children.forEach(function(c){
+        var t = Math.min(r.font, 10);
+        c.font = Math.max(t, c.ofont);
+      });
+    });
   }
+  return node;
 }
 function collapse_value(node, root){
   var value = root.value;
@@ -333,7 +345,7 @@ function Hierarchy(){
     root = d3.hierarchy(data);
     count_extent = d3.extent(root.descendants(), function(d){return d.data.count;});
     // count2font = count2font_factory(count_extent);
-    count2font = count2font_factory(root.data.count);
+    count2font = count2font_factory(root.data.count, 600);
     assign_font(count2font);
     var leave = leaf_values(root, count2font);
     adjust_height();
@@ -399,11 +411,11 @@ function leaf_values(root, count2font){
 function height_by_leave(leave){
   return d3.sum(leave, function(d){return d.data.value;});
 }
-function count2font_factory(b){
-  var S = d3.scaleSqrt().domain([0, 600]).range([0, 25]);
+function count2font_factory(b, k){
+  var S = d3.scaleSqrt().domain([0, k]).range([0, 25]);
   return function(count){
 
-    return font_size(count, b, 600, S);
+    return font_size(count, b, k, S);
   };
 }
 function font_size(e, b, k, S) {
