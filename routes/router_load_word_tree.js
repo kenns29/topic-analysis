@@ -24,8 +24,8 @@ module.exports = exports = function(req, res){
   co(function*(){
     var data = yield get_fun();
     var word_tree = WordTree().root_word(root_word);
-    if(direction === DIRECTION.FORWARD) word_tree.reverse(false).create(data);
-    else if(direction === DIRECTION.REVERSE) word_tree.reverse(true).create(data);
+    if(direction === DIRECTION.FORWARD) yield word_tree.reverse(false).create(data);
+    else if(direction === DIRECTION.REVERSE) yield word_tree.reverse(true).create(data);
     res.json(word_tree.root());
   }).catch(function(err){
     console.log(err);

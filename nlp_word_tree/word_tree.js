@@ -1,6 +1,6 @@
-
+var Stopwords = require('../nlp/stopwords');
+var co = require('co');
 module.exports = exports = word_tree;
-
 function word_tree(){
   var root = null;
   var token_stop_pattern = /\n|\r\n|\r|(?:http[s]?|ftp|file):\/\/\S+(\/\S+)*/i;
@@ -66,14 +66,16 @@ function word_tree(){
     }
   }
   function create(docs){
-    root = null;
-    docs.forEach(function(doc){
-      var tokens = tokens_acc(doc);
-      append_tree(root_word, tokens);
-    });
-    add_end(root);
-    compress(root, reverse);
-    return ret;
+    return co(function*(){
+      root = null;
+      docs.forEach(function(doc){
+        var tokens = tokens_acc(doc);
+        append_tree(root_word, tokens);
+      });
+      add_end(root);
+      compress(root, reverse);
+      return Promise.resolve(ret);
+    }).catch(function(err){console.log(err);});
   }
   var ret = {};
   ret.root = function(_){return arguments.length > 0 ? (root = _, ret) : root;};
