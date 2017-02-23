@@ -1,11 +1,10 @@
-var Stopwords = require('../nlp/stopwords');
 var co = require('co');
 module.exports = exports = word_tree;
 function word_tree(){
   var root = null;
   var token_stop_pattern = /\n|\r\n|\r|(?:http[s]?|ftp|file):\/\/\S+(\/\S+)*/i;
   var use_stop_pattern = false;
-  var use_stop_words = false;
+  var use_stopwords = false;
   var stopwords = new Set();
   var reverse = false;
   var root_word = 'studies';
@@ -33,7 +32,7 @@ function word_tree(){
       var word = token_acc(token);
       var word_lower = word.toLowerCase();
       if((use_stop_pattern && word.match(token_stop_pattern)) ||
-        (use_stop_words && stopwords.has(word))) return;
+        (use_stopwords && stopwords.has(word_lower))) return;
       //after the first encounter of the root word
       if(add_flag){
         let found = false;
@@ -88,7 +87,7 @@ function word_tree(){
     if(arguments.length > 0) {tokens_acc = _; return ret;}
   };
   ret.use_stop_pattern = function(_){return arguments.length > 0 ? (use_stop_pattern = _, ret) : use_stop_pattern;};
-  ret.use_stop_words = function(_){return arguments.length > 0 ? (use_stop_words = _, ret) : use_stop_words;};
+  ret.use_stopwords = function(_){return arguments.length > 0 ? (use_stopwords = _, ret) : use_stopwords;};
   ret.stop_pattern = function(_){return arguments.length > 0 ? (token_stop_pattern = _, ret) : token_stop_pattern;};
   ret.stopwords = function(_){return arguments.length > 0 ? (stopwords = _, ret) : stopwords;};
   ret.to_lower_case = function(_){return arguments.length > 0 ? (to_lower_case = _, ret) : to_lower_case;};
