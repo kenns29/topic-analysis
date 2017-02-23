@@ -16,7 +16,18 @@ function word_tree(){
     var pre_node = root;
     var root_word_lower = root_word.toLowerCase();
     if(!reverse) tokens.forEach(each_token);
-    else for(let i = tokens.length - 1; i>=0; i--) each_token(tokens[i]);
+    else{
+      //look for the last encounter of the root word
+      let i = 0;
+      for(i; i < tokens.length; i++){
+        let token = tokens[i];
+        if(token_acc(token).toLowerCase() === root_word_lower){
+          break;
+        }
+      }
+      if(i === tokens.length) return;
+      for(i; i>=0; i--) each_token(tokens[i]);
+    }
 
     function each_token(token){
       var word = token_acc(token);
