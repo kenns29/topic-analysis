@@ -150,16 +150,16 @@ function word_tree(){
   return ret;
 
   function click(d){
-    if(!d._collapsed && !(d.parent && !d._collapsed)) return;
     var node = d; var r;
     if(d === (r = hierarchy_forward.root())){
       op(r, r);
       op(r = hierarchy_reverse.root(), r);
+      update_all();
     } else {
       r = d.reverse ? hierarchy_reverse.root() : hierarchy_forward.root();
       op(d, r);
+      update_all();
     }
-    update_all();
     function op(node, root){
       //if the node was collapsed before
       if(node._collapsed){
