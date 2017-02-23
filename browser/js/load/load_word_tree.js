@@ -12,12 +12,13 @@ module.exports = exports = function(){
   var direction = DIRECTION.FORWARD;
   var level = DOC.P;
   var use_stopwords = false;
+  var use_lemma = false;
   function callback(data){}
   function load(){
     var deferred = $.ajax({
       url : service_url + '/loadwordtree',
       data : {root_word:root_word,year:year,to_year:to_year,type:type,field:field,
-        direction:direction,level:level,use_stopwords:use_stopwords},
+        direction:direction,level:level,use_stopwords:use_stopwords,use_lemma:use_lemma},
       dataType: 'json',
       success : function(data){
         callback(data);
@@ -38,5 +39,6 @@ module.exports = exports = function(){
   ret.direction = function(_){return arguments.length > 0 ? (direction = _, ret) : direction;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
   ret.use_stopwords = function(_){return arguments.length > 0 ? (use_stopwords = _, ret) : use_stopwords;};
+  ret.use_lemma = function(_){return arguments.length > 0 ? (use_lemma = _, ret) : use_lemma;};
   return ret;
 };

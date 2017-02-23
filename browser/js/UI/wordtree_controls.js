@@ -29,7 +29,9 @@ function get_flags(){
   var year = Number(year_str);
   var to_year = Number(to_year_str);
   var use_stopwords = $('#checkbox-word-tree-filter-stop-words').is(':checked');
-  return {level:level,type:type,field:field,year:year,to_year:to_year,use_stopwords:use_stopwords};
+  var use_lemma = $('#checkbox-word-tree-use-lemma').is(':checked');
+  return {level:level,type:type,field:field,year:year,to_year:to_year,
+    use_stopwords:use_stopwords,use_lemma:use_lemma};
 }
 function str2flag(str){
   switch(str){

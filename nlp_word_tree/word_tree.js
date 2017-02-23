@@ -71,8 +71,10 @@ function word_tree(){
         var tokens = tokens_acc(doc);
         append_tree(root_word, tokens);
       });
-      add_end(root);
-      compress(root, reverse);
+      if(root !== null){
+        add_end(root);
+        compress(root, reverse);
+      }
       return Promise.resolve(ret);
     }).catch(function(err){console.log(err);});
   }
@@ -81,10 +83,10 @@ function word_tree(){
   ret.create = create;
   ret.append_tree = append_tree;
   ret.token = function(_){
-    if(arguments.length > 0) {token_acc = _; return ret;}
+    if(arguments.length > 0) {token_acc = _; return ret;} return ret;
   };
   ret.tokens = function(_){
-    if(arguments.length > 0) {tokens_acc = _; return ret;}
+    if(arguments.length > 0) {tokens_acc = _; return ret;} return ret;
   };
   ret.use_stop_pattern = function(_){return arguments.length > 0 ? (use_stop_pattern = _, ret) : use_stop_pattern;};
   ret.use_stopwords = function(_){return arguments.length > 0 ? (use_stopwords = _, ret) : use_stopwords;};
@@ -99,7 +101,7 @@ function add_end(root){
   recurse(root);
   return root;
   function recurse(r){
-    if(!is_leaf(r)){
+    if(r && !is_leaf(r)){
       r.children.forEach(recurse);
       let children_count = r.children.reduce(function(pre, cur){
         return pre + cur.count;
@@ -114,7 +116,7 @@ function compress(root, reverse){
   recurse(root);
   return root;
   function recurse(r){
-    if(!is_leaf(r)){
+    if(r && !is_leaf(r)){
       if(r.children.length === 1){
         r.tokens[reverse ? 'unshift' : 'push'](r.children[0].tokens[0]);
         r.children = r.children[0].children;

@@ -15,9 +15,8 @@ module.exports = exports = function(req, res){
   var level = Number(req.query.level);
   var direction = Number(req.query.direction);
   var root_word = req.query.root_word;
-  var use_stopwords = req.query.use_stopwords;
-  if(use_stopwords == 'true') use_stopwords = true;
-  else use_stopwords = false;
+  var use_stopwords = str2boolean(req.query.use_stopwords);
+  var use_lemma = str2boolean(req.query.use_lemma);
   if(root_word === '') {res.json(null); return;};
   var get_fun = level === DOC.PN ? GetPanels() : GetPapers();
   get_fun.year(year).to_year(to_year).type(type);
@@ -25,6 +24,7 @@ module.exports = exports = function(req, res){
   co(function*(){
     var data = yield get_fun();
     var word_tree = WordTree().root_word(root_word).use_stopwords(use_stopwords);
+    if(use_lemma) word_tree.token(function(d){return d.lemma;});
     if(use_stopwords){
       let stopwords = yield Stopwords().load();
       word_tree.stopwords(stopwords);
@@ -38,3 +38,7 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
+
+function str2boolean(str){
+  return (str == 'true') ? true : false;
+}
