@@ -64,7 +64,7 @@ function word_tree(){
 
     //Entering the necessary nodes and append texts, and compute the font and text length for each node
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
-    var node_enter = node_sel.enter().append('g').attr('class', 'node');
+    var node_enter = node_sel.enter().append('g').attr('class', 'node').style('cursor', 'pointer');
     node_enter.append('text');
     var node_exit = node_sel.exit();
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
@@ -102,9 +102,9 @@ function word_tree(){
       return 'translate('+[d.y, d.x]+')';
     });
     node_update.on('mouseover', function(d){
-      tooltip.show(svg.node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count);
+      tooltip.show(d3.select(container).node(), d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count);
     }).on('mousemove', function(){
-      tooltip.move(svg.node());
+      tooltip.move(d3.select(container).node());
     }).on('mouseout', function(){
       tooltip.hide();
     });
