@@ -14,3 +14,10 @@ router.get('/testunideptree', function(req, res){
 		}
 	});
 });
+function count2font_factory(extent){
+  var scale = d3.scaleLinear().domain(extent).range([0, 50]);
+  return function(count){
+    var v = scale(count);
+    return text_scale(v);
+  };
+}
