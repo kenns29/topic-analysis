@@ -78,6 +78,7 @@ function word_tree(){
     var tspan_exit = tspan_sel.exit();
     if(!tspan_exit.empty()) tspan_exit.remove();
     var tspan_update = tspan_sel.merge(tspan_enter);
+    tspan_update.order();
     tspan_update.html(function(d, i){
       if(i === 0) return d.text; else return '&nbsp;' + d.text;
     });
@@ -164,12 +165,12 @@ function word_tree(){
       //if the node was collapsed before
       if(node._collapsed){
         expand_sibling(node);
-        expand_font(node, root);
         expand_value(node);
+        expand_font(node, root);
       } else if(node.parent && !node._collapsed){
         collapse_sibling(node);
-        collapse_font(node, root);
         collapse_value(node, root);
+        collapse_font(node, root);
       }
       if(!node.reverse) hierarchy_forward.adjust();
       else hierarchy_reverse.adjust();
@@ -211,18 +212,22 @@ function expand_sibling(node){
     }
   }
 }
+function adjust_descendants_font(node, root){
+  node.eachBefore(function(r){
+    var h = r.value / root.value * height;
+    var count2font = count2font_factory(r.data.count, h);
+    r.children && r.children.forEach(function(c){
+      c.font = Math.min(r.font, count2font(c.data.count));
+    });
+  });
+}
 function collapse_font(node, root){
   var font = root.font;
   var r = node;
   while(r.parent){
     r.font = font; r = r.parent;
   }
-  node.eachBefore(function(r){
-    r.children && r.children.forEach(function(c){
-      var t = Math.min(r.font, 10);
-      c.font = Math.max(t, c.ofont);
-    });
-  });
+  adjust_descendants_font(node, root);
   return node;
 }
 function expand_font(node, root){
@@ -231,12 +236,7 @@ function expand_font(node, root){
       r.font = r.ofont;
     });
   } else {
-    node.eachBefore(function(r){
-      r.children && r.children.forEach(function(c){
-        var t = Math.min(r.font, 10);
-        c.font = Math.max(t, c.ofont);
-      });
-    });
+    adjust_descendants_font(node, root);
   }
   return node;
 }
@@ -411,10 +411,10 @@ function leaf_values(root, count2font){
 function height_by_leave(leave){
   return d3.sum(leave, function(d){return d.data.value;});
 }
+//b = root.count, k = height
 function count2font_factory(b, k){
-  var S = d3.scaleSqrt().domain([0, k]).range([0, 25]);
+  var S = d3.scaleSqrt().domain([0, b]).range([0, 25]);
   return function(count){
-
     return font_size(count, b, k, S);
   };
 }
