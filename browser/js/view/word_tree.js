@@ -74,14 +74,7 @@ function word_tree(){
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){return d.font;})
     .attr('text-anchor', function(d){return d.reverse ? 'end' : 'start';});
-    var tspan_sel = node_update.select('text').selectAll('tspan').data(function(d){return d.data.tokens;}, function(d){return d.text;});
-    var tspan_enter = tspan_sel.enter().append('tspan');
-    var tspan_exit = tspan_sel.exit();
-    if(!tspan_exit.empty()) tspan_exit.remove();
-    var tspan_update = tspan_sel.merge(tspan_enter);
-    tspan_update.html(function(d, i){
-      if(i === 0) return d.text; else return '&nbsp;' + d.text;
-    });
+    node_update.select('text').call(generate_tspan, function(d){return d.data.tokens;});
     node_update.each(function(d){
       d.data.text_length = d.text_length = d3.select(this).select('text').node().getComputedTextLength();
     });
@@ -101,18 +94,7 @@ function word_tree(){
     node_update.transition().duration(duration).attr('transform', function(d){
       return 'translate('+[d.y, d.x]+')';
     });
-    node_update.on('mouseover', function(d){
-      // var content = d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count;
-      var format = d3.format('.1f')
-      // var content = format(d.x0) + ' , ' + format(d.x1);
-      // var content = format(d.font) + ' , ' + format(d._font);
-      var content = format(d.size) + ' , ' + format(d.value);
-      tooltip.show(d3.select(container).node(), content);
-    }).on('mousemove', function(){
-      tooltip.move(d3.select(container).node());
-    }).on('mouseout', function(){
-      tooltip.hide();
-    });
+    node_update.call(mouseover);
     node_update.on('click', click);
     //update links
     var link_sel = graph_g.selectAll('.link').data(links, function(d){return d.id;});
@@ -149,7 +131,17 @@ function word_tree(){
   ret.update = update;
   ret.loading = function(){return loading;};
   return ret;
-
+  function generate_tspan(element, d){
+    var tspan_sel = element.selectAll('tspan').data(d, function(d){return d.text;});
+    var tspan_enter = tspan_sel.enter().append('tspan');
+    var tspan_exit = tspan_sel.exit();
+    if(!tspan_exit.empty()) tspan_exit.remove();
+    var tspan_update = tspan_sel.merge(tspan_enter);
+    tspan_update.html(function(d, i){
+      if(i === 0) return d.text; else return '&nbsp;' + d.text;
+    });
+    return tspan_update;
+  }
   function click(d){
     var node = d; var r;
     if(d === (r = hierarchy_forward.root())){
@@ -177,6 +169,26 @@ function word_tree(){
     }
   }
 
+  function mouseover(element){
+    element.on('mouseover', function(d){
+      // var content = d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count;
+      // var format = d3.format('.1f')
+      // var content = format(d.x0) + ' , ' + format(d.x1);
+      // var content = format(d.font) + ' , ' + format(d._font);
+      // var content = format(d.size) + ' , ' + format(d.value);
+      var html = content(d);
+      tooltip.show(d3.select(container).node(), html);
+    }).on('mousemove', function(){
+      tooltip.move(d3.select(container).node());
+    }).on('mouseout', function(){
+      tooltip.hide();
+    });
+    function content(d){
+      var element = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      d3.select(element).call(generate_tspan, d.data.tokens);
+      return element.outerHTML;
+    }
+  }
 }
 function diagonal(s, d) {
   return `M ${s.y} ${s.x}
