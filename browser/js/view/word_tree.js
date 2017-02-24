@@ -49,6 +49,7 @@ function word_tree(){
     return ret;
   }
   function update(){
+    zoom.transform({x:0, y:0, k:0});
     return update_all();
   }
 
@@ -121,7 +122,7 @@ function word_tree(){
       return diagonal(o, o);
     }).attr('fill', 'none')
     .attr('stroke', 'black')
-    .attr('stroke-width', 1);
+    .attr('stroke-width', 0.5);
     var link_exit = link_sel.exit();
     if(!link_exit.empty()) link_exit.remove();
     var link_update = link_sel.merge(link_enter);
