@@ -339,14 +339,14 @@ function Partition(){
   return ret;
 }
 function Hierarchy(){
-  var data, root, height = 600, count2font, count_extent;
+  var data, root, hierarchy_height = 600, count2font, count_extent;
   var reverse;
   function make(_){
     if(arguments.length > 0) data = _;
     root = d3.hierarchy(data);
     count_extent = d3.extent(root.descendants(), function(d){return d.data.count;});
     // count2font = count2font_factory(count_extent);
-    count2font = count2font_factory(root.data.count, 600);
+    count2font = count2font_factory(root.data.count, height);
     assign_font(count2font);
     var leave = leaf_values(root, count2font);
     adjust_height();
@@ -375,7 +375,7 @@ function Hierarchy(){
   }
   function adjust_height(){
     var leave = root.leaves();
-    height = Math.max(600, height_by_leave(leave));
+    hierarchy_height = Math.max(height, height_by_leave(leave));
     return ret;
   }
   function adjust(){
@@ -387,7 +387,7 @@ function Hierarchy(){
   ret.make = make;
   ret.data = function(_){return arguments.length > 0 ?(data =_, ret) : data;};
   ret.root = function(_){return arguments.length > 0 ?(root =_, ret) : root;};
-  ret.height = function(_){return arguments.length > 0 ?(height =_, ret) : height;};
+  ret.height = function(_){return arguments.length > 0 ?(hierarchy_height =_, ret) : hierarchy_height;};
   ret.count_extent = function(_){return arguments.length > 0 ?(count_extent =_, ret) : count_extent;};
   ret.reverse = function(_){return arguments.length > 0 ?(reverse =_, ret) : reverse;};
   ret.adjust_height = adjust_height;
