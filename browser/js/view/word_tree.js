@@ -49,7 +49,7 @@ function word_tree(){
     return ret;
   }
   function update(){
-    zoom.transform({x:0, y:0, k:0});
+    svg.call(zoom.transform, d3.zoomIdentity);
     return update_all();
   }
 
