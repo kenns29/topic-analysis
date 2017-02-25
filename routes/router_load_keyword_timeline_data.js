@@ -3,6 +3,7 @@ var MongoClient = mongodb.MongoClient;
 var co = require('co');
 var ConnStat = require('../db_mongo/connection');
 var DOC = require('../flags/doc_flags');
+var KeywordTimelineFlags = require('../flags/keyword_timeline_flags');
 module.exports = exports = function(req, res){
   var keyword = req.query.keyword;
   var type = Number(req.query.type);
@@ -23,15 +24,15 @@ module.exports = exports = function(req, res){
     ]).toArray();
 
     db.close();
-    var min_year = 1979;
-    var max_year = 1989;
+    var min_year = KeywordTimelineFlags.MIN_YEAR;
+    var max_year = KeywordTimelineFlags.MAX_YEAR;
     var year2index = function(year){return year - min_year;};
     var index2year = function(index){return min_year + index;}
     var data_array = Array(max_year - min_year + 1);
     for(let i = 0; i < data_array.length; i++)data_array[i] = {year:index2year(i),count:0};
     for(let i = 0; i  < aggr.length; i++){
       let dat = aggr[i];
-      data_array[year2index(dat._id)].count = dat.count;
+      data_array[year2index(dat._id)].count = (dat ? dat.count : 0);
     }
     var data = {
       id : keyword,

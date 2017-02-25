@@ -5,6 +5,7 @@ var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
 var KeywordSelect = require('../UI/keyword_select');
 var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
+var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -14,8 +15,8 @@ module.exports = exports = function(){
   var id2data = [];
   var timeline_height = 30;
   var timeline_y_space = 7;
-  var min_year = 1979;
-  var max_year = 1989;
+  var min_year = KeywordTimelineFlags.MIN_YEAR;
+  var max_year = KeywordTimelineFlags.MAX_YEAR;
   var y_scale;
   var x_scale;
   var x_axis;
