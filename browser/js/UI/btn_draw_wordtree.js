@@ -21,7 +21,10 @@ module.exports = exports = $('#keyword-tree-control-div #btn-draw-wordtree').cli
     var data_both = yield Promise.all([load_forward(), load_reverse()]);
     $(loading).hide();
     var data_forward = data_both[0], data_reverse = data_both[1];
-    if(data_forward == null || data_reverse == null) return;
+    if(data_forward == null || data_reverse == null) {
+      alert('No Data');
+      return;
+    }
     global.word_tree.data(data_forward);
     global.word_tree.data(data_reverse, true);
     global.word_tree.update();
