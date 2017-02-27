@@ -14,6 +14,7 @@ module.exports = exports = function(passport){
     res.render('index', { title: 'Topic Analysis' });
   });
   router.get('/login', function(req, res){
+    console.log(user)
     res.render('login', { title : 'Login', message: req.flash('loginMessage') });
   });
   router.get('/signup', function(req, res){
