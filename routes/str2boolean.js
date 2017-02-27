@@ -1,3 +1,3 @@
-module.exports = exports = function(){
+module.exports = exports = function(str){
   return (str == 'true') ? true : false;
 };

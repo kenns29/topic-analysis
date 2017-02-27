@@ -45,6 +45,7 @@ module.exports = exports = function(){
     $('#keyword-select-div #select-level').change(update_all_keyword_timeline);
     $('#keyword-select-div #select-type').change(update_all_keyword_timeline);
     $('#keyword-select-div #select-field').change(update_all_keyword_timeline);
+    $('#keyword-select-div #checkbox-keyword-timeline-percent').change(update_all_keyword_timeline);
     return ret;
   }
   var ret = {};
@@ -61,11 +62,13 @@ function update_all_keyword_timeline(){
   var flag = get_flags();
   var data = global.multi_keyword_timeline.data();
   var loading = global.multi_keyword_timeline.loading();
+  global.multi_keyword_timeline.percent(flag.percent);
   co(function*(){
     $(loading).show();
     for(let i = 0; i < data.length; i++){
       let keyword = data[i].id;
-      let line_data = yield LoadKeywordTimelineData().type(flag.type).level(flag.level).load(keyword);
+      let line_data = yield LoadKeywordTimelineData().type(flag.type).level(flag.level)
+      .percent(flag.percent).load(keyword);
       global.multi_keyword_timeline.replace_timeline(line_data);
     }
     $(loading).hide();

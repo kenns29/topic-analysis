@@ -27,6 +27,9 @@ module.exports = exports = function(){
   var loading;
   var duration = 500;
   var percent = false;
+  function value(d){
+    return percent ? d.percent : d.count;
+  }
   function init(){
     width = 800, height = 400;
     W = width - margin.left - margin.right - timeline_x_offset;
@@ -45,13 +48,18 @@ module.exports = exports = function(){
     return ret;
   }
   function update_y_scale(){
-    var extent = [Infinity, -Infinity];
-    data.forEach(function(d){
-      d.data.forEach(function(obj){
-          if(extent[0] > obj.count) extent[0] = obj.count;
-          if(extent[1] < obj.count) extent[1] = obj.count;
+    var extent;
+    if(percent) extent = [0, 1];
+    else{
+      extent = [0, -Infinity];
+      data.forEach(function(d){
+        d.data.forEach(function(obj){
+          let v = value(obj);
+          // if(extent[0] > v) extent[0] = v;
+          if(extent[1] < v) extent[1] = v;
+        });
       });
-    });
+    }
     y_scale = d3.scaleSqrt().domain(extent).range([0, timeline_height/2]);
   }
   function update(){
@@ -95,23 +103,23 @@ module.exports = exports = function(){
   }
   function area_mouseover(element){
     element.on('mouseover', function(d){
-      var v = value.call(this, d);
-      tooltip.show(d3.select(container).node(), 'year: ' + v.year + ', count: ' + v.value);
+      var v = content.call(this, d);
+      tooltip.show(d3.select(container).node(), 'year: ' + v.year + ', value: ' + v.value);
     }).on('mousemove', function(d){
-      var v = value.call(this, d);
-      tooltip.move(d3.select(container).node(), 'year: ' + v.year + ', count: ' + v.value);
+      var v = content.call(this, d);
+      tooltip.move(d3.select(container).node(), 'year: ' + v.year + ', value: ' + v.value);
     }).on('mouseout', function(d){tooltip.hide();});
-    function value(d){
+    function content(d){
       var x = d3.mouse(this)[0];
       var year = Math.floor(x_scale.invert(x));
       var line_data = d3.select(this).data()[0];
       let values = line_data.data;
-      let value = 0;
+      let val = 0;
       for(let i = 0; i < values.length; i++){
         let v = values[i];
-        if(Number(v.year) === Number(year)) {value = v.count; break;}
+        if(Number(v.year) === Number(year)) {val = value(v); break;}
       }
-      return {year : year, value : value};
+      return {year : year, value : val};
     }
   }
   function update_line(d, i){
@@ -119,8 +127,8 @@ module.exports = exports = function(){
     // var y_scale = d3.scaleLinear().domain(y_extent).range([0, timeline_height/2]);
     var area_fun = d3.area().x(function(d){return x_scale(d.year);})
     .y(function(){return timeline_height/2;})
-    .y0(function(d){return timeline_height/2+y_scale(d.count);})
-    .y1(function(d){return timeline_height/2-y_scale(d.count);}).curve(d3.curveCardinal);
+    .y0(function(d){return timeline_height/2+y_scale(value(d));})
+    .y1(function(d){return timeline_height/2-y_scale(value(d));}).curve(d3.curveCardinal);
     d3.select(this).select('path').transition().duration(duration).attr('d', function(d){
       return area_fun(d.data);
     }).attr('fill', 'lightpink').attr('stroke', 'black').attr('stroke-width', 1);
@@ -180,6 +188,7 @@ module.exports = exports = function(){
   ret.deactivate_brushes = function(){brushes.deactivate();};
   ret.loading = function(){return loading;};
   ret.brushes = function(){return brushes;};
+  ret.percent = function(_){return arguments.length > 0 ? (percent =_, ret) : percent;};
   return ret;
 
   function brushes_factory(){

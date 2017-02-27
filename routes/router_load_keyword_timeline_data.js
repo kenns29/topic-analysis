@@ -24,8 +24,6 @@ module.exports = exports = function(req, res){
       {$group : {_id : '$year', count : {$sum : 1}}},
       {$sort : {_id : 1}}
     ]).toArray();
-
-    db.close();
     var min_year = KeywordTimelineFlags.MIN_YEAR;
     var max_year = KeywordTimelineFlags.MAX_YEAR;
     var year2index = function(year){return year - min_year;};
@@ -36,6 +34,19 @@ module.exports = exports = function(req, res){
       let dat = aggr[i];
       data_array[year2index(dat._id)].count = (dat ? dat.count : 0);
     }
+    if(percent){
+      let aggr = yield col.aggregate([
+        {$group : {_id : '$year', count : {$sum : 1}}},
+        {$sort : {_id : 1}}
+      ]).toArray();
+      let year2total = [];
+      aggr.forEach(function(d){year2total[d._id] = d.count;});
+      data_array.forEach(function(d){
+        let total = year2total[d.year];
+        d.percent = total ? d.count / total : 0;
+      });
+    }
+    db.close();
     var data = {
       id : keyword,
       data : data_array
