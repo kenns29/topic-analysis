@@ -18,9 +18,16 @@
       <li><a href="#">Link</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="/signup" id="logout-btn">Register</a></li>
+      <% if (loggedIn) { %>
+        <li><a href="/logout" id="logout-btn">Log Out</a></li>
+      <% }
+      else {%>
+        <li><a href="/signup" id="logout-btn">Register</a></li>
+        <li><a href="/login" id="logout-btn">Log In</a></li>
+      <% } %>
+      <!-- <li><a href="/signup" id="logout-btn">Register</a></li>
       <li><a href="/login" id="logout-btn">Log In</a></li>
-      <li><a href="/logout" id="logout-btn"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+      <li><a href="/logout" id="logout-btn"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li> -->
     </ul>
     
   </div>

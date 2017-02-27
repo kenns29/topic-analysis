@@ -11,10 +11,10 @@ var express = require('express');
 module.exports = exports = function(passport){
   var router = express.Router();
   router.get('/', function(req, res) {
-    res.render('index', { title: 'Topic Analysis' });
+    var loggedIn = req.user ? true : false;
+    res.render('index', { title: 'Topic Analysis', loggedIn: loggedIn});
   });
   router.get('/login', function(req, res){
-    console.log(user)
     res.render('login', { title : 'Login', message: req.flash('loginMessage') });
   });
   router.get('/signup', function(req, res){
