@@ -10,11 +10,13 @@ function get_flags(){
   var level_str = $('#keyword-select-div #select-level').val();
   var type_str = $('#keyword-select-div #select-type').val();
   var field_str = $('#keyword-select-div #select-field').val();
+  var metric_str = $('#keyword-select-div #select-metric').val();
   var level = str2flag(level_str);
   var type = str2flag(type_str);
   var field = str2flag(field_str);
+  var metric = str2flag(metric_str);
   var percent = $('#keyword-select-div #checkbox-keyword-timeline-percent').is(':checked');
-  return {level:level,type:type,field:field,percent:percent};
+  return {level:level,type:type,field:field,percent:percent,metric:metric};
 }
 function str2flag(str){
   switch(str){
@@ -24,6 +26,8 @@ function str2flag(str){
     case 'RW' : return DOC.RW;
     case 'TITLE' : return DOC.TITLE;
     case 'ABSTRACT' : return DOC.ABSTRACT;
+    case 'METRIC_DOCUMENT' : return KeywordTimelineFlags.METRIC_DOCUMENT;
+    case 'METRIC_WORD' : return KeywordTimelineFlags.METRIC_WORD;
     case 'ALL' : return -1;
     default : return -1;
   }

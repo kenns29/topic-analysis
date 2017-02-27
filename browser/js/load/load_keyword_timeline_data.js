@@ -1,17 +1,19 @@
 var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
+var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 module.exports = exports = function(){
   var data;
   var type = DOC.A;
   var level = DOC.P;
   var field = DOC.TITLE;
   var percent = false;
+  var metric = KeywordTimelineFlags.METRIC_DOCUMENT;
   var keyword = '';
   function load(_keyword){
     if(_keyword) keyword = _keyword;
     var deferred = $.ajax({
       url : service_url + '/loadkeywordtimelinedata',
-      data : {type:type,level:level,field:field,keyword:keyword,percent:percent},
+      data : {type:type,level:level,field:field,keyword:keyword,percent:percent,metric:metric},
       dataType: 'json'
     });
     return Promise.resolve(deferred);
@@ -27,5 +29,6 @@ module.exports = exports = function(){
   ret.keyword = function(_){return arguments.length > 0 ? (keyword = _, ret) : keyword;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
   ret.percent = function(_){return arguments.length > 0 ? (percent = _, ret) : percent;};
+  ret.metric = function(_){return arguments.length > 0 ? (metric = _, ret) : metric;};
   return ret;
 };

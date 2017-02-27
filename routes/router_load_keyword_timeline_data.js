@@ -10,21 +10,12 @@ module.exports = exports = function(req, res){
   var type = Number(req.query.type);
   var level = Number(req.query.level);
   var percent = str2boolean(req.query.percent);
+  var metric = Number(req.query.metric);
   var col_name = level === DOC.PN ? 'panels' : 'papers';
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
     var col = db.collection(col_name);
-    var match = {'title_tokens.lemma' : {
-      $regex : keyword, $options : 'i'
-    }};
-    if(type >= 0) match.type = type;
-    var aggr = yield col.aggregate([
-      {$unwind : '$title_tokens'},
-      {$match : match},
-      {$group : {_id : '$id', year: {$last : '$year'}}},
-      {$group : {_id : '$year', count : {$sum : 1}}},
-      {$sort : {_id : 1}}
-    ]).toArray();
+    var aggr = yield col.aggregate(count_aggr(keyword, type, metric)).toArray();
     var min_year = KeywordTimelineFlags.MIN_YEAR;
     var max_year = KeywordTimelineFlags.MAX_YEAR;
     var year2index = function(year){return year - min_year;};
@@ -36,13 +27,7 @@ module.exports = exports = function(req, res){
       data_array[year2index(dat._id)].count = (dat ? dat.count : 0);
     }
     if(percent){
-      let match = {};
-      if(type > 0) match.type = type;
-      let aggr = yield col.aggregate([
-        {$match : match},
-        {$group : {_id : '$year', count : {$sum : 1}}},
-        {$sort : {_id : 1}}
-      ]).toArray();
+      let aggr = yield col.aggregate(total_aggr(type, metric)).toArray();
       let year2total = [];
       aggr.forEach(function(d){year2total[d._id] = d.count;});
       data_array.forEach(function(d){
@@ -63,3 +48,46 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
+
+function count_aggr(keyword, type, metric){
+  var match = {'title_tokens.lemma' : {
+    $regex : keyword, $options : 'i'
+  }};
+  if(type >= 0) match.type = type;
+  if(metric === KeywordTimelineFlags.METRIC_DOCUMENT){
+    return [
+      {$unwind : '$title_tokens'},
+      {$match : match},
+      {$group : {_id : '$id', year: {$last : '$year'}}},
+      {$group : {_id : '$year', count : {$sum : 1}}},
+      {$sort : {_id : 1}}
+    ];
+  } else {
+    return [
+      {$unwind : '$title_tokens'},
+      {$match : match},
+      {$group : {_id : '$year', count : {$sum : 1}}},
+      {$sort : {_id : 1}}
+    ];
+  }
+}
+function total_aggr(type, metric){
+  var match = {};
+  if(type >= 0) match.type = type;
+  if(metric === KeywordTimelineFlags.METRIC_DOCUMENT){
+    return [
+      {$match : match},
+      {$group : {_id : '$year', count : {$sum : 1}}},
+      {$sort : {_id : 1}}
+    ];
+  } else {
+    return [
+      {$match : match},
+      {$project : {year : 1, title_tokens : 1}},
+      {$group : {_id : '$year', count : {
+        $sum : {$size : '$title_tokens'}
+      }}},
+      {$sort:{_id : 1}}
+    ];
+  }
+}
