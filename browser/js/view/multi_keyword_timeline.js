@@ -26,6 +26,7 @@ module.exports = exports = function(){
   var brushes = brushes_factory();
   var loading;
   var duration = 500;
+  var percent = false;
   function init(){
     width = 800, height = 400;
     W = width - margin.left - margin.right - timeline_x_offset;
