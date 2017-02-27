@@ -21,13 +21,14 @@ module.exports = exports = function(req, res){
     var aggr = yield col.aggregate([
       {$unwind : '$title_tokens'},
       {$match : match},
+      {$group : {_id : '$id', year: {$last : '$year'}}},
       {$group : {_id : '$year', count : {$sum : 1}}},
       {$sort : {_id : 1}}
     ]).toArray();
     var min_year = KeywordTimelineFlags.MIN_YEAR;
     var max_year = KeywordTimelineFlags.MAX_YEAR;
     var year2index = function(year){return year - min_year;};
-    var index2year = function(index){return min_year + index;}
+    var index2year = function(index){return min_year + index;};
     var data_array = Array(max_year - min_year + 1);
     for(let i = 0; i < data_array.length; i++)data_array[i] = {year:index2year(i),count:0};
     for(let i = 0; i  < aggr.length; i++){
@@ -35,7 +36,10 @@ module.exports = exports = function(req, res){
       data_array[year2index(dat._id)].count = (dat ? dat.count : 0);
     }
     if(percent){
+      let match = {};
+      if(type > 0) match.type = type;
       let aggr = yield col.aggregate([
+        {$match : match},
         {$group : {_id : '$year', count : {$sum : 1}}},
         {$sort : {_id : 1}}
       ]).toArray();
@@ -44,6 +48,7 @@ module.exports = exports = function(req, res){
       data_array.forEach(function(d){
         let total = year2total[d.year];
         d.percent = total ? d.count / total : 0;
+        d.total = total ? total : 0;
       });
     }
     db.close();
@@ -58,21 +63,3 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
-// function old_aggregate(){
-//   col.aggregate([
-//     {$match : {type : type}},
-//     {$project : {year : 1, title_tokens : 1}},
-//     {$group : {_id : '$year', count : {
-//       $sum : {
-//         $size : {
-//           $filter : {
-//             input : '$title_tokens',
-//             as : 'token',
-//             cond : {$eq :['$$token.lemma', keyword]}
-//           }
-//         }
-//       }
-//     }}},
-//     {$sort:{_id : 1}}
-//   ]).toArray();
-// }
