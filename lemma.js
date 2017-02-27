@@ -1,15 +1,17 @@
 var StanfordCoreNLP = require('./nlp/stanford_core_nlp');
 var StanfordParser = require('./nlp/stanford_parser');
 var co = require('co');
-var GetPapers = require('./db_mongo/get_papers');
 var MongoClient = require('mongodb').MongoClient;
 var ConnStat = require('./db_mongo/connection');
+var conn_stat = ConnStat().db('gender_study');
 var stanford_core_nlp = StanfordCoreNLP();
 var stanford_parser = StanfordParser();
+var from_year = 1989;
+var to_year = 2003;
 module.exports = co(function*(){
-  var db = yield MongoClient.connect(ConnStat().url());
+  var db = yield MongoClient.connect(conn_stat.url());
   var col = db.collection('papers');
-  var data = yield col.find({}).toArray();
+  var data = yield col.find({year : {$gte : from_year, $lt : to_year}}).sort({year :1}).toArray();
   var bulk = col.initializeOrderedBulkOp();
   stanford_parser.pipeline(stanford_core_nlp());
   for(let i = 0; i < data.length; i++){
@@ -27,7 +29,7 @@ module.exports = co(function*(){
   console.log('finished papers');
 
   col = db.collection('panels')
-  data = yield col.find({}).toArray();
+  data = yield col.find({year : {$gte : from_year, $lt : to_year}}).sort({year : 1}).toArray();
   bulk = col.initializeOrderedBulkOp();
   for(let i = 0; i < data.length; i++){
     let entry = data[i];

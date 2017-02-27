@@ -3,7 +3,7 @@ module.exports = exports = function(){
   var db = 'gender_study';
   var ret = {};
   ret.host = function(_){return arguments.length > 0 ? (host =_, ret):host;};
-  ret.db = function(_){return arguments.length > 0 ? (host =_, ret):host;};
+  ret.db = function(_){return arguments.length > 0 ? (db =_, ret):db;};
   ret.url = function(){return host + '/' + db;};
   return ret;
 };

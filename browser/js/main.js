@@ -19,10 +19,13 @@ global.model_stats_display.load().then(function(data){
 });
 var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
+require('./UI/wordtree_controls').init_year_select();
+require('./UI/btn_draw_wordtree');
 
 require('./UI/document_tab_nav');
 require('./UI/keyword_tab_nav');
-require('./UI/checkbox-timeline-brush');
-require('./test_code/draw_keyword_timelines')();
-require('./UI/test');
-
+require('./UI/checkbox_timeline_brush');
+require('./UI/checkbox_timeline_percent');
+require('./init/draw_keyword_timelines')();
+// require('./init/draw_word_tree')();
+// require('./UI/test');

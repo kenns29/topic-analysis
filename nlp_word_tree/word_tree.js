@@ -1,12 +1,10 @@
-
+var co = require('co');
 module.exports = exports = word_tree;
-
 function word_tree(){
   var root = null;
   var token_stop_pattern = /\n|\r\n|\r|(?:http[s]?|ftp|file):\/\/\S+(\/\S+)*/i;
   var use_stop_pattern = false;
-  var use_stop_words = false;
-  var to_lower_case = true;
+  var use_stopwords = false;
   var stopwords = new Set();
   var reverse = false;
   var root_word = 'studies';
@@ -17,24 +15,37 @@ function word_tree(){
     var pre_node = root;
     var root_word_lower = root_word.toLowerCase();
     if(!reverse) tokens.forEach(each_token);
-    else for(let i = tokens.length - 1; i>=0; i--) each_token(tokens[i]);
+    else{
+      //look for the last encounter of the root word
+      let i = 0;
+      for(i; i < tokens.length; i++){
+        let token = tokens[i];
+        if(token_acc(token).toLowerCase() === root_word_lower){
+          break;
+        }
+      }
+      if(i === tokens.length) return;
+      for(i; i>=0; i--) each_token(tokens[i]);
+    }
 
     function each_token(token){
       var word = token_acc(token);
-      if(to_lower_case) word = word.toLowerCase();
+      var word_lower = word.toLowerCase();
       if((use_stop_pattern && word.match(token_stop_pattern)) ||
-        (use_stop_words && stopwords.has(word))) return;
+        (use_stopwords && stopwords.has(word_lower))) return;
       //after the first encounter of the root word
       if(add_flag){
         let found = false;
         for(let i = 0; i < pre_node.children.length; i++){
           let node = pre_node.children[i];
-          if(token_acc(node.tokens[0]).toLowerCase() === word.toLowerCase()){
-            ++node.value; found = true; pre_node = node; break;
+          let pre_word_lower = token_acc(node.tokens[0]).toLowerCase();
+          if(pre_word_lower === word_lower){
+            ++node.count; found = true; pre_node = node;
+            break;
           }
         }
         if(!found){
-          let new_node = {tokens : [token], value : 1, children : []};
+          let new_node = {tokens : [token], count : 1, children : []};
           pre_node.children.push(new_node);
           pre_node = new_node;
         }
@@ -44,9 +55,9 @@ function word_tree(){
         if(root_word_lower === word.toLowerCase()){
           add_flag = true;
           if(root === null){
-            root = {tokens : [token], value : 1, children:[]};
+            root = {tokens : [token], count : 1, children:[]};
           } else {
-            ++root.value;
+            ++root.count;
           }
           pre_node = root;
         }
@@ -54,25 +65,31 @@ function word_tree(){
     }
   }
   function create(docs){
-    docs.forEach(function(doc){
-      var tokens = tokens_acc(doc);
-      append_tree(root_word, tokens);
-    });
-    compress(root, reverse);
-    return ret;
+    return co(function*(){
+      root = null;
+      docs.forEach(function(doc){
+        var tokens = tokens_acc(doc);
+        append_tree(root_word, tokens);
+      });
+      if(root !== null){
+        add_end(root);
+        compress(root, reverse);
+      }
+      return Promise.resolve(ret);
+    }).catch(function(err){console.log(err);});
   }
   var ret = {};
   ret.root = function(_){return arguments.length > 0 ? (root = _, ret) : root;};
   ret.create = create;
   ret.append_tree = append_tree;
   ret.token = function(_){
-    if(arguments.length > 0) {token_acc = _; return ret;}
+    if(arguments.length > 0) {token_acc = _; return ret;} return ret;
   };
   ret.tokens = function(_){
-    if(arguments.length > 0) {tokens_acc = _; return ret;}
+    if(arguments.length > 0) {tokens_acc = _; return ret;} return ret;
   };
   ret.use_stop_pattern = function(_){return arguments.length > 0 ? (use_stop_pattern = _, ret) : use_stop_pattern;};
-  ret.use_stop_words = function(_){return arguments.length > 0 ? (use_stop_words = _, ret) : use_stop_words;};
+  ret.use_stopwords = function(_){return arguments.length > 0 ? (use_stopwords = _, ret) : use_stopwords;};
   ret.stop_pattern = function(_){return arguments.length > 0 ? (token_stop_pattern = _, ret) : token_stop_pattern;};
   ret.stopwords = function(_){return arguments.length > 0 ? (stopwords = _, ret) : stopwords;};
   ret.to_lower_case = function(_){return arguments.length > 0 ? (to_lower_case = _, ret) : to_lower_case;};
@@ -80,11 +97,26 @@ function word_tree(){
   ret.root_word = function(_){return arguments.length > 0 ? (root_word = _, ret) : root_word;};
   return ret;
 }
+function add_end(root){
+  recurse(root);
+  return root;
+  function recurse(r){
+    if(r && !is_leaf(r)){
+      r.children.forEach(recurse);
+      let children_count = r.children.reduce(function(pre, cur){
+        return pre + cur.count;
+      }, 0);
+      if(r.count > children_count){
+        r.children.push({tokens : [make_token('.', '.')], count : r.count - children_count, children:[]});
+      }
+    }
+  }
+}
 function compress(root, reverse){
   recurse(root);
   return root;
   function recurse(r){
-    if(!is_leaf(r)){
+    if(r && !is_leaf(r)){
       if(r.children.length === 1){
         r.tokens[reverse ? 'unshift' : 'push'](r.children[0].tokens[0]);
         r.children = r.children[0].children;
@@ -96,4 +128,7 @@ function compress(root, reverse){
 }
 function is_leaf(r){
   return !r.children || r.children.length === 0;
+}
+function make_token(text, lemma){
+  return {text: text, lemma:lemma};
 }

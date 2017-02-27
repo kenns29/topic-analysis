@@ -49,7 +49,7 @@ function update_labels(data){
     return topic_color(d.id);
   });
   label_sel.exit().remove();
-  var label_update = label_g.selectAll('.label');
+  var label_update = label_sel.merge(label_enter);
   label_update.transition().duration(duration).attr('transform', function(d){
     return 'translate(' + [0, d.y + d.height/2] + ')'
   });
@@ -88,7 +88,7 @@ function update_topics(data){
   var topic_sel = topics_g.selectAll('.topic').data(data, function(d){return d.id;});
   var topic_enter = topic_sel.enter().append('g').attr('class', 'topic');
   topic_sel.exit().remove();
-  var topic_update = topics_g.selectAll('.topic');
+  var topic_update = topic_sel.merge(topic_enter);
   topic_update.each(function(d){d.height = 0; d.y = 0;});
   var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.index;});
   var token_enter = token_sel.enter().append('g').attr('class', 'token').style('cursor', 'pointer');
@@ -126,16 +126,17 @@ function update_topics(data){
   });
   var s_height = svg_height(data);
   svg.attr('height','100%').style('min-height', s_height);
+  var t = d3.transition().duration(duration);
   var t1 = function(){
     return new Promise(function(resolve, reject){
-      topic_update.transition().duration(duration).attr('transform', function(d){
+      topic_update.transition(t).attr('transform', function(d){
         return 'translate(' + [0, d.y] +')';
       }).on('end', resolve);
     });
   };
   var t2 = function(){
     return new Promise(function(resolve, reject){
-      token_update.transition().duration(duration).attr('transform', function(d){
+      token_update.transition(t).attr('transform', function(d){
         var topic_height = d3.select(this.parentNode).data()[0].height;
         return 'translate(' + [d.x, topic_height/2] +')';
       }).on('end', resolve);

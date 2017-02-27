@@ -5,6 +5,7 @@ var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
 var KeywordSelect = require('../UI/keyword_select');
 var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
+var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -14,8 +15,8 @@ module.exports = exports = function(){
   var id2data = [];
   var timeline_height = 30;
   var timeline_y_space = 7;
-  var min_year = 1979;
-  var max_year = 1989;
+  var min_year = KeywordTimelineFlags.MIN_YEAR;
+  var max_year = KeywordTimelineFlags.MAX_YEAR;
   var y_scale;
   var x_scale;
   var x_axis;
@@ -25,15 +26,18 @@ module.exports = exports = function(){
   var brushes = brushes_factory();
   var loading;
   var duration = 500;
+  var percent = false;
+  function value(d){
+    return percent ? d.percent : d.count;
+  }
   function init(){
-    console.log('hey')
-    width = $(container).width(), height = $(container).height();
+    width = 800, height = 400;
     W = width - margin.left - margin.right - timeline_x_offset;
     H = height - margin.top - margin.bottom;
     svg = d3.select(container).attr('class', 'keyword-timeline')
-    .append('svg')
+    .append('svg').attr('width', '100%').attr('height', '100%')
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + width + " " + height);
+    .attr("viewBox", '0 0 '+width+' '+ height);
     timeline_g = svg.append('g').attr('transform','translate('+[margin.left, margin.top]+')');
     x_scale = d3.scaleLinear().domain([min_year, max_year]).range([0, W]);
     x_axis = d3.axisBottom().scale(x_scale).ticks(max_year - min_year + 1);
@@ -44,13 +48,18 @@ module.exports = exports = function(){
     return ret;
   }
   function update_y_scale(){
-    var extent = [Infinity, -Infinity];
-    data.forEach(function(d){
-      d.data.forEach(function(obj){
-          if(extent[0] > obj.count) extent[0] = obj.count;
-          if(extent[1] < obj.count) extent[1] = obj.count;
+    var extent;
+    if(percent) extent = [0, 1];
+    else{
+      extent = [0, -Infinity];
+      data.forEach(function(d){
+        d.data.forEach(function(obj){
+          let v = value(obj);
+          // if(extent[0] > v) extent[0] = v;
+          if(extent[1] < v) extent[1] = v;
+        });
       });
-    });
+    }
     y_scale = d3.scaleSqrt().domain(extent).range([0, timeline_height/2]);
   }
   function update(){
@@ -64,7 +73,7 @@ module.exports = exports = function(){
     area_enter.append('rect').attr('width', W).attr('height', timeline_height).attr('fill','white');
     area_enter.append('path');
     timeline_sel.exit().remove();
-    var timeline_update = timeline_g.selectAll('.timeline');
+    var timeline_update = timeline_sel.merge(timeline_enter);
     timeline_update.select('.area').each(update_line);
     timeline_update.select('.area').call(area_mouseover);
     x_axis_g.call(x_axis);
@@ -73,10 +82,10 @@ module.exports = exports = function(){
       update();
     });
     if(brushes.is_activated())brushes.activate();
+    var t = d3.transition().duration(duration);
     var t1 = function(){
       return new Promise(function(resolve, reject){
-        timeline_update.transition().duration(duration)
-        .attr('transform', function(d){
+        timeline_update.transition(t).attr('transform', function(d){
           var x = 0, y = d.index * (timeline_height + timeline_y_space);
           return 'translate('+[x, y]+')';
         }).on('end', resolve);
@@ -84,8 +93,8 @@ module.exports = exports = function(){
     };
     var t2 = function(){
       return new Promise(function(resolve, reject){
-        x_axis_g.transition().duration(duration).attr('transform', 'translate(' + [
-          margin.left + 50,
+        x_axis_g.transition(t).attr('transform', 'translate(' + [
+          margin.left + timeline_x_offset,
           margin.top + data.length * (timeline_height + timeline_y_space) + 5
         ]+')').on('end', resolve);
       });
@@ -94,23 +103,26 @@ module.exports = exports = function(){
   }
   function area_mouseover(element){
     element.on('mouseover', function(d){
-      var v = value.call(this, d);
-      tooltip.show(svg.node(), 'year: ' + v.year + ', count: ' + v.value);
+      var v = content.call(this, d);
+      tooltip.show(d3.select(container).node(), v);
     }).on('mousemove', function(d){
-      var v = value.call(this, d);
-      tooltip.move(svg.node(), 'year: ' + v.year + ', count: ' + v.value);
+      var v = content.call(this, d);
+      tooltip.move(d3.select(container).node(), v);
     }).on('mouseout', function(d){tooltip.hide();});
-    function value(d){
+    function content(d){
       var x = d3.mouse(this)[0];
       var year = Math.floor(x_scale.invert(x));
       var line_data = d3.select(this).data()[0];
       let values = line_data.data;
-      let value = 0;
+      let val = 0;
       for(let i = 0; i < values.length; i++){
         let v = values[i];
-        if(Number(v.year) === Number(year)) {value = v.count; break;}
+        if(Number(v.year) === Number(year)) {val = value(v); break;}
       }
-      return {year : year, value : value};
+      var html = 'year: ' + year;
+      if(!percent) html += ', count: ' + val;
+      else html += ', percent: ' + d3.format('d')(val * 100) + '%';
+      return html;
     }
   }
   function update_line(d, i){
@@ -118,9 +130,9 @@ module.exports = exports = function(){
     // var y_scale = d3.scaleLinear().domain(y_extent).range([0, timeline_height/2]);
     var area_fun = d3.area().x(function(d){return x_scale(d.year);})
     .y(function(){return timeline_height/2;})
-    .y0(function(d){return timeline_height/2+y_scale(d.count);})
-    .y1(function(d){return timeline_height/2-y_scale(d.count);}).curve(d3.curveCardinal);
-    d3.select(this).select('path').transition().duration(500).attr('d', function(d){
+    .y0(function(d){return timeline_height/2+y_scale(value(d));})
+    .y1(function(d){return timeline_height/2-y_scale(value(d));}).curve(d3.curveCardinal);
+    d3.select(this).select('path').transition().duration(duration).attr('d', function(d){
       return area_fun(d.data);
     }).attr('fill', 'lightpink').attr('stroke', 'black').attr('stroke-width', 1);
   }
@@ -179,6 +191,7 @@ module.exports = exports = function(){
   ret.deactivate_brushes = function(){brushes.deactivate();};
   ret.loading = function(){return loading;};
   ret.brushes = function(){return brushes;};
+  ret.percent = function(_){return arguments.length > 0 ? (percent =_, ret) : percent;};
   return ret;
 
   function brushes_factory(){

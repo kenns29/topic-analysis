@@ -62,34 +62,49 @@ body{
       overflow-y: auto;
       overflow-x: hidden;
     }
-    #keyword-select-div{
-      position: relative;
-      height : auto;
-      .control{
-        display : inline-block;
-      }
-      #textbox-keyword{
-        width : 50px;
-      }
-    }
     #keyword-contents{
       position: relative;
       width : 100%;
-      height: calc(60% - 35px);
+      height: 60%;
       .tab-content{
         position: relative;
         height : calc(100% - 45px);
         width : 100%;
         #keyword-timeline-view-panel{
+          position: relative;
           height: 100%; width: 100%;
+          #keyword-select-div{
+            position: relative;
+            height : auto;
+            .control{
+              display : inline-block;
+            }
+            #textbox-keyword{
+              width : 50px;
+            }
+          }
           #keyword-timeline-view-div{
-            height: 100%; width: 100%;
+            position: relative;
+            height: calc(100% - 65px);
+            width: 100%;
           }
         }
         #keyword-tree-view-panel{
+          position: relative;
           height: 100%; width: 100%;
+          #keyword-tree-control-div{
+            position: relative;
+            height : auto;
+            .control{
+              display : inline-block;
+            }
+            #textbox-keyword{
+              width : 50px;
+            }
+          }
           #keyword-tree-view-div{
-            height: 100%; width: 100%;
+            position: relative;
+            height: calc(100% - 65px); width: 100%;
           }
         }
       }
@@ -129,18 +144,18 @@ body{
   }
 }
 
-.svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%;
-    vertical-align: top;
-    overflow: hidden;
-}
-.svg-container>svg {
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
+// .svg-container {
+//     display: inline-block;
+//     position: relative;
+//     width: 100%;
+//     padding-bottom: 100%;
+//     vertical-align: top;
+//     overflow: hidden;
+// }
+// .svg-container>svg {
+//     display: inline-block;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+// }
 @import 'util'
