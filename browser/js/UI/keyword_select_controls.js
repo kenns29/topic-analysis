@@ -12,7 +12,8 @@ function get_flags(){
   var level = str2flag(level_str);
   var type = str2flag(type_str);
   var field = str2flag(field_str);
-  return {level:level,type:type,field:field};
+  var percent = $('#keyword-select-div #checkbox-keyword-timeline-percent').is(':checked');
+  return {level:level,type:type,field:field,percent:percent};
 }
 function str2flag(str){
   switch(str){

@@ -5,12 +5,13 @@ module.exports = exports = function(){
   var type = DOC.A;
   var level = DOC.P;
   var field = DOC.TITLE;
+  var percent = false;
   var keyword = '';
   function load(_keyword){
     if(_keyword) keyword = _keyword;
     var deferred = $.ajax({
       url : service_url + '/loadkeywordtimelinedata',
-      data : {type:type,level:level,field:field,keyword:keyword},
+      data : {type:type,level:level,field:field,keyword:keyword,percent:percent},
       dataType: 'json'
     });
     return Promise.resolve(deferred);
@@ -25,5 +26,6 @@ module.exports = exports = function(){
   ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
   ret.keyword = function(_){return arguments.length > 0 ? (keyword = _, ret) : keyword;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
+  ret.percent = function(_){return arguments.length > 0 ? (percent = _, ret) : percent;};
   return ret;
 };

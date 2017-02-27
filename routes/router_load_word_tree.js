@@ -7,6 +7,7 @@ var DIRECTION = require('../flags/word_tree_direction_flags');
 var WordTree = require('../nlp_word_tree/word_tree');
 var co = require('co');
 var Stopwords = require('../nlp/stopwords');
+var str2boolean = require('./str2boolean');
 module.exports = exports = function(req, res){
   var field = Number(req.query.field);
   var year = Number(req.query.year); if(!year) year = -1;
@@ -38,7 +39,3 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
-
-function str2boolean(str){
-  return (str == 'true') ? true : false;
-}

@@ -83,8 +83,8 @@ function insert_keyword_timeline(keyword){
   if(keyword !== null && keyword !== undefined && keyword !== ''){
     keyword = keyword.toLowerCase();
     var flag = get_flags();
-    var level = flag.level, type = flag.type, field = flag.field;
-    LoadKeywordTimelineData().type(type).level(level).load(keyword).then(function(data){
+    var level = flag.level, type = flag.type, field = flag.field, percent = flag.percent;
+    LoadKeywordTimelineData().type(type).level(level).percent(percent).load(keyword).then(function(data){
       global.multi_keyword_timeline.add_timeline(data).update();
     }).catch(function(err){
       console.log(err);

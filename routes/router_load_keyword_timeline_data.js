@@ -4,10 +4,12 @@ var co = require('co');
 var ConnStat = require('../db_mongo/connection');
 var DOC = require('../flags/doc_flags');
 var KeywordTimelineFlags = require('../flags/keyword_timeline_flags');
+var str2boolean = require('./str2boolean');
 module.exports = exports = function(req, res){
   var keyword = req.query.keyword;
   var type = Number(req.query.type);
   var level = Number(req.query.level);
+  var percent = str2boolean(req.query.percent);
   var col_name = level === DOC.PN ? 'panels' : 'papers';
   co(function*(){
     var db = yield MongoClient.connect(ConnStat().url());
