@@ -1,4 +1,5 @@
 var DOC = require('../../../flags/doc_flags');
+var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 var $ = require('jquery');
 var d3 = require('d3');
 module.exports.get_flags = get_flags;
