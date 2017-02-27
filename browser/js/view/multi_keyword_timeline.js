@@ -104,10 +104,10 @@ module.exports = exports = function(){
   function area_mouseover(element){
     element.on('mouseover', function(d){
       var v = content.call(this, d);
-      tooltip.show(d3.select(container).node(), 'year: ' + v.year + ', value: ' + v.value);
+      tooltip.show(d3.select(container).node(), v);
     }).on('mousemove', function(d){
       var v = content.call(this, d);
-      tooltip.move(d3.select(container).node(), 'year: ' + v.year + ', value: ' + v.value);
+      tooltip.move(d3.select(container).node(), v);
     }).on('mouseout', function(d){tooltip.hide();});
     function content(d){
       var x = d3.mouse(this)[0];
@@ -119,7 +119,10 @@ module.exports = exports = function(){
         let v = values[i];
         if(Number(v.year) === Number(year)) {val = value(v); break;}
       }
-      return {year : year, value : val};
+      var html = 'year: ' + year;
+      if(!percent) html += ', count: ' + val;
+      else html += ', percent: ' + d3.format('d')(val * 100) + '%';
+      return html;
     }
   }
   function update_line(d, i){
