@@ -4,18 +4,30 @@ body{
 #wrapper {
   position:relative;
   width : 100%;
-  height: auto;
+  height: calc(100% - 32px);
 }
 
 #top-navbar {
   margin-bottom: 0px;
+  min-height: 0px;
+  a, .navbar-brand {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: auto;
+  }
+  a {
+    font-size: 12px;
+  }
+  .navbar-brand {
+    font-size: 14px;
+  }
 }
 
 #welcome-text {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   color: #eeeeee;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 #left-side-bar {
