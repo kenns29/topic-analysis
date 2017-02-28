@@ -11,7 +11,7 @@ var express = require('express');
 module.exports = exports = function(passport){
   var router = express.Router();
   router.get('/', function(req, res) {
-    res.render('index', { title: 'Topic Analysis' });
+    res.render('index', { title: 'Topic Analysis', user: req.user});
   });
   router.get('/login', function(req, res){
     res.render('login', { title : 'Login', message: req.flash('loginMessage') });
@@ -26,7 +26,7 @@ module.exports = exports = function(passport){
     res.render('userprofile', {user : req.user});
   });
   router.get('/logout', function(req, res){
-    req.logout(); res.redirect('/login');
+    req.logout(); res.redirect('/');
   });
   router.post('/signup', passport.authenticate('local-signup', {
     successRedirect : '/login',
@@ -34,7 +34,7 @@ module.exports = exports = function(passport){
     failureFlash : true
   }));
   router.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/userprofile',
+    successRedirect : '/',
     failureRedirect : '/login',
     failureFlash : true
   }));
