@@ -7,25 +7,25 @@
 <link rel="stylesheet" href="css/main.css"/>
 </header>
 <body>
-<div id ="wrapper">
-  <nav class="navbar navbar-inverse" id="top-navbar">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <div class="navbar-brand">Gender Study</div>
-      </div>
-      <ul class="nav navbar-nav navbar-right">
-        <% if (user) { %>
-          <li id="welcome-text">Welcome <%= user.email() %></li>
-          <li><a href="/logout" id="logout-btn">Log Out</a></li>
-        <% }
-        else {%>
-          <li><a href="/signup" id="logout-btn">Register</a></li>
-          <li><a href="/login" id="logout-btn">Log In</a></li>
-        <% } %>
-      </ul>
-      
+<nav class="navbar navbar-inverse" id="top-navbar">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-brand">Gender Study</div>
     </div>
-  </nav>
+    <ul class="nav navbar-nav navbar-right">
+      <% if (user) { %>
+        <li id="welcome-text">Welcome <%= user.email() %></li>
+        <li><a href="/logout" id="logout-btn">Log Out</a></li>
+      <% }
+      else {%>
+        <li><a href="/signup" id="logout-btn">Register</a></li>
+        <li><a href="/login" id="logout-btn">Log In</a></li>
+      <% } %>
+    </ul>
+
+  </div>
+</nav>
+<div id ="wrapper">
   <div id = "left-side-bar">
     <div id = "data-select">
       <div id = "year-select">
