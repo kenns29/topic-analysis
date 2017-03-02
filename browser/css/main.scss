@@ -80,21 +80,26 @@ body{
     float : left;
     padding: 0px 10px;
     border-left: 1px solid #ddd;
-    #topic-viewer-div {
-      position: relative;
-      height: 40%;
-      width: 100%;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+
     #keyword-contents{
       position: relative;
       width : 100%;
-      height: 60%;
+      height: 100%;
       .tab-content{
         position: relative;
         height : calc(100% - 45px);
         width : 100%;
+        #topic-panel{
+          position: relative;
+          height:100%; width:100%;
+          #topic-viewer-div {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+          }
+        }
         #keyword-timeline-view-panel{
           position: relative;
           height: 100%; width: 100%;
