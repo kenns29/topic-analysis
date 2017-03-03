@@ -4,6 +4,7 @@ var Tooltip = require('../tooltip');
 var Hierarchy = require('./hierarchy');
 var Partition = require('./partition');
 var count2font_factory = require('./count2font');
+var SIZE = require('./size');
 module.exports = exports = word_tree;
 
 var text_scale = d3.scaleThreshold()
@@ -15,7 +16,7 @@ var tiny_text_scale = d3.scaleThreshold()
   return d * 0.5;
 }));
 var margin = {top:20, right:120, bottom:20, left:120};
-width = 800, height = 600;
+width = SIZE[0], height = SIZE[1];
 function word_tree(){
   var container = "#keyword-tree-view-div";
   var data;

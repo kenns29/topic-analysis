@@ -1,9 +1,10 @@
 var d3 = require('../../load_d3');
-var height = 600;
+var SIZE = require('./size');
+var height = SIZE[1];
 var count2font_factory = require('./count2font');
 module.exports = exports = Hierarchy;
 function Hierarchy(){
-  var data, root, hierarchy_height = 600, count2font, count_extent;
+  var data, root, hierarchy_height = SIZE[1], count2font, count_extent;
   var reverse;
   function make(_){
     if(arguments.length > 0) data = _;

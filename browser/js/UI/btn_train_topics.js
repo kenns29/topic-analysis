@@ -37,12 +37,12 @@ module.exports = $('#btn-train-topics').click(function(){
   });
 });
 
-function test(){
-  var test_data = require('../test_data/topic_with_id_data');
-  if(num_topics == 8)
-    topic_viewer.data(test_data.eight).update();
-  else if(num_topics == 10)
-    topic_viewer.data(test_data.ten).update();
-  else if(num_topics == 13)
-    topic_viewer.data(test_data.thirteen).update();
-}
+// function test(){
+//   var test_data = require('../test_data/topic_with_id_data');
+//   if(num_topics == 8)
+//     topic_viewer.data(test_data.eight).update();
+//   else if(num_topics == 10)
+//     topic_viewer.data(test_data.ten).update();
+//   else if(num_topics == 13)
+//     topic_viewer.data(test_data.thirteen).update();
+// }
