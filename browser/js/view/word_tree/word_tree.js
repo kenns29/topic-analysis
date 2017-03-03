@@ -68,11 +68,14 @@ function word_tree(){
 
     //Entering the necessary nodes and append texts, and compute the font and text length for each node
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id || (d.id = ++last_id);});
-    var node_enter = node_sel.enter().append('g').attr('class', 'node').style('cursor', 'pointer');
+    var node_enter = node_sel.enter().append('g').attr('class', 'node').style('cursor', 'pointer')
+    .attr('transform', function(){
+      return 'translate('+ (source ? [source.y, source.x] : [0, 0]) +')';
+    });
     node_enter.append('text');
     var node_exit = node_sel.exit();
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
-      return 'translate('+ (source ? :[source.y, source.x] : [0, 0]) +')';
+      return 'translate('+ (source ? [source.y, source.x] : [0, 0]) +')';
     }).remove();
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){return d.font;})
@@ -150,11 +153,11 @@ function word_tree(){
     if(d === (r = hierarchy_forward.root())){
       op(r, r);
       op(r = hierarchy_reverse.root(), r);
-      update_all();
+      update_all(d);
     } else {
       r = d.reverse ? hierarchy_reverse.root() : hierarchy_forward.root();
       op(d, r);
-      update_all();
+      update_all(node._collapsed?node:node.parent);
     }
     function op(node, root){
       //if the node was collapsed before
