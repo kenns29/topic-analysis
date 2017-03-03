@@ -90,7 +90,7 @@ function update_topics(data){
   topic_sel.exit().remove();
   var topic_update = topic_sel.merge(topic_enter);
   topic_update.each(function(d){d.height = 0; d.y = 0;});
-  var token_sel = topic_update.selectAll('.token').data(function(d){return d.topic;}, function(d){return d.index;});
+  var token_sel = topic_update.selectAll('.token').data(function(d){return d.tokens;}, function(d){return d.index;});
   var token_enter = token_sel.enter().append('g').attr('class', 'token').style('cursor', 'pointer');
   token_enter.append('text');
   token_sel.exit().remove();
@@ -117,8 +117,8 @@ function update_topics(data){
       let pre_y = pre_data.y, pre_height = pre_data.height;
       d.y += pre_y + text_y_space + pre_height;
     }
-    for(let j = 1; j < d.topic.length; j++){
-      let token = d.topic[j];
+    for(let j = 1; j < d.tokens.length; j++){
+      let token = d.tokens[j];
       let pre_token = id2index2token[d.id][token.index - 1];
       let pre_x = pre_token.x, pre_width = pre_token.width;
       token.x += pre_x + text_x_space + pre_width;
@@ -175,7 +175,7 @@ function svg_height(data){
 function font_scale_factory(){
   var extent = [Infinity, -Infinity];
   data.forEach(function(t){
-    t.topic.forEach(function(token){
+    t.tokens.forEach(function(token){
       if(extent[0] > token.weight) extent[0] = token.weight;
       if(extent[1] < token.weight) extent[1] = token.weight;
     });
@@ -190,7 +190,7 @@ function order_topics(){
 }
 function order_topics_by_weight(){
   data.sort(function(a, b){
-    return b.topic[0].weight - a.topic[0].weight;
+    return b.tokens[0].weight - a.tokens[0].weight;
   });
   index2topic = Array(data.length);
   data.forEach(function(d, i){
@@ -202,9 +202,9 @@ function order_topics_by_weight(){
 function order_topics_by_token(token){
   var id2weight = [];
   data.forEach(function(d){
-    var t_idx = d.topic.length;
-    for(let i = 0; i < d.topic.length; i++){
-      if(d.topic[i].token === token.token) {t_idx = i; break;}
+    var t_idx = d.tokens.length;
+    for(let i = 0; i < d.tokens.length; i++){
+      if(d.tokens[i].token === token.token) {t_idx = i; break;}
     }
     id2weight[d.id] = t_idx;
   });
@@ -216,14 +216,14 @@ function order_topics_by_token(token){
     d.index = i;
     index2topic[i] = d;
   });
-  return data.filter(function(d){return id2weight[d.id] < d.topic.length;});
+  return data.filter(function(d){return id2weight[d.id] < d.tokens.length;});
 }
 function order_tokens(t){
   // t.topic.sort(function(a, b){
   //   return b.weight - a.weight;
   // });
   if(!id2index2token[t.id]) id2index2token[t.id] = [];
-  t.topic.forEach(function(token, i){
+  t.tokens.forEach(function(token, i){
     token.index = i;
     id2index2token[t.id][i] = token;
   });
