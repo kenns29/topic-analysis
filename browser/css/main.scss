@@ -92,7 +92,7 @@ body{
         height : calc(100% - 45px);
         width : 100%;
         #topic-panel{
-          position: relative;
+          position: absolute;
           height:100%; width:100%;
           #topic-viewer-div {
             position: relative;
@@ -108,7 +108,7 @@ body{
           }
         }
         #keyword-timeline-view-panel{
-          position: relative;
+          position: absolute;
           height: 100%; width: 100%;
           #keyword-select-div{
             position: relative;
@@ -127,7 +127,7 @@ body{
           }
         }
         #keyword-tree-view-panel{
-          position: relative;
+          position: absolute;
           height: 100%; width: 100%;
           #keyword-tree-control-div{
             position: relative;

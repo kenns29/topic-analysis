@@ -4,12 +4,12 @@ var tab_util = TabUtil().name('keyword-tab')
 .tab_show(function(){
 	$(this).addClass('active');
 	let href = $(this).find('a').attr('href');
-	$(href).removeClass('hidden');
+	$(href).removeClass('invisible');
 })
 .tab_hide(function(){
 	$(this).removeClass('active');
 	let href = $(this).find('a').attr('href');
-	$(href).addClass('hidden');
+	$(href).addClass('invisible');
 });
 
 //initialize tab change
