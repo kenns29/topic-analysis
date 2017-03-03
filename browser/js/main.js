@@ -10,6 +10,9 @@ var MultiKeywordTimeline = require('./view/multi_keyword_timeline');
 global.multi_keyword_timeline = MultiKeywordTimeline().init();
 var WordTree = require('./view/word_tree');
 global.word_tree = WordTree().init();
+var TopicModelCompare = require('./view/topic_model_compare');
+global.topic_model_compare = TopicModelCompare().init();
+
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')
 require('./UI/btn_train_topics');
