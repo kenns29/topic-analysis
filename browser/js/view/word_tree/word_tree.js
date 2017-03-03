@@ -74,9 +74,13 @@ function word_tree(){
     });
     node_enter.append('text');
     var node_exit = node_sel.exit();
-    if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
-      return 'translate('+ (source ? [source.y, source.x] : [0, 0]) +')';
-    }).remove();
+    if(!node_exit.empty()) {
+      let transition = d3.transition().duration(duration);
+      node_exit.select('text').transition(transition).attr('font-size', 0);
+      node_exit.transition(transition).attr('transform', function(d){
+        return 'translate('+ (source ? [source.y, source.x] : [0, 0]) +')';
+      }).remove();
+    }
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){return d.font;})
     .attr('text-anchor', function(d){return d.reverse ? 'end' : 'start';});
@@ -157,7 +161,7 @@ function word_tree(){
     } else {
       r = d.reverse ? hierarchy_reverse.root() : hierarchy_forward.root();
       op(d, r);
-      update_all(node._collapsed?node:r);
+      update_all(d._collapsed?d:r);
     }
     function op(node, root){
       //if the node was collapsed before
