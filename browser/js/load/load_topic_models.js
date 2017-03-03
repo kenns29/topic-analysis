@@ -1,23 +1,17 @@
 var $ = require('jquery');
-var DOC = require('../../../flags/doc_flags');
 var array2str = require('./array2str');
 module.exports = exports = function(){
   var data;
-  var model_id;
-  var year = 1979;
-  var to_year = -1;
-  var type = DOC.A;
-  var field = DOC.TITLE;
-  var keywords;
+  var ids = [];
+  var year=-1, type=-1, level=-1,field=-1,name='';
   function callback(data){}
   function load(){
-    var keywords_str = array2str(keywords);
     var deferred = $.ajax({
-      url : service_url + '/loadpanels',
-      data : {model_id:model_id,year:year,to_year:to_year,type:type,field:field,keywords:keywords_str},
+      url : service_url + '/loadtopicmodel',
+      data : {ids:ids,year:year,type:type,level:level,field:field,name:name},
       dataType: 'json',
-      success : function(data){
-        callback(data);
+      success : function(_){
+        data = _; callback(data);
       }
     });
     return Promise.resolve(deferred);
@@ -26,13 +20,12 @@ module.exports = exports = function(){
     return load();
   }
   ret.callback = function(_){return arguments.length > 0 ? (callback=_,ret):callback;};
-  ret.model_id = function(_){return arguments.length > 0 ? (model_id =_, ret):model_;};
   ret.data = function(){return data;};
+  ret.ids = function(_){return arguments.length > 0 ? (ids =_, ret) : ids;};
   ret.load = load;
   ret.year = function(_){return arguments.length > 0 ? (year = _, ret) : year;};
-  ret.to_year = function(_){return arguments.length > 0 ? (to_year = _, ret) : to_year;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
+  ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};
   ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
-  ret.keywords = function(_){return arguments.length > 0 ? (keywords = _, ret) : keywords;};
   return ret;
 };

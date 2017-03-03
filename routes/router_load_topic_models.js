@@ -22,7 +22,7 @@ module.exports = exports = function(req, res){
       if(level > 0) q.level = level;
       if(type > 0) q.type = type;
       if(field > 0) q.field = field;
-      if(name > 0) q.name = name;
+      if(name !== '') q.name = name;
       return q;
     }
   }

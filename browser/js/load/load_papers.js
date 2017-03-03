@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
+var array2str = require('./array2str');
 module.exports = exports = function(){
   var data;
   var model_id;
@@ -10,13 +11,7 @@ module.exports = exports = function(){
   var keywords;
   function callback(data){}
   function load(){
-    var keywords_str = '';
-    if(keywords && keywords.length > 0){
-      keywords_str = keywords.reduce(function(pre, cur){
-        if(pre === '') return cur;
-        else return pre + ',' + cur;
-      }, '');
-    }
+    var keywords_str = array2str(keywords);
     var deferred = $.ajax({
       url : service_url + '/loadpapers',
       data : {model_id:model_id,year:year,to_year:to_year,type:type,field:field,keywords:keywords_str},
