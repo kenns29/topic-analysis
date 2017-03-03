@@ -7,7 +7,7 @@ module.exports = exports = function(){
   function callback(data){}
   function load(){
     var deferred = $.ajax({
-      url : service_url + '/loadtopicmodel',
+      url : service_url + '/loadtopicmodels',
       data : {ids:ids,year:year,type:type,level:level,field:field,name:name},
       dataType: 'json',
       success : function(_){
