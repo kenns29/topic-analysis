@@ -72,7 +72,7 @@ function word_tree(){
     node_enter.append('text');
     var node_exit = node_sel.exit();
     if(!node_exit.empty()) node_exit.transition().duration(duration).attr('transform', function(d){
-      return 'translate('+[0, 0]+')';
+      return 'translate('+ (source ? :[source.y, source.x] : [0, 0]) +')';
     }).remove();
     var node_update = node_sel.merge(node_enter);
     node_update.select('text').attr('dominant-baseline', 'middle').attr('font-size', function(d){return d.font;})
@@ -103,7 +103,7 @@ function word_tree(){
     var link_sel = graph_g.selectAll('.link').data(links, function(d){return d.id;});
     var link_enter = link_sel.enter().append('path').attr('class', 'link')
     .attr('d', function(d){
-      var o = {x : 0, y:0};
+      var o = source ? {x:source.x,y:source.y}:{x:0,y:0};
       return diagonal(o, o);
     }).attr('fill', 'none')
     .attr('stroke', 'black')
