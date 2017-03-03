@@ -1,1 +1,1 @@
-module.exports = exports = 'models';
+module.exports = exports = 'models_test';
