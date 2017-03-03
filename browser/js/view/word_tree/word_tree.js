@@ -157,7 +157,7 @@ function word_tree(){
     } else {
       r = d.reverse ? hierarchy_reverse.root() : hierarchy_forward.root();
       op(d, r);
-      update_all(node._collapsed?node:node.parent);
+      update_all(node._collapsed?node:r);
     }
     function op(node, root){
       //if the node was collapsed before
