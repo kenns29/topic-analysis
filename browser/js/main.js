@@ -10,6 +10,9 @@ var MultiKeywordTimeline = require('./view/multi_keyword_timeline');
 global.multi_keyword_timeline = MultiKeywordTimeline().init();
 var WordTree = require('./view/word_tree');
 global.word_tree = WordTree().init();
+var TopicModelCompare = require('./view/topic_model_compare');
+global.topic_model_compare = TopicModelCompare().init();
+
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')
 require('./UI/btn_train_topics');
@@ -27,6 +30,6 @@ require('./UI/keyword_tab_nav');
 require('./UI/checkbox_timeline_brush');
 require('./UI/checkbox_timeline_percent');
 require('./init/draw_keyword_timelines')();
-require('./init/draw_model_compare')();
-// require('./init/draw_word_tree')();
+// require('./init/draw_model_compare')();
+require('./init/draw_word_tree')();
 // require('./UI/test');

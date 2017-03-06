@@ -143,7 +143,7 @@ module.exports = function(){
     var json = get_topics(num_words);
     return json.map(function(d, i){return {
       id : i,
-      topic : d
+      tokens : d
     };});
   }
   function get_topics(_){

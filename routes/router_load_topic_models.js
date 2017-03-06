@@ -39,6 +39,7 @@ module.exports = exports = function(req, res){
         type : m.type,
         field : m.field,
         name : m.name,
+        level : m.level,
         topics : topic_model.get_topics_with_id(20)
       };
     });

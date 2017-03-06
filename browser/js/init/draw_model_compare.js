@@ -5,6 +5,7 @@ module.exports = exports = function(){
   return co(function*(){
     var data = yield LoadTopicModels().level(DOC.P).type(DOC.A).field(DOC.TITLE).load();
     console.log('data', data);
+    global.topic_model_compare.models(data).update();
   }).catch(function(err){
     console.log(err);
   });
