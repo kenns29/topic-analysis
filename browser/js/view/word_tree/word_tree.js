@@ -27,6 +27,7 @@ function word_tree(){
   var last_id = 0;
   var duration = 700;
   var zoom;
+  var background;
   var tooltip;
   var partition_height;
   var node_x_space = 40;
@@ -41,12 +42,13 @@ function word_tree(){
     .attr('class', 'word-tree').attr('width', '100%').attr('height', '100%')
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", '0 0 '+width+' '+height);
+    background = svg.append('rect').attr('width', '100%').attr('height', '100%').attr('fill', 'white');
     graph_g = svg.append('g');
     zoom = d3.zoom().on('zoom', function(d){
       var x = d3.event.transform.x, y = d3.event.transform.y, k = d3.event.transform.k;
       graph_g.attr('transform', 'translate(' + [x, y] + ')scale('+k+')');
     });
-    svg.call(zoom);
+    background.call(zoom);
     tooltip = Tooltip().container(container).html(function(d){return d;})();
     loading = d3.select(container).select('.loading').node();
     return ret;
