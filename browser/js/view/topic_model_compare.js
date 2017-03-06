@@ -64,6 +64,9 @@ function year2index_factory(models){
     return year2index[year];
   };
 }
+function model_id_to_topic_nodes_factory(nodes){
+  
+}
 function flatten_topics(models){
   var topics = [];
   models.forEach(function(model){
