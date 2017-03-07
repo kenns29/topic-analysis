@@ -30,6 +30,6 @@ require('./UI/keyword_tab_nav');
 require('./UI/checkbox_timeline_brush');
 require('./UI/checkbox_timeline_percent');
 require('./init/draw_keyword_timelines')();
-// require('./init/draw_model_compare')();
+require('./init/draw_model_compare')();
 require('./init/draw_word_tree')();
 // require('./UI/test');
