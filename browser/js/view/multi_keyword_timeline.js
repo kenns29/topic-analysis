@@ -77,6 +77,10 @@ module.exports = exports = function(){
     timeline_update.select('.area').each(update_line);
     timeline_update.select('.area').call(area_mouseover);
     x_axis_g.call(x_axis);
+    x_axis_g.selectAll('.tick').select('text')
+    .attr('text-anchor', 'end').attr('dominant-baseline', 'hanging')
+    .attr('y', 3).attr('transform', 'translate(-6, 0)rotate(-45)');
+
     label_enter.on('click', function(d, i){
       remove_timeline(d.id);
       update();
