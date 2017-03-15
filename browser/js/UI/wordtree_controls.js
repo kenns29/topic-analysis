@@ -7,7 +7,7 @@ module.exports.disable_opts = disable_opts;
 module.exports.enable_opts = enable_opts;
 module.exports.init_year_select = function(){
   var start_year = 1979;
-  var end_year = 2003;
+  var end_year = 2014;
   d3.select('#keyword-tree-from-year').selectAll('option').data(d3.range(start_year, end_year+1, 1))
   .enter().append('option').attr('value', function(d){return d;})
   .html(function(d){return d;});

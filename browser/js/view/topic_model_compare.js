@@ -5,12 +5,15 @@ module.exports = exports = topic_model_compare;
 function topic_model_compare(){
   var container = '#model-compare-div';
   var nodes;
+  var links;
   var models;
   var x_space = 50;
   var y_space = 5;
   var node_width = 20, node_height = 10;
   var svg, width = 800, height = 400;
   var graph_g, W, H;
+
+  var model_id2nodes = [];
   function init(){
     svg = d3.select(container).append('svg')
     .attr('class', 'topic-model-compare').attr('width', '100%')
@@ -27,7 +30,6 @@ function topic_model_compare(){
     return ret;
   }
   function update(){
-    nodes = models2nodes(models);
     var node_sel = graph_g.selectAll('.node').data(nodes, function(d){return d.id;});
     var node_enter = node_sel.enter().append('g').attr('class', 'node');
     var node_exit = node_sel.exit();
@@ -42,7 +44,14 @@ function topic_model_compare(){
   var ret = {};
   ret.init = init;
   ret.update = update;
-  ret.models = function(_){return arguments.length > 0 ? (models=_, ret) : models;};
+  ret.models = function(_){
+    if(arguments.length > 0){
+      models = _;
+      nodes = models2nodes(models);
+      model_id2nodes = model_id2nodes_factory(nodes);
+      return ret;
+    } else return models;
+  };
   return ret;
 
   function models2nodes(models){
@@ -55,8 +64,11 @@ function topic_model_compare(){
     });
     return nodes;
   }
-}
 
+}
+function compute_links(nodes, model_id2nodes){
+
+}
 function year2index_factory(models){
   var year2index = [];
   models.forEach(function(d, i){year2index[d.year] = i;});
@@ -64,8 +76,14 @@ function year2index_factory(models){
     return year2index[year];
   };
 }
-function model_id_to_topic_nodes_factory(nodes){
-  
+function model_id2nodes_factory(nodes){
+  var model2nodes = [];
+  nodes.forEach(function(node){
+    var t = model2nodes[node.model_id];
+    if(!t) t = model2nodes[node.model_id] = [];
+    t.push(node);
+  })
+  return model2nodes;
 }
 function flatten_topics(models){
   var topics = [];
