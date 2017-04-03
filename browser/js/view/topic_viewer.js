@@ -1,6 +1,7 @@
 var d3 = require('../load_d3');
 var $ = require('jquery');
 var Tooltip = require('./tooltip');
+var controller_topic_selection = require('../control/controller_topic_selection')();
 var container = '#topic-viewer-div';
 var svg, width, height;
 var graph_g, W, H;
@@ -60,11 +61,8 @@ function update_labels(data){
     d3.select(this).transition().duration(duration).attr('width', rect_w).attr('height', rect_h)
     .attr('y', -rect_h/2);
   });
-  // label_update.on('mouseover', function(d){tooltip.show(svg.node(), d.id);})
-  // .on('mousemove', function(){tooltip.move(svg.node());})
-  // .on('mouseout', function(){tooltip.hide();});
   label_update.on('click', function(d){
-    global.topic_document_viewer.scroll_to_topic(d.id);
+    controller_topic_selection.select_topic(d.id);
   });
   return Promise.resolve();
 }
