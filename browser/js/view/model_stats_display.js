@@ -66,32 +66,9 @@ function update(){
   model_update.select('.num-topics').html(function(d){return d.num_topics;});
   model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
     controller_topic_model_selection.select_model(d);
-    // selected_model = d;
-    // model_update.filter(function(g){
-    //   return g.id !== d.id;
-    // }).select('.radio-td').select('.radio').select('input').each(function(){
-    //   this.checked = false;
-    // });
-    // co(function*(){
-    //   $(global.topic_viewer.loading()).show();
-    //   var topics = yield LoadTopicModel().id(d.id).load();
-    //   $(global.topic_viewer.loading()).hide();
-    //   yield global.topic_viewer.display_opt('weight').data(topics).update();
-    //   var data = yield global.topic_document_viewer.year(d.year).type(d.type).level(d.level).load();
-    //   global.topic_document_viewer.data(data).update();
-    // }).catch(function(err){
-    //   console.log(err);
-    //   $(global.topic_viewer.loading()).hide();
-    // });
   });
   model_update.select('.trash').select('i').on('click', function(d, i){
     controller_topic_model_selection.delete_model(d);
-    // DeleteTopicModel().id(d.id).load().then(function(status){
-    //     data.splice(i, 1); update();
-    // }).catch(function(err){
-    //   console.log(err);
-    //   alert('did not delete the model successfully');
-    // });
   });
   return ret;
 }

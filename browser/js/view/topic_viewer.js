@@ -64,22 +64,7 @@ function update_labels(data){
   // .on('mousemove', function(){tooltip.move(svg.node());})
   // .on('mouseout', function(){tooltip.hide();});
   label_update.on('click', function(d){
-    var nodes = global.topic_document_viewer.documents()._groups[0];
-    var top = 0;
-    var documents_container = global.topic_document_viewer.container();
-    if(nodes){
-      for(let i = 0; i < nodes.length; i++){
-        let node = nodes[i];
-        let dat = node.__data__;
-        if(Number(dat.topic) == Number(d.id)){
-          top = $(node).position().top + $(documents_container).scrollTop();
-          break;
-        }
-      }
-    }
-    $(documents_container).animate({
-      scrollTop : top
-    }, 1000);
+    global.topic_document_viewer.scroll_to_topic(d.id);
   });
   return Promise.resolve();
 }
