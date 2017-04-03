@@ -183,11 +183,6 @@ function word_tree(){
 
   function mouseover(element){
     element.on('mouseover', function(d){
-      // var content = d.data.tokens[0].text + ', value ' + d.value + ', count ' + d.data.count;
-      // var format = d3.format('.1f')
-      // var content = format(d.x0) + ' , ' + format(d.x1);
-      // var content = format(d.font) + ' , ' + format(d._font);
-      // var content = format(d.size) + ' , ' + format(d.value);
       var html = content(d);
       tooltip.show(d3.select(container).node(), html);
     }).on('mousemove', function(){
