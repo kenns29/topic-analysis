@@ -11,7 +11,7 @@ module.exports = exports = function(_container){
 	function init(){
 		tooltip = d3.select(container)
 		.append('div')
-		.style("z-index","99")
+		.style("z-index","9999999")
 		.style('opacity', 0)
 		.style('position', 'absolute')
 		.style('text-align', 'center')
