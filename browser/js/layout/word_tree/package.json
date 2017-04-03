@@ -1,0 +1,4 @@
+{
+  "name" : "word_tree",
+  "main" : "./word_tree.js"
+}
