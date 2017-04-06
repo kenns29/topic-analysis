@@ -80,10 +80,8 @@ module.exports = exports = function(){
     x_axis_g.selectAll('.tick').select('text')
     .attr('text-anchor', 'end').attr('dominant-baseline', 'hanging')
     .attr('y', 3).attr('transform', 'translate(-6, 0)rotate(-45)');
-
     label_enter.on('click', function(d, i){
-      remove_timeline(d.id);
-      update();
+      global.controller_keyword.remove_keyword_timeline(d.id);
     });
     if(brushes.is_activated())brushes.activate();
     var t = d3.transition().duration(duration);
@@ -169,10 +167,6 @@ module.exports = exports = function(){
       --i;
     }
     brushes.remove(id);
-    if(brushes.is_activated())
-      global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
-      .year(brushes.domain()[0]).to_year(brushes.domain()[1])
-      .update();
     return ret;
   }
   var ret = {};

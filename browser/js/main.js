@@ -13,7 +13,9 @@ global.word_tree = WordTree().init();
 var TopicModelCompare = require('./view/topic_model_compare');
 global.topic_model_compare = TopicModelCompare().init();
 
-global.controller_keyword_document_viewer = require('./control/controller_keyword_document_viewer')()
+//Controlllers
+global.controller_keyword_document_viewer = require('./control/controller_keyword_document_viewer')();
+global.controller_keyword = require('./control/controller_keyword')();
 
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')

@@ -38,6 +38,8 @@ module.exports = exports = function(){
     // load().then(function(data){
     //   update();
     // });
+    var update_all_keyword_timeline = global.controller_keyword.update_all_keyword_timeline;
+    var insert_keyword_timeline = global.controller_keyword.insert_keyword_timeline;
     $('#keyword-select-div #btn-add-word').click(function(){
       insert_keyword_timeline($('#keyword-select-div #textbox-keyword').val());
     });
@@ -58,49 +60,3 @@ module.exports = exports = function(){
   ret.enable_opts = enable_opts;
   return ret;
 };
-function update_all_keyword_timeline(){
-  var flag = get_flags();
-  var data = global.multi_keyword_timeline.data();
-  var loading = global.multi_keyword_timeline.loading();
-  global.multi_keyword_timeline.percent(flag.percent);
-  co(function*(){
-    $(loading).show();
-    for(let i = 0; i < data.length; i++){
-      let keyword = data[i].id;
-      let line_data = yield LoadKeywordTimelineData().type(flag.type).level(flag.level)
-      .percent(flag.percent).metric(flag.metric).load(keyword);
-      global.multi_keyword_timeline.replace_timeline(line_data);
-    }
-    $(loading).hide();
-    yield global.multi_keyword_timeline.update();
-    var brushes = global.multi_keyword_timeline.brushes();
-    if(brushes.is_activated()){
-      global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
-      .year(brushes.domain()[0]).to_year(brushes.domain()[1])
-      .update();
-    }
-  }).catch(function(err){
-    console.log(err);
-  });
-}
-function insert_keyword_timeline(keyword){
-  if(keyword !== null && keyword !== undefined && keyword !== ''){
-    keyword = keyword.toLowerCase();
-    var flag = get_flags();
-    var level = flag.level, type = flag.type, field = flag.field, percent = flag.percent,
-    metric = flag.metric;
-    co(function*(){
-      var line_data = yield LoadKeywordTimelineData().type(type).level(level).percent(percent).metric(metric).load(keyword);
-      var brushes = global.multi_keyword_timeline.brushes();
-      yield global.multi_keyword_timeline.add_timeline(line_data).update();
-      var data = global.multi_keyword_timeline.data();
-      if(brushes.is_activated()){
-        global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
-        .year(brushes.domain()[0]).to_year(brushes.domain()[1])
-        .update();
-      }
-    }).catch(function(err){
-      console.log(err);
-    });
-  }
-}
