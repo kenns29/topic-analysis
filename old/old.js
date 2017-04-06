@@ -46,3 +46,12 @@ var aggr = yield col.aggregate([
 	{$group : {_id : '$year', count : {$sum : 1}}},
 	{$sort : {_id : 1}}
 ]).toArray();
+
+var text_scale = d3.scaleThreshold()
+.domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
+.range([ 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ]);
+var tiny_text_scale = d3.scaleThreshold()
+.domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
+.range([ 0, 15, 20, 25, 30, 35, 40, 45, 50, 55 ].map(function(d) {
+  return d * 0.5;
+}));

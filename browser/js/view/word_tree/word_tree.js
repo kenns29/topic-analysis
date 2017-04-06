@@ -6,15 +6,6 @@ var Partition = require('./partition');
 var count2font_factory = require('./count2font');
 var SIZE = require('./size');
 module.exports = exports = word_tree;
-
-var text_scale = d3.scaleThreshold()
-.domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
-.range([ 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ]);
-var tiny_text_scale = d3.scaleThreshold()
-.domain([ 1, 2, 3, 4, 5, 10, 20, 30, 40 ])
-.range([ 0, 15, 20, 25, 30, 35, 40, 45, 50, 55 ].map(function(d) {
-  return d * 0.5;
-}));
 var margin = {top:20, right:120, bottom:20, left:120};
 width = SIZE[0], height = SIZE[1];
 function word_tree(){
@@ -39,10 +30,11 @@ function word_tree(){
   var loading;
   function init(){
     svg = d3.select(container).append('svg')
-    .attr('class', 'word-tree').attr('width', '100%').attr('height', '100%')
+    .attr('class', 'word-tree').style('width', '100%').style('height', '100%')
+    .style('position', 'relative')
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", '0 0 '+width+' '+height);
-    background = svg.append('rect').attr('width', '100%').attr('height', '100%').attr('fill', 'white');
+    background = svg.append('rect').style('width', '100%').style('height', '100%').attr('fill', 'white');
     graph_g = svg.append('g');
     zoom = d3.zoom().on('zoom', function(d){
       var x = d3.event.transform.x, y = d3.event.transform.y, k = d3.event.transform.k;

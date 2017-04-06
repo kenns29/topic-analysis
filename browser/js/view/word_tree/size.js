@@ -1,1 +1,1 @@
-module.exports = exports = [800, 1200];
+module.exports = exports = [1100, 1200];
