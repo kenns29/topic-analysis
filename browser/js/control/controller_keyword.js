@@ -63,6 +63,7 @@ function remove_keyword_timeline(keyword){
     co(function*(){
       global.multi_keyword_timeline.remove_timeline(keyword);
       yield global.multi_keyword_timeline.update();
+      var data = global.multi_keyword_timeline.data();
       var brushes = global.multi_keyword_timeline.brushes();
       if(brushes.is_activated())
         global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
