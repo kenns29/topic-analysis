@@ -3,7 +3,6 @@ var d3 = require('../load_d3');
 var DOC = require('../../../flags/doc_flags');
 var LoadTfidf = require('../load/load_tfidf');
 var LoadKeywordTimelineData = require('../load/load_keyword_timeline_data');
-var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
 var KeywordSelectControls = require('./keyword_select_controls');
 var co = require('co');
 var get_flags = KeywordSelectControls.get_flags;
@@ -76,8 +75,9 @@ function update_all_keyword_timeline(){
     yield global.multi_keyword_timeline.update();
     var brushes = global.multi_keyword_timeline.brushes();
     if(brushes.is_activated()){
-      UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
-      .update_domain(global.multi_keyword_timeline.brushes().domain());
+      global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
+      .year(brushes.domain()[0]).to_year(brushes.domain()[1])
+      .update();
     }
   }).catch(function(err){
     console.log(err);
@@ -89,9 +89,16 @@ function insert_keyword_timeline(keyword){
     var flag = get_flags();
     var level = flag.level, type = flag.type, field = flag.field, percent = flag.percent,
     metric = flag.metric;
-    LoadKeywordTimelineData().type(type).level(level).percent(percent).metric(metric)
-    .load(keyword).then(function(data){
-      global.multi_keyword_timeline.add_timeline(data).update();
+    co(function*(){
+      var line_data = yield LoadKeywordTimelineData().type(type).level(level).percent(percent).metric(metric).load(keyword);
+      var brushes = global.multi_keyword_timeline.brushes();
+      yield global.multi_keyword_timeline.add_timeline(line_data).update();
+      var data = global.multi_keyword_timeline.data();
+      if(brushes.is_activated()){
+        global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
+        .year(brushes.domain()[0]).to_year(brushes.domain()[1])
+        .update();
+      }
     }).catch(function(err){
       console.log(err);
     });

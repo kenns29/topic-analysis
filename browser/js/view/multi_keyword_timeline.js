@@ -4,7 +4,7 @@ var Tooltip = require('./tooltip');
 var LoadPapers = require('../load/load_papers');
 var LoadPanels = require('../load/load_panels');
 var KeywordSelect = require('../UI/keyword_select');
-var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
+// var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
 var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
@@ -147,9 +147,6 @@ module.exports = exports = function(){
       data.push(line_data);
       brushes.add(line_data.id);
     }
-    if(brushes.is_activated())
-      UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
-      .update_domain(brushes.domain());
     return ret;
   }
   function replace_timeline(line_data){
@@ -173,8 +170,9 @@ module.exports = exports = function(){
     }
     brushes.remove(id);
     if(brushes.is_activated())
-      UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
-      .update_domain(brushes.domain());
+      global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
+      .year(brushes.domain()[0]).to_year(brushes.domain()[1])
+      .update();
     return ret;
   }
   var ret = {};
@@ -249,8 +247,10 @@ module.exports = exports = function(){
         if(d3.event.selection){
           domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
           extent = domain.map(x_scale);
-          UpdateKeywordDocumentViewer().keywords(data.map(function(d){return d.id;}))
-          .update_domain(domain);
+          global.controller_keyword_document_viewer
+          .keywords(data.map(function(d){return d.id;}))
+          .year(domain[0]).to_year(domain[1])
+          .update();
         }
       });
       return brush;
