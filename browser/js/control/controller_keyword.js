@@ -43,7 +43,9 @@ function insert_keyword_timeline(keyword){
     var level = flag.level, type = flag.type, field = flag.field, percent = flag.percent,
     metric = flag.metric;
     co(function*(){
+      $(global.multi_keyword_timeline.loading()).show()
       var line_data = yield LoadKeywordTimelineData().type(type).level(level).percent(percent).metric(metric).load(keyword);
+      $(global.multi_keyword_timeline.loading()).hide();
       var brushes = global.multi_keyword_timeline.brushes();
       yield global.multi_keyword_timeline.add_timeline(line_data).update();
       var data = global.multi_keyword_timeline.data();
@@ -53,6 +55,7 @@ function insert_keyword_timeline(keyword){
         .update();
       }
     }).catch(function(err){
+      $(global.multi_keyword_timeline.loading()).hide();
       console.log(err);
     });
   }
@@ -65,10 +68,11 @@ function remove_keyword_timeline(keyword){
       yield global.multi_keyword_timeline.update();
       var data = global.multi_keyword_timeline.data();
       var brushes = global.multi_keyword_timeline.brushes();
-      if(brushes.is_activated())
+      if(brushes.is_activated()){
         global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
         .year(brushes.domain()[0]).to_year(brushes.domain()[1])
         .update();
+      }
     }).catch(function(err){
       console.log(err);
     });
