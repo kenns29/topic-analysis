@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
+var service_url = require('../service');
 module.exports = exports = function(){
   var data;
   var num_topics = 10;

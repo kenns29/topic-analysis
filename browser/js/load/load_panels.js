@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
 var array2str = require('./array2str');
+var service_url = require('../service');
 module.exports = exports = function(){
   var data;
   var model_id;

@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var service_url = require('../service');
 module.exports = exports = function(){
   var data;
   function callback(data){}

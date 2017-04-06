@@ -1,4 +1,3 @@
-global.service_url = require('./service');
 global.UI_year_select = require('./UI/year_select');
 var TopicDocumentViewer = require('./view/document_viewer/topic_document_viewer');
 global.topic_document_viewer = TopicDocumentViewer().init();

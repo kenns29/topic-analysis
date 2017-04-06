@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
 var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
+var service_url = require('../service');
 module.exports = exports = function(){
   var data;
   var type = DOC.A;
