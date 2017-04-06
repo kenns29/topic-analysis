@@ -156,6 +156,23 @@ module.exports = exports = function(){
     }
     return data;
   }
+  function scroll_to_topic(topic){
+    var nodes = ret.documents().nodes();
+    var top = 0;
+    if(nodes){
+      for(let i = 0; i < nodes.length; i++){
+        let node = nodes[i];
+        let dat = d3.select(node).data()[0];
+        if(Number(dat.topic) == Number(topic)){
+          top = $(node).position().top + $(container).scrollTop();
+          break;
+        }
+      }
+    }
+    $(container).animate({
+      scrollTop : top
+    }, 1000);
+  }
   var ret = {};
   ret.container = function(_){return arguments.length > 0 ? (container = _, ret) : container;};
   ret.init = init;
@@ -176,5 +193,6 @@ module.exports = exports = function(){
   ret.loading = function(){return loading;};
   ret.load = load;
   ret.documents = function(){return d3.select(container).selectAll('.document');};
+  ret.scroll_to_topic = scroll_to_topic;
   return ret;
 };

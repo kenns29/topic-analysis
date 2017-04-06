@@ -33,3 +33,4 @@ require('./init/draw_keyword_timelines')();
 // require('./init/draw_model_compare')();
 require('./init/draw_word_tree')();
 // require('./UI/test');
+require('./test_code/safe_load_test');
