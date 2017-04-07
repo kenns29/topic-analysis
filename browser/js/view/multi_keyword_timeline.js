@@ -83,7 +83,6 @@ module.exports = exports = function(){
     label_enter.on('click', function(d, i){
       global.controller_keyword.remove_keyword_timeline(d.id);
     });
-    if(brushes.is_activated())brushes.activate();
     var t = d3.transition().duration(duration);
     var t1 = function(){
       return new Promise(function(resolve, reject){

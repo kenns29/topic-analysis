@@ -28,6 +28,7 @@ function update_all_keyword_timeline(){
     yield global.multi_keyword_timeline.update();
     var brushes = global.multi_keyword_timeline.brushes();
     if(brushes.is_activated()){
+      brushes.activate();
       global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
       .year(brushes.domain()[0]).to_year(brushes.domain()[1])
       .update();
@@ -50,6 +51,7 @@ function insert_keyword_timeline(keyword){
       yield global.multi_keyword_timeline.add_timeline(line_data).update();
       var data = global.multi_keyword_timeline.data();
       if(brushes.is_activated()){
+        brushes.activate();
         global.controller_keyword_document_viewer.keywords(data.map(function(d){return d.id;}))
         .year(brushes.domain()[0]).to_year(brushes.domain()[1])
         .update();
