@@ -57,7 +57,6 @@ function insert_keyword_timeline(keyword){
         .update();
       }
     }).catch(function(err){
-      $(global.multi_keyword_timeline.loading()).hide();
       console.log(err);
     });
   }

@@ -84,7 +84,6 @@ function word_tree(){
     });
 
     //update the layout
-    // width = $(container).width(), height = $(container).height();
     var layout_height_forward = hierarchy_forward.height() > height ? hierarchy_forward.height() : height;
     var layout_height_reverse = hierarchy_reverse.height() > height ? hierarchy_reverse.height() : height;
     var partition_forward = Partition().hierarchy(hierarchy_forward).reverse(false).height(layout_height_forward).width(width/2).update();
