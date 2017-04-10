@@ -22,6 +22,7 @@
     "fs-promise": "^1.0.0",
     "intercept-stdout": "^0.1.2",
     "java": "*",
+    "jison": "^0.4.17",
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
     "mongodb": "^2.2.22",
