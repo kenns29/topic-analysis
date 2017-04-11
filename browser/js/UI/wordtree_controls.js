@@ -7,13 +7,15 @@ module.exports.disable_opts = disable_opts;
 module.exports.enable_opts = enable_opts;
 module.exports.init_year_select = function(){
   var start_year = 1979;
-  var end_year = 2014;
+  var end_year = 2017;
   d3.select('#keyword-tree-from-year').selectAll('option').data(d3.range(start_year, end_year+1, 1))
   .enter().append('option').attr('value', function(d){return d;})
   .html(function(d){return d;});
   d3.select('#keyword-tree-to-year').selectAll('option').data(d3.range(start_year, end_year+1, 1))
   .enter().append('option').attr('value', function(d){return d;})
   .html(function(d){return d;});
+  d3.select('#keyword-tree-from-year').selectAll('option').filter(function(d){return d == 2000;})
+  .attr('selected', '');
   d3.select('#keyword-tree-to-year').selectAll('option').filter(function(d){return d === end_year;})
   .attr('selected', '');
 };
