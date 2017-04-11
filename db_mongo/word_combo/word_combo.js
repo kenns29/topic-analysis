@@ -3,7 +3,7 @@ var plain2ur = require('./plain2ur');
 var ur2hr = require('./ur2hr');
 var ur2plain = require('./ur2plain');
 var hr2ur = require('./hr2ur');
-var ur2parse = require('./ur2parse');
+var ur2parsed = require('./ur2parsed');
 module.exports = exports = word_combo;
 
 function word_combo(){
@@ -22,7 +22,7 @@ function word_combo(){
   ret.ur2plain = ur2plain;
   ret.hr2ur = hr2ur;
   ret.plain2ur = plain2ur;
-  ret.ur2parse = ur2parse;
+  ret.ur2parsed = ur2parsed;
   ret.parser = function(){return parser;}
   return ret;
 }

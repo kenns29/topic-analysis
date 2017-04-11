@@ -1,7 +1,7 @@
 var $ = require('jquery');
 var d3 = require('../load_d3');
-var start_year = 1975;
-var end_year = 2015;
+var start_year = 1979;
+var end_year = 2017;
 var from_select = '#from-year';
 var to_select = '#to-year';
 function init(){
