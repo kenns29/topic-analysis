@@ -1,9 +1,9 @@
 module.exports = exports = hr2ur;
 function hr2ur(hr){
-  var hr = ur.replace(/--or--/g, '/');
-  hr = hr.replace(/--and--/g, '&');
-  hr = hr.replace(/--not--/g, '^');
-  hr = hr.replace(/--LP--/g, '(');
-  hr = hr.replace(/--RP--/g, ')');
-  return hr;
+  var ur = hr.replace(/--or--/g, '/');
+  ur = ur.replace(/--and--/g, '&');
+  ur = ur.replace(/--not--/g, '^');
+  ur = ur.replace(/--LP--/g, '(');
+  ur = ur.replace(/--RP--/g, ')');
+  return ur;
 }

@@ -1,5 +1,5 @@
 var KeywordSelectControls = require('../UI/keyword_select_controls');
-var SafeLoad = require('../safe_load')();
+var SafeLoad = require('../safe_load');
 module.exports = exports = function(){
   var safe_load = SafeLoad();
   var keywords = [];

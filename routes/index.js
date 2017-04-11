@@ -8,6 +8,7 @@ var router_delete_topic_model = require('./router_delete_topic_model');
 var router_load_tfidf = require('./router_load_tfidf');
 var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_data');
 var router_load_word_tree = require('./router_load_word_tree');
+var router_test = require('./router_test');
 var express = require('express');
 module.exports = exports = function(passport){
   var router = express.Router();
@@ -49,5 +50,6 @@ module.exports = exports = function(passport){
   router.get('/loadtfidf', router_load_tfidf);
   router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data);
   router.get('/loadwordtree', router_load_word_tree);
+  router.get('/test', router_test);
   return router;
 };
