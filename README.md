@@ -54,6 +54,7 @@ You don't have to do it manually, becase I have included this command in our npm
 npm install java
 ```
 **Important For Windows Users**
+
 Installing the node-java library can be a bit tricky on windows. First you will need to have node-gyp installed
 ```
 npm install -g node-gyp
@@ -65,6 +66,7 @@ npm install --global windows-build-tools
 It will take a while.
 
 **java codes**
+
 I have wrapped up all the javacode inside _/jars/nlptoolkit.jar_. This file contained the precompiled java code from my other project [nlptoolkit](http://vaderserver0.cidse.dhcp.asu.edu:10000/hxwang/nlptoolkit). All it does is just wrapping up some NLP libraries, along with some helper functions. It also contains a slightly modifed Mallet library. Ask me for developer access if you think you need to add more functionalities on this code.
 
 ## <a name = "run"></a>Things to Run
@@ -79,12 +81,38 @@ It will install all necessary dependencies for our project. If you are not famil
 ```
 npm install --save [library]
 ```
-**Important**
+**Important:**
 the _--save_ options adds the library you installed to the _dependencies_ field. This is **very important** because it allow others to know which libraries you have used.
 
 #### Building and Debugging
 
-After installing all the dependencies, now please take a look at _scripts_ field in _package.json_. These are our **_npm scripts_**.
+After installing all the dependencies, now please take a look at _scripts_ field in _package.json_. These are our **_npm scripts_**. Each can be executed by
+```
+npm run [command-name]
+```
+
+I will explain them one by one:
+
+```json
+"scripts": {
+  "build-js": "browserify browser/js/main.js -o public/bundle.js -t [babelify --presets [es2015 async-to-generator async-generator-functions]]",
+  "build": "npm run build-js & npm run build-css",
+  "watch-js": "watchify browser/js/main.js -o public/bundle.js -dv",
+  "watch": "npm run watch-js",
+  "start": "node app.js",
+  "build-css": "sass browser/css/main.scss:public/css/main.css --style compressed",
+  "watch-css": "sass --watch browser/css/main.scss:public/css/main.css --style compressed"
+}
+```
+**build-js** uses browserify to bundle our front-end javascript codes into _/public/bundle.js_.
+**build-css** uses sass to bundle our css into _/public/css/main.css_.
+**build** builds both javascript and css.
+**watch-js** uses watchify to watch for any changes made to the front-end javascript code and update _/public/bundle.js_.
+**watch-css** uses sass to watch for any changes made to the css and updates _/public/css/main.css_.
+**watch** watchs the javascript.
+**start** starts the back-end server which listens to port 10082.
+
+Typically, during development, you want to open two terminal, one does ```npm run watch-js``` and the other does ```npm run watch-css```
 ## <a name = "learn"></a>Things to Learn
 
 ## <a name = "mvc"></a>A little about MVC
