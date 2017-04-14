@@ -6,7 +6,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Things to Install](#install)
 * [Development Environment](#environment)
 * [Project Structure](#structure)
-* [Access the database](#database)
+* [Access the Database](#database)
 * [A little about MVC](#MVC)
 * [Things to Learn](#learn)
 
@@ -81,7 +81,10 @@ gem install sass
 
 ### <a name = "bower"></a>bower
 
-[bower](https://bower.io/) is another package manager for front-end libraries. Although it can be used for everything, we are only using this to install css libraries for our project.
+[bower](https://bower.io/) is another package manager for front-end libraries. Although it can be used for everything, we are only using this to install css libraries for our project. Install bower by:
+```
+npm install -g bower
+```
 
 ## <a name = "environment"></a>Development Environment
 
@@ -166,6 +169,10 @@ package.json
 * **views/** stores the rendering components. We use [ejs](https://www.npmjs.com/package/ejs) as our view engine, which has a syntax similar to html.
 * **public/** stores the static content for the website, such as the bundled javascript and css files.
 * **browser/** is where most of the front-end codes are stored. _browser/css_ stores the css code and _browser/js_ stores the javascript codes. The _main.js_ file is the entry point of all front-end javascript codes.
+
+## <a name = "database"></a> Access the Database
+
+[MongoDB](https://www.mongodb.com/) is the database we use.
 
 ## <a name = "mvc"></a>A little about MVC
 
