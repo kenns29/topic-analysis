@@ -5,9 +5,9 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Get the project](#git)
 * [Things to Install](#install)
 * [Things to Run](#run)
-* [Things to Learn](#learn)
-* [Managing the Project](#manage)
 * [Access the database](#database)
+* [Project Structure](#structure)
+* [Things to Learn](#learn)
 * [A little about MVC](#MVC)
 
 ## <a name = "git"></a>Get the project
@@ -81,8 +81,7 @@ It will install all necessary dependencies for our project. If you are not famil
 ```
 npm install --save [library]
 ```
-**Important:**
-the _--save_ options adds the library you installed to the _dependencies_ field. This is **very important** because it allow others to know which libraries you have used.
+**Important:** the _--save_ options adds the library you installed to the _dependencies_ field. This is **very important** because it allow others to know which libraries you have used.
 
 #### Building and Debugging
 
@@ -105,14 +104,41 @@ I will explain them one by one:
 }
 ```
 **build-js** uses browserify to bundle our front-end javascript codes into _/public/bundle.js_.
+
 **build-css** uses sass to bundle our css into _/public/css/main.css_.
+
 **build** builds both javascript and css.
+
 **watch-js** uses watchify to watch for any changes made to the front-end javascript code and update _/public/bundle.js_.
+
 **watch-css** uses sass to watch for any changes made to the css and updates _/public/css/main.css_.
+
 **watch** watchs the javascript.
+
 **start** starts the back-end server which listens to port 10082.
 
-Typically, during development, you want to open two terminal, one does ```npm run watch-js``` and the other does ```npm run watch-css```
+Typically, during development, you want to open two terminal, one does ```npm run watch-js``` and the other does ```npm run watch-css```, this will make sure all changes you made to the front-end can take effect when you refresh the webpage. And you want to redo ```npm start``` everytime you made any changes to the backend.
+
+## <a name = "structure"></a> Project Structure
+
+The project may look like it has a lot of folders, but essentially, it has only a few major components:
+```
+browser/
+  css/
+  js/
+public/
+  css/
+  bundle.js
+  ...
+views/
+  index.ejs
+  ...
+app.js
+package.json
+... /* other modules and resources */
+```
+
+
 ## <a name = "learn"></a>Things to Learn
 
 ## <a name = "mvc"></a>A little about MVC
