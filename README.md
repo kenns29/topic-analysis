@@ -45,15 +45,15 @@ To install browserify, you can do:
 npm install -g browserify watchify
 ```
 
-Note that npm is the package manager for nodejs, you should also be familiar with it. This command also installs watchify, which is a plugin for browserify, you can learn more about it in [https://github.com/substack/watchify](https://github.com/substack/watchify).
+Note that **npm** is the package manager for nodejs, you should also be familiar with it. This command also installs **watchify**, which is a plugin for browserify, you can learn more about it in [https://github.com/substack/watchify](https://github.com/substack/watchify).
 #### <a name = "node-java">node-java
-Although we use nodejs primarily, we still have to use some java libraries for some NLP tasks, such as [StanfordCoreNLP](https://stanfordnlp.github.io/CoreNLP/) and [Mallet](http://mallet.cs.umass.edu/). To communicate between nodejs and java, we used the [node-java library](https://github.com/joeferner/node-java). You should try to get familar with it. Please use the module inside java/java_init.js to load the library and the java codes.
+Although we use nodejs primarily, we still have to use some java libraries for some NLP tasks, such as [StanfordCoreNLP](https://stanfordnlp.github.io/CoreNLP/) and [Mallet](http://mallet.cs.umass.edu/). To communicate between nodejs and java, we used the [node-java library](https://github.com/joeferner/node-java). You should try to get familar with it. Please use the module inside _java/java_init.js_ to load the library and the java codes.
 
 You don't have to do it manually, becase I have included this command in our npm script (I will cover later). But if you really want, you can do
 ```
 npm install java
 ```
-
+**Important For Windows Users**
 Installing the node-java library can be a bit tricky on windows. First you will need to have node-gyp installed
 ```
 npm install -g node-gyp
@@ -64,11 +64,27 @@ npm install --global windows-build-tools
 ```
 It will take a while.
 
-#### java codes
-I have wrapped up all the javacode inside /jars/nlptoolkit.jar. This file contained the precompiled java code from my other project [nlptoolkit](http://vaderserver0.cidse.dhcp.asu.edu:10000/hxwang/nlptoolkit). All it does is just wrapping up some NLP libraries, along with some helper functions. It also contains a slightly modifed Mallet library. Ask me for developer access if you think you need to add more functionalities on this code.
+**java codes**
+I have wrapped up all the javacode inside _/jars/nlptoolkit.jar_. This file contained the precompiled java code from my other project [nlptoolkit](http://vaderserver0.cidse.dhcp.asu.edu:10000/hxwang/nlptoolkit). All it does is just wrapping up some NLP libraries, along with some helper functions. It also contains a slightly modifed Mallet library. Ask me for developer access if you think you need to add more functionalities on this code.
 
 ## <a name = "run"></a>Things to Run
 
+#### Installing Dependencies
+
+After all the necessary compoments are installed, you should run
+```
+npm install
+```
+It will install all necessary dependencies for our project. If you are not familar with npm. I suggest you take a look at our _package.json_ file. The _dependencies_ field describes all the node libraries we are using. If you want to install additional libraries, please do
+```
+npm install --save [library]
+```
+**Important**
+the _--save_ options adds the library you installed to the _dependencies_ field. This is **very important** because it allow others to know which libraries you have used.
+
+#### Building and Debugging
+
+After installing all the dependencies, now please take a look at _scripts_ field in _package.json_. These are our **_npm scripts_**.
 ## <a name = "learn"></a>Things to Learn
 
 ## <a name = "mvc"></a>A little about MVC

@@ -1,7 +1,7 @@
 {
-  "name": "hong",
+  "name": "Topic Analysis",
   "version": "0.0.1",
-  "description": "universal dependencies",
+  "description": "Analyze Topics",
   "dependencies": {
     "assert": "^1.4.1",
     "atob": "^2.0.3",
