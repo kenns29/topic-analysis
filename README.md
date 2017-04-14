@@ -34,10 +34,22 @@ In order to get started on the project, there are a few things you will have to 
 * [browserify](#browserify)
 * [node-java](#node-java)
 
-#### nodejs
-Our backend used nodejs, you can install it
-#### browserify
-#### node-java
+#### <a name = "nodejs"></a>nodejs
+Our backend used nodejs, you can install it from [https://nodejs.org/](https://nodejs.org/).
+#### <a name = "browserify"></a>browserify
+Our frontend javascript is bundled using browserify, which is a nodejs library, you should learn more about it in [http://browserify.org/](http://browserify.org/).
+
+To install browserify, you can do:
+
+```
+npm install -g browserify watchify
+```
+
+Note that npm is the package manager for nodejs, you should also be familiar with it. This command also installs watchify, which is a plugin for browserify, you can learn more about it in [https://github.com/substack/watchify](https://github.com/substack/watchify).
+#### <a name = "node-java">node-java
+Although we use nodejs primarily, we still have to use some java libraries for some NLP tasks, such as [StanfordCoreNLP](https://stanfordnlp.github.io/CoreNLP/) and [Mallet](http://mallet.cs.umass.edu/). To communicate between nodejs and java, we
+
+I have wrapped up all the javacode inside /jars/nlptoolkit.jar. You should be able to find
 
 ## <a name = "run"></a>Things to run
 
