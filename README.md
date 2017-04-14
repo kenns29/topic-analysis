@@ -5,7 +5,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Get the project](#git)
 * [Things to Install](#install)
 * [Things to Run](#run)
-* [Things to look](#learn)
+* [Things to Learn](#learn)
 * [Managing the Project](#manage)
 * [Access the database](#database)
 * [A little about MVC](#MVC)
@@ -47,12 +47,28 @@ npm install -g browserify watchify
 
 Note that npm is the package manager for nodejs, you should also be familiar with it. This command also installs watchify, which is a plugin for browserify, you can learn more about it in [https://github.com/substack/watchify](https://github.com/substack/watchify).
 #### <a name = "node-java">node-java
-Although we use nodejs primarily, we still have to use some java libraries for some NLP tasks, such as [StanfordCoreNLP](https://stanfordnlp.github.io/CoreNLP/) and [Mallet](http://mallet.cs.umass.edu/). To communicate between nodejs and java, we
+Although we use nodejs primarily, we still have to use some java libraries for some NLP tasks, such as [StanfordCoreNLP](https://stanfordnlp.github.io/CoreNLP/) and [Mallet](http://mallet.cs.umass.edu/). To communicate between nodejs and java, we used the [node-java library](https://github.com/joeferner/node-java). You should try to get familar with it. Please use the module inside java/java_init.js to load the library and the java codes.
 
-I have wrapped up all the javacode inside /jars/nlptoolkit.jar. You should be able to find
+You don't have to do it manually, becase I have included this command in our npm script (I will cover later). But if you really want, you can do
+```
+npm install java
+```
 
-## <a name = "run"></a>Things to run
+Installing the node-java library can be a bit tricky on windows. First you will need to have node-gyp installed
+```
+npm install -g node-gyp
+```
+But installing this requires you to have python and c++ compiler (usually the one comes with Visual Studio), so it may throw you an error if you don't have these installed. If you don't want to install all these manuallly, I suggest you use [Windows-Build-Tools](https://github.com/felixrieseberg/windows-build-tools). You can install this simply by:
+```
+npm install --global windows-build-tools
+```
+It will take a while.
 
-## <a name = "learn"></a>Things to look
+#### java codes
+I have wrapped up all the javacode inside /jars/nlptoolkit.jar. This file contained the precompiled java code from my other project [nlptoolkit](http://vaderserver0.cidse.dhcp.asu.edu:10000/hxwang/nlptoolkit). All it does is just wrapping up some NLP libraries, along with some helper functions. It also contains a slightly modifed Mallet library. Ask me for developer access if you think you need to add more functionalities on this code.
+
+## <a name = "run"></a>Things to Run
+
+## <a name = "learn"></a>Things to Learn
 
 ## <a name = "mvc"></a>A little about MVC
