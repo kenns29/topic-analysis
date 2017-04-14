@@ -6,7 +6,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Things to Install](#install)
 * [Development Environment](#environment)
 * [Project Structure](#structure)
-* [Access the Database](#database)
+* [Database](#database)
 * [A little about MVC](#MVC)
 * [Things to Learn](#learn)
 
@@ -170,9 +170,27 @@ package.json
 * **public/** stores the static content for the website, such as the bundled javascript and css files.
 * **browser/** is where most of the front-end codes are stored. _browser/css_ stores the css code and _browser/js_ stores the javascript codes. The _main.js_ file is the entry point of all front-end javascript codes.
 
-## <a name = "database"></a> Access the Database
+## <a name = "database"></a> Database
 
-[MongoDB](https://www.mongodb.com/) is the database we use.
+[MongoDB](https://www.mongodb.com/) is the database that we use. Our MongoDB server is located at [vaderserver0.cidse.dhcp.asu.edu:27017/gender_study](vaderserver0.cidse.dhcp.asu.edu).
+
+#### Examine the Data
+
+There are two ways you can examine our database, one is to log in our server using SSH; the other one is to install a MongoDB client on your local machine.
+
+###### SSH
+You need a SSH terminal to log in our server, plase ask me for a SSH account. Once you log in, do the following:
+```
+$ mongo
+> use gender_study
+```
+
+###### MongoDB Client
+
+Refer to [https://docs.mongodb.com/manual/administration/install-community/](https://docs.mongodb.com/manual/administration/install-community/) to install the MongoDB Community Edition in your machine. Once you finish, you can use the same command sequence to access the database.
+
+#### MongoDB Nodejs Driver
+
 
 ## <a name = "mvc"></a>A little about MVC
 
