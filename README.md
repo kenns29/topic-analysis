@@ -9,6 +9,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Managing the Project](#manage)
 * [Access the database](#database)
 * [A little about MVC](#MVC)
+
 ## <a name = "git"></a>Get the project
 In order to access and make updates to the project, we have to use git. If you are not familar with git, please check [https://git-scm.com/](https://git-scm.com/).
 
@@ -32,6 +33,7 @@ In order to get started on the project, there are a few things you will have to 
 * [nodejs](#nodejs)
 * [browserify](#browserify)
 * [node-java](#node-java)
+
 #### nodejs
 Our backend used nodejs, you can install it
 #### browserify
