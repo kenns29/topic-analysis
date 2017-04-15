@@ -1,5 +1,5 @@
 {
-  "name": "Topic Analysis",
+  "name": "topic-analysis",
   "version": "0.0.1",
   "description": "Analyze Topics",
   "dependencies": {
