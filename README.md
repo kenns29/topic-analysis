@@ -16,13 +16,14 @@ In order to access and make updates to the project, we have to use git. If you a
 Our git server is located at [http://vaderserver0.cidse.dhcp.asu.edu:10000/](http://vaderserver0.cidse.dhcp.asu.edu:10000/).  Feel free to sign up with an user name and password, but please ask me for confirmation. Search for topic-analysis to find our project. You can get the project by
 
 ```
-git clone http://vaderserver0.cidse.dhcp.asu.edu:10000/hxwang/topic-analysis.git
+$ git clone http://vaderserver0.cidse.dhcp.asu.edu:10000/hxwang/topic-analysis.git
 ```
 
 You will be asked for user name and password. You can avoid typing these everytime by uploading an SSH key. To find out how to do it, go to deploy key page in our git server, and make sure change the remote
 by
 ```
-git remote set-url origin ssh://gitlab@vaderserver0.cidse.dhcp.asu.edu:2323/hxwang/topic-analysis.git
+$ git remote set-url origin
+$ ssh://gitlab@vaderserver0.cidse.dhcp.asu.edu:2323/hxwang/topic-analysis.git
 ```
 
 Every new member should ask me for a developer access in order to make updates to the project. I recommand everyone to create an own branch.
@@ -44,7 +45,7 @@ Our frontend javascript is bundled using browserify, which is a nodejs library, 
 To install browserify, you can do:
 
 ```
-npm install -g browserify watchify
+$ npm install -g browserify watchify
 ```
 
 Note that **npm** is the package manager for nodejs, you should also be familiar with it. This command also installs **watchify**, which is a plugin for browserify, you can learn more about it in [https://github.com/substack/watchify](https://github.com/substack/watchify).
@@ -53,17 +54,17 @@ Although we use nodejs primarily, we still have to use some java libraries for s
 
 You don't have to do it manually, becase I have included this command in our npm script (I will cover later). But if you really want, you can do
 ```
-npm install java
+$ npm install java
 ```
 **Important For Windows Users**
 
 Installing the node-java library can be a bit tricky on windows. First you will need to have node-gyp installed
 ```
-npm install -g node-gyp
+$ npm install -g node-gyp
 ```
 But installing this requires you to have python and c++ compiler (usually the one comes with Visual Studio), so it may throw you an error if you don't have these installed. If you don't want to install all these manuallly, I suggest you use [Windows-Build-Tools](https://github.com/felixrieseberg/windows-build-tools). You can install this simply by:
 ```
-npm install --global windows-build-tools
+$ npm install --global windows-build-tools
 ```
 It will take a while.
 
@@ -76,14 +77,14 @@ I have wrapped up all the javacode inside _/jars/nlptoolkit.jar_. This file cont
 [sass](http://sass-lang.com/) is a preprocesser for css language. We use it to create a css bundle in
 _public/css/_. To install sass, you need to first install [Ruby](https://www.ruby-lang.org/en/), and then just do:
 ```
-gem install sass
+$ gem install sass
 ```
 
 ### <a name = "bower"></a>bower
 
 [bower](https://bower.io/) is another package manager for front-end libraries. Although it can be used for everything, we are only using this to install css libraries for our project. Install bower by:
 ```
-npm install -g bower
+$ npm install -g bower
 ```
 
 ## <a name = "environment"></a>Development Environment
@@ -93,25 +94,25 @@ npm install -g bower
 ###### javascript
 After all the necessary compoments are installed, you should run
 ```
-npm install
+$ npm install
 ```
 It will install all necessary dependencies for our project. If you are not familar with npm. I suggest you take a look at our _package.json_ file. The _dependencies_ field describes all the node libraries we are using. If you want to install additional libraries, please do
 ```
-npm install --save [library]
+$ npm install --save [library]
 ```
 **Important:** the _--save_ options adds the library you installed to the _dependencies_ field. This is **very important** because it allow others to know which libraries you have used.
 
 ###### css
 You also need to install necessary css libraries, use the following command:
 ```
-cd public/
-bower install
+$ cd public/
+$ bower install
 ```
 #### Building and Debugging
 
 After installing all the dependencies, now please take a look at _scripts_ field in _package.json_. These are our **_npm scripts_**. Each can be executed by
 ```
-npm run [command-name]
+$ npm run [command-name]
 ```
 
 I will explain them one by one:
