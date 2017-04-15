@@ -203,15 +203,24 @@ The web server needs a driver to communicate with the database server, and we us
 * [jquery](#jquery)
 * [Promise](#Promise)
 
-#### d3
+#### <a name = "d3"></a>d3
 
 [d3](https://d3js.org/) is now perhaps "THE" library to do visualization on web. We use it throughout the entire project. If you are not familiar with it right now, please spend some time to become an **_expert_** of it. You can start with some online [tutorials](https://github.com/d3/d3/wiki/Tutorials), and the [API Reference](https://github.com/d3/d3/wiki/API-Reference) is always your friend. Beware that d3 has two non-compatible versions: [v3](https://github.com/d3/d3-3.x-api-reference/blob/master/API-Reference.md) and [v4](https://github.com/d3/d3/blob/master/API.md). We are only using v4, but it helps if you know both. The similarity between these two versions are much greater than their differences. You can check [Changes in D3 4.0](https://github.com/d3/d3/blob/master/CHANGES.md) and [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) to know more.
 
-#### jquery
+#### <a name = "jquery"></a>jquery
 
 [jquery](https://jquery.com/) is the ubiquitous front-end javascript library that does almost everything that's related to the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model). It is so popular that everyone expects you to know it. So we also use this quite a lot in the project.
 
 ###### AJAX
 
 We use jquery to do [AJAX](https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started) mostly, but you are not constrained to use jquery, you can use [d3-request](https://github.com/d3/d3-request) or even plain javascript if you feel like it. But you want to use jquery, you can check [jQuery.ajax()](http://api.jquery.com/jquery.ajax/) for help. Also, _browser/js/load/_ should give you enough information about how we do ajax in our project.
+
+#### <a name = "promise"></a>Promise
+
+Most asynchronous components in our code are wrapped in [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Promise is natively supported by javascript since [ES6](https://github.com/lukehoban/es6features). It makes asynchronous programming easier (avoiding the [Callback Hell](http://callbackhell.com/)). Promise is easy to use. But if you are new to asynchronous, it will take a while to grasp its concepts. We used Promise throughout the entire project.
+
+###### generator function
+
+Notice that in many times, we use the [generator function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [co](https://github.com/tj/co) to simplify our Promise code. These are handy so it doesn't hurt to know a little bit about them.
+ 
 ## <a name = "mvc"></a>A little about MVC
