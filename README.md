@@ -49,7 +49,7 @@ $ npm install -g browserify watchify
 ```
 
 Note that **npm** is the package manager for nodejs, you should also be familiar with it. This command also installs **watchify**, which is a plugin for browserify, you can learn more about it in [https://github.com/substack/watchify](https://github.com/substack/watchify).
-#### <a name = "node-java">node-java
+#### <a name = "node-java"></a>node-java
 Although we use nodejs primarily, we still have to use some java libraries for some NLP tasks, such as [StanfordCoreNLP](https://stanfordnlp.github.io/CoreNLP/) and [Mallet](http://mallet.cs.umass.edu/). To communicate between nodejs and java, we used the [node-java library](https://github.com/joeferner/node-java). You should try to get familar with it. Please use the module inside _java/java_init.js_ to load the library and the java codes.
 
 You don't have to do it manually, becase I have included this command in our npm script (I will cover later). But if you really want, you can do
@@ -80,7 +80,7 @@ _public/css/_. To install sass, you need to first install [Ruby](https://www.rub
 $ gem install sass
 ```
 
-### <a name = "bower"></a>bower
+#### <a name = "bower"></a>bower
 
 [bower](https://bower.io/) is another package manager for front-end libraries. Although it can be used for everything, we are only using this to install css libraries for our project. Install bower by:
 ```
