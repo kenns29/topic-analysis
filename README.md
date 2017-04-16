@@ -385,6 +385,7 @@ Stores user's login session. This is handled by the [passport](http://passportjs
 * [jquery](#jquery)
 * [Promise](#Promise)
 * [passport](#passport)
+
 #### <a name = "d3"></a>d3
 
 [d3](https://d3js.org/) is now perhaps "THE" library to do visualization on web. We use it throughout the entire project. If you are not familiar with it right now, please spend some time to become an **_expert_** of it. You can start with some online [tutorials](https://github.com/d3/d3/wiki/Tutorials), and the [API Reference](https://github.com/d3/d3/wiki/API-Reference) is always your friend. Beware that d3 has two non-compatible versions: [v3](https://github.com/d3/d3-3.x-api-reference/blob/master/API-Reference.md) and [v4](https://github.com/d3/d3/blob/master/API.md). We are only using v4, but it helps if you know both. The similarity between these two versions are much greater than their differences. You can check [Changes in D3 4.0](https://github.com/d3/d3/blob/master/CHANGES.md) and [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) to know more.
