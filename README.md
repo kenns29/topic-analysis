@@ -256,7 +256,8 @@ Stores information for papers, it has following schema:
 ```
 
 <details>
-<summary>Example</summary><p>
+<summary>Example</summary>
+<p>
 
 ```json
 {
@@ -520,7 +521,8 @@ Stores information for papers, it has following schema:
 }
 ```
 <details>
-<summary>Example</summary><p>
+<summary>Example</summary>
+<p>
 
 ```json
 {
