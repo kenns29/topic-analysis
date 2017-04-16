@@ -225,7 +225,7 @@ Stores information for papers, it has following schema:
           2 -> roundtable/workshop paper
           */,
   panel : /* the id of the panel to which this paper belongs */,
-  abstract : /* the abstract of the paper in string */,
+  abstract : /* the abstract of the paper in string (Nullable) */,
   title_tokens : [ /* tokenized title in array */
     {
       text : /* original text of the token */,
@@ -239,7 +239,7 @@ Stores information for papers, it has following schema:
     },
     ...
   ],
-  abstract_tokens : [ /* tokenized abstract in array */
+  abstract_tokens : [ /* tokenized abstract in array (Nullable)*/
     {
       text : /* original text of the token */,
       index : /* index of the token in the abstract */,
@@ -254,227 +254,6 @@ Stores information for papers, it has following schema:
   ]
 }
 ```
-
-<details>
-<summary>Example</summary>
-<p>
-
-```json
-{
-	"_id" : ObjectId("589620d4ecfd0512d1c9e484"),
-	"id" : 1980127,
-	"title" : "Textbooks as Reinforcers of Sexist Attitudes With Implications for Media",
-	"year" : 1980,
-	"type" : 1,
-	"panel" : 198066,
-	"abstract" : "Assessment of textbooks and media as reinforcers of sex bias",
-	"title_tokens" : [
-		{
-			"text" : "Textbooks",
-			"index" : 0,
-			"sent_index" : 0,
-			"index_in_sent" : 1,
-			"begin_position" : 0,
-			"end_position" : 9,
-			"ner" : "O",
-			"lemma" : "textbook"
-		},
-		{
-			"text" : "as",
-			"index" : 1,
-			"sent_index" : 0,
-			"index_in_sent" : 2,
-			"begin_position" : 10,
-			"end_position" : 12,
-			"ner" : "O",
-			"lemma" : "as"
-		},
-		{
-			"text" : "Reinforcers",
-			"index" : 2,
-			"sent_index" : 0,
-			"index_in_sent" : 3,
-			"begin_position" : 13,
-			"end_position" : 24,
-			"ner" : "O",
-			"lemma" : "reinforcer"
-		},
-		{
-			"text" : "of",
-			"index" : 3,
-			"sent_index" : 0,
-			"index_in_sent" : 4,
-			"begin_position" : 25,
-			"end_position" : 27,
-			"ner" : "O",
-			"lemma" : "of"
-		},
-		{
-			"text" : "Sexist",
-			"index" : 4,
-			"sent_index" : 0,
-			"index_in_sent" : 5,
-			"begin_position" : 28,
-			"end_position" : 34,
-			"ner" : "O",
-			"lemma" : "sexist"
-		},
-		{
-			"text" : "Attitudes",
-			"index" : 5,
-			"sent_index" : 0,
-			"index_in_sent" : 6,
-			"begin_position" : 35,
-			"end_position" : 44,
-			"ner" : "O",
-			"lemma" : "attitude"
-		},
-		{
-			"text" : "With",
-			"index" : 6,
-			"sent_index" : 0,
-			"index_in_sent" : 7,
-			"begin_position" : 45,
-			"end_position" : 49,
-			"ner" : "O",
-			"lemma" : "with"
-		},
-		{
-			"text" : "Implications",
-			"index" : 7,
-			"sent_index" : 0,
-			"index_in_sent" : 8,
-			"begin_position" : 50,
-			"end_position" : 62,
-			"ner" : "O",
-			"lemma" : "implication"
-		},
-		{
-			"text" : "for",
-			"index" : 8,
-			"sent_index" : 0,
-			"index_in_sent" : 9,
-			"begin_position" : 63,
-			"end_position" : 66,
-			"ner" : "O",
-			"lemma" : "for"
-		},
-		{
-			"text" : "Media",
-			"index" : 9,
-			"sent_index" : 0,
-			"index_in_sent" : 10,
-			"begin_position" : 67,
-			"end_position" : 72,
-			"ner" : "O",
-			"lemma" : "Media"
-		}
-	],
-	"abstract_tokens" : [
-		{
-			"text" : "Assessment",
-			"index" : 0,
-			"sent_index" : 0,
-			"index_in_sent" : 1,
-			"begin_position" : 0,
-			"end_position" : 10,
-			"ner" : "O",
-			"lemma" : "Assessment"
-		},
-		{
-			"text" : "of",
-			"index" : 1,
-			"sent_index" : 0,
-			"index_in_sent" : 2,
-			"begin_position" : 11,
-			"end_position" : 13,
-			"ner" : "O",
-			"lemma" : "of"
-		},
-		{
-			"text" : "textbooks",
-			"index" : 2,
-			"sent_index" : 0,
-			"index_in_sent" : 3,
-			"begin_position" : 14,
-			"end_position" : 23,
-			"ner" : "O",
-			"lemma" : "textbook"
-		},
-		{
-			"text" : "and",
-			"index" : 3,
-			"sent_index" : 0,
-			"index_in_sent" : 4,
-			"begin_position" : 24,
-			"end_position" : 27,
-			"ner" : "O",
-			"lemma" : "and"
-		},
-		{
-			"text" : "media",
-			"index" : 4,
-			"sent_index" : 0,
-			"index_in_sent" : 5,
-			"begin_position" : 28,
-			"end_position" : 33,
-			"ner" : "O",
-			"lemma" : "media"
-		},
-		{
-			"text" : "as",
-			"index" : 5,
-			"sent_index" : 0,
-			"index_in_sent" : 6,
-			"begin_position" : 34,
-			"end_position" : 36,
-			"ner" : "O",
-			"lemma" : "as"
-		},
-		{
-			"text" : "reinforcers",
-			"index" : 6,
-			"sent_index" : 0,
-			"index_in_sent" : 7,
-			"begin_position" : 37,
-			"end_position" : 48,
-			"ner" : "O",
-			"lemma" : "reinforcer"
-		},
-		{
-			"text" : "of",
-			"index" : 7,
-			"sent_index" : 0,
-			"index_in_sent" : 8,
-			"begin_position" : 49,
-			"end_position" : 51,
-			"ner" : "O",
-			"lemma" : "of"
-		},
-		{
-			"text" : "sex",
-			"index" : 8,
-			"sent_index" : 0,
-			"index_in_sent" : 9,
-			"begin_position" : 52,
-			"end_position" : 55,
-			"ner" : "O",
-			"lemma" : "sex"
-		},
-		{
-			"text" : "bias",
-			"index" : 9,
-			"sent_index" : 0,
-			"index_in_sent" : 10,
-			"begin_position" : 56,
-			"end_position" : 60,
-			"ner" : "O",
-			"lemma" : "bias"
-		}
-	]
-}
-```
-</p></details>
 
 ##### panels
 
@@ -491,7 +270,7 @@ Stores information for papers, it has following schema:
   papers : [ /* array of the id's of papers that belongs to the panel */
     ...
   ],
-  abstract : /* the abstract of the panel in string */,
+  abstract : /* the abstract of the panel in string (Nullable) */,
   title_tokens : [ /* tokenized title in array */
     {
       text : /* original text of the token */,
@@ -505,7 +284,7 @@ Stores information for papers, it has following schema:
     },
     ...
   ],
-  abstract_tokens : [ /* tokenized abstract in array */
+  abstract_tokens : [ /* tokenized abstract in array (Nullable) */
     {
       text : /* original text of the token */,
       index : /* index of the token in the abstract */,
@@ -520,403 +299,36 @@ Stores information for papers, it has following schema:
   ]
 }
 ```
-<details>
-<summary>Example</summary>
-<p>
 
-```json
+##### models
+
+Stores the topic models
+
+```
 {
-	"_id" : ObjectId("588a5aacecfd0512d1c9ac69"),
-	"id" : 19882,
-	"title" : "Activists and Academics Building Lesbian and Feminist Community",
-	"year" : 1988,
-	"type" : 1,
-	"papers" : [
-		19880,
-		19881,
-		19882,
-		19883,
-		19884
-	],
-	"abstract" : "This panel provides a forum for Womens Studies scholars librarians and community activists to discuss successes in building alliances and to share strategies for overcoming difficulties in coalition building",
-	"title_tokens" : [
-		{
-			"text" : "Activists",
-			"index" : 0,
-			"sent_index" : 0,
-			"index_in_sent" : 1,
-			"begin_position" : 0,
-			"end_position" : 9,
-			"ner" : "O",
-			"lemma" : "activist"
-		},
-		{
-			"text" : "and",
-			"index" : 1,
-			"sent_index" : 0,
-			"index_in_sent" : 2,
-			"begin_position" : 10,
-			"end_position" : 13,
-			"ner" : "O",
-			"lemma" : "and"
-		},
-		{
-			"text" : "Academics",
-			"index" : 2,
-			"sent_index" : 0,
-			"index_in_sent" : 3,
-			"begin_position" : 14,
-			"end_position" : 23,
-			"ner" : "O",
-			"lemma" : "academic"
-		},
-		{
-			"text" : "Building",
-			"index" : 3,
-			"sent_index" : 0,
-			"index_in_sent" : 4,
-			"begin_position" : 24,
-			"end_position" : 32,
-			"ner" : "O",
-			"lemma" : "building"
-		},
-		{
-			"text" : "Lesbian",
-			"index" : 4,
-			"sent_index" : 0,
-			"index_in_sent" : 5,
-			"begin_position" : 33,
-			"end_position" : 40,
-			"ner" : "O",
-			"lemma" : "lesbian"
-		},
-		{
-			"text" : "and",
-			"index" : 5,
-			"sent_index" : 0,
-			"index_in_sent" : 6,
-			"begin_position" : 41,
-			"end_position" : 44,
-			"ner" : "O",
-			"lemma" : "and"
-		},
-		{
-			"text" : "Feminist",
-			"index" : 6,
-			"sent_index" : 0,
-			"index_in_sent" : 7,
-			"begin_position" : 45,
-			"end_position" : 53,
-			"ner" : "O",
-			"lemma" : "Feminist"
-		},
-		{
-			"text" : "Community",
-			"index" : 7,
-			"sent_index" : 0,
-			"index_in_sent" : 8,
-			"begin_position" : 54,
-			"end_position" : 63,
-			"ner" : "O",
-			"lemma" : "community"
-		}
-	],
-	"abstract_tokens" : [
-		{
-			"text" : "This",
-			"index" : 0,
-			"sent_index" : 0,
-			"index_in_sent" : 1,
-			"begin_position" : 0,
-			"end_position" : 4,
-			"ner" : "O",
-			"lemma" : "this"
-		},
-		{
-			"text" : "panel",
-			"index" : 1,
-			"sent_index" : 0,
-			"index_in_sent" : 2,
-			"begin_position" : 5,
-			"end_position" : 10,
-			"ner" : "O",
-			"lemma" : "panel"
-		},
-		{
-			"text" : "provides",
-			"index" : 2,
-			"sent_index" : 0,
-			"index_in_sent" : 3,
-			"begin_position" : 11,
-			"end_position" : 19,
-			"ner" : "O",
-			"lemma" : "provide"
-		},
-		{
-			"text" : "a",
-			"index" : 3,
-			"sent_index" : 0,
-			"index_in_sent" : 4,
-			"begin_position" : 20,
-			"end_position" : 21,
-			"ner" : "O",
-			"lemma" : "a"
-		},
-		{
-			"text" : "forum",
-			"index" : 4,
-			"sent_index" : 0,
-			"index_in_sent" : 5,
-			"begin_position" : 22,
-			"end_position" : 27,
-			"ner" : "O",
-			"lemma" : "forum"
-		},
-		{
-			"text" : "for",
-			"index" : 5,
-			"sent_index" : 0,
-			"index_in_sent" : 6,
-			"begin_position" : 28,
-			"end_position" : 31,
-			"ner" : "O",
-			"lemma" : "for"
-		},
-		{
-			"text" : "Womens",
-			"index" : 6,
-			"sent_index" : 0,
-			"index_in_sent" : 7,
-			"begin_position" : 32,
-			"end_position" : 38,
-			"ner" : "O",
-			"lemma" : "woman"
-		},
-		{
-			"text" : "Studies",
-			"index" : 7,
-			"sent_index" : 0,
-			"index_in_sent" : 8,
-			"begin_position" : 39,
-			"end_position" : 46,
-			"ner" : "O",
-			"lemma" : "study"
-		},
-		{
-			"text" : "scholars",
-			"index" : 8,
-			"sent_index" : 0,
-			"index_in_sent" : 9,
-			"begin_position" : 47,
-			"end_position" : 55,
-			"ner" : "O",
-			"lemma" : "scholar"
-		},
-		{
-			"text" : "librarians",
-			"index" : 9,
-			"sent_index" : 0,
-			"index_in_sent" : 10,
-			"begin_position" : 56,
-			"end_position" : 66,
-			"ner" : "O",
-			"lemma" : "librarian"
-		},
-		{
-			"text" : "and",
-			"index" : 10,
-			"sent_index" : 0,
-			"index_in_sent" : 11,
-			"begin_position" : 67,
-			"end_position" : 70,
-			"ner" : "O",
-			"lemma" : "and"
-		},
-		{
-			"text" : "community",
-			"index" : 11,
-			"sent_index" : 0,
-			"index_in_sent" : 12,
-			"begin_position" : 71,
-			"end_position" : 80,
-			"ner" : "O",
-			"lemma" : "community"
-		},
-		{
-			"text" : "activists",
-			"index" : 12,
-			"sent_index" : 0,
-			"index_in_sent" : 13,
-			"begin_position" : 81,
-			"end_position" : 90,
-			"ner" : "O",
-			"lemma" : "activist"
-		},
-		{
-			"text" : "to",
-			"index" : 13,
-			"sent_index" : 0,
-			"index_in_sent" : 14,
-			"begin_position" : 91,
-			"end_position" : 93,
-			"ner" : "O",
-			"lemma" : "to"
-		},
-		{
-			"text" : "discuss",
-			"index" : 14,
-			"sent_index" : 0,
-			"index_in_sent" : 15,
-			"begin_position" : 94,
-			"end_position" : 101,
-			"ner" : "O",
-			"lemma" : "discuss"
-		},
-		{
-			"text" : "successes",
-			"index" : 15,
-			"sent_index" : 0,
-			"index_in_sent" : 16,
-			"begin_position" : 102,
-			"end_position" : 111,
-			"ner" : "O",
-			"lemma" : "success"
-		},
-		{
-			"text" : "in",
-			"index" : 16,
-			"sent_index" : 0,
-			"index_in_sent" : 17,
-			"begin_position" : 112,
-			"end_position" : 114,
-			"ner" : "O",
-			"lemma" : "in"
-		},
-		{
-			"text" : "building",
-			"index" : 17,
-			"sent_index" : 0,
-			"index_in_sent" : 18,
-			"begin_position" : 115,
-			"end_position" : 123,
-			"ner" : "O",
-			"lemma" : "building"
-		},
-		{
-			"text" : "alliances",
-			"index" : 18,
-			"sent_index" : 0,
-			"index_in_sent" : 19,
-			"begin_position" : 124,
-			"end_position" : 133,
-			"ner" : "O",
-			"lemma" : "alliance"
-		},
-		{
-			"text" : "and",
-			"index" : 19,
-			"sent_index" : 0,
-			"index_in_sent" : 20,
-			"begin_position" : 134,
-			"end_position" : 137,
-			"ner" : "O",
-			"lemma" : "and"
-		},
-		{
-			"text" : "to",
-			"index" : 20,
-			"sent_index" : 0,
-			"index_in_sent" : 21,
-			"begin_position" : 138,
-			"end_position" : 140,
-			"ner" : "O",
-			"lemma" : "to"
-		},
-		{
-			"text" : "share",
-			"index" : 21,
-			"sent_index" : 0,
-			"index_in_sent" : 22,
-			"begin_position" : 141,
-			"end_position" : 146,
-			"ner" : "O",
-			"lemma" : "share"
-		},
-		{
-			"text" : "strategies",
-			"index" : 22,
-			"sent_index" : 0,
-			"index_in_sent" : 23,
-			"begin_position" : 147,
-			"end_position" : 157,
-			"ner" : "O",
-			"lemma" : "strategy"
-		},
-		{
-			"text" : "for",
-			"index" : 23,
-			"sent_index" : 0,
-			"index_in_sent" : 24,
-			"begin_position" : 158,
-			"end_position" : 161,
-			"ner" : "O",
-			"lemma" : "for"
-		},
-		{
-			"text" : "overcoming",
-			"index" : 24,
-			"sent_index" : 0,
-			"index_in_sent" : 25,
-			"begin_position" : 162,
-			"end_position" : 172,
-			"ner" : "O",
-			"lemma" : "overcome"
-		},
-		{
-			"text" : "difficulties",
-			"index" : 25,
-			"sent_index" : 0,
-			"index_in_sent" : 26,
-			"begin_position" : 173,
-			"end_position" : 185,
-			"ner" : "O",
-			"lemma" : "difficulty"
-		},
-		{
-			"text" : "in",
-			"index" : 26,
-			"sent_index" : 0,
-			"index_in_sent" : 27,
-			"begin_position" : 186,
-			"end_position" : 188,
-			"ner" : "O",
-			"lemma" : "in"
-		},
-		{
-			"text" : "coalition",
-			"index" : 27,
-			"sent_index" : 0,
-			"index_in_sent" : 28,
-			"begin_position" : 189,
-			"end_position" : 198,
-			"ner" : "O",
-			"lemma" : "coalition"
-		},
-		{
-			"text" : "building",
-			"index" : 28,
-			"sent_index" : 0,
-			"index_in_sent" : 29,
-			"begin_position" : 199,
-			"end_position" : 207,
-			"ner" : "O",
-			"lemma" : "building"
-		}
-	]
+	_id : /* ObjectId */,
+	id : /* unique identifier for the model */,
+	name : /* name of the model */,
+	year : /* year of the data for which the model was trained */,
+	type : 1 /* type of the data for which the model was trained
+              1 -> academic panel
+              2 -> roundtable/workshop panel
+            */,
+	level : 3 /* specifies if the data is paper or panel
+              3 -> paper
+              4 -> panel
+             */,
+	field : 5 /* specifies if the model is trained on title or abstract
+              5 -> title
+              6 -> abstract
+             */,
+	num_topics : 10 /* number or topics the model has */,
+	num_iterations : 2000 /* number of iterations during training of the model */,
+  model : /* the serialized java object of the class nlp.edu.asu.vader.mallet.model.TopicModel
+             
+           */
 }
 ```
-
-</p></details>
 
 ## <a name = "libraries"></a>Other Important Libraries and Utilities
 
