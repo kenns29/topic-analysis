@@ -7,7 +7,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Development Environment](#environment)
 * [Project Structure](#structure)
 * [Database](#database)
-* [Important Libraries and Utilities](#libraries)
+* [Other Important Libraries and Utilities](#libraries)
 * [A little about MVC](#MVC)
 
 
@@ -197,6 +197,8 @@ You should be familiar with Mongo shell command to navigate the database. You ca
 #### MongoDB Nodejs Driver
 The web server needs a driver to communicate with the database server, and we use the MongoDB Native Driver for the purpose. There are other alternatives such as [Mongoose](http://mongoosejs.com/), but I opt the native driver for simplicity. Beware when you search for online help, and make sure the solution is for the native driver but not others. The driver API is rather too complicated to explain in this tutorial, you can find some example of how to use it in _db_mongo/_ and _routers/_. You should also refer to the [driver documentation](https://mongodb.github.io/node-mongodb-native/) for help. We are using version 2.2 right now.
 
+#### Database Schema
+
 ## <a name = "libraries"></a>Other Important Libraries and Utilities
 
 * [d3](#d3)
@@ -221,6 +223,21 @@ Most asynchronous components in our code are wrapped in [Promise](https://develo
 
 ###### generator function
 
-Notice that in many times, we use the [generator function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [co](https://github.com/tj/co) to simplify our Promise code. These are handy so it doesn't hurt to know a little bit about them.
- 
+Notice that in many times, we use the [generator function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [co](https://github.com/tj/co) to simplify our Promise code. For example, this code from _browser/js/control/controller_topic_model_selection.js_:
+```javascript
+co(function*(){
+  $(global.topic_viewer.loading()).show();
+  var topics = yield LoadTopicModel().id(selected_model.id).load();
+  $(global.topic_viewer.loading()).hide();
+  yield global.topic_viewer.display_opt('weight').data(topics).update();
+  var data = yield global.topic_document_viewer.year(selected_model.year)
+    .type(selected_model.type).level(selected_model.level).load();
+  global.topic_document_viewer.data(data).update();
+}).catch(function(err){
+  console.log(err);
+  $(global.topic_viewer.loading()).hide();
+});
+```
+These are handy so it doesn't hurt to know a little bit about them. Also currently, they are only supported by Chrome and Firefox, this is why our project doesn't work in IE right now.
+
 ## <a name = "mvc"></a>A little about MVC
