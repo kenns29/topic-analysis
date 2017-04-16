@@ -324,10 +324,43 @@ Stores the topic models
              */,
 	num_topics : 10 /* number or topics the model has */,
 	num_iterations : 2000 /* number of iterations during training of the model */,
-  model : /* the serialized java object of the class nlp.edu.asu.vader.mallet.model.TopicModel
-             
+  model : /* the serialized java object of the class nlp.edu.asu.vader.mallet.model.TopicModel, which wraps up the Mallet topic model along with some helper functions in binary format
            */
 }
+```
+
+Example of how to load the model from the database, from _routes/router_load_topic_model.js_:
+
+```javascript
+var TopicModel = require('../mallet/topic_model');
+var ConnStat = require('../db_mongo/connection');
+var model_col = require('../db_mongo/model_col');
+var co = require('co');
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+
+module.exports = exports = function(req, res){
+  var id = Number(req.query.id);
+  co(function*(){
+    /* Connects to the mongodb database */
+    var db = yield MongoClient.connect(ConnStat().url());
+    /* point to the models collection */
+    var col = db.collection(model_col);
+    /* query for the model based on id */
+    var data_array = yield col.find({id : id}).toArray();
+    db.close();
+    var m = data_array[0];
+    var topic_model = TopicModel().load_from_binary(m.model.buffer);
+    return Promise.resolve(topic_model.get_topics_with_id(20));
+  }).then(function(json){
+    res.json(json);
+  }).catch(function(err){
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  });
+};
+
 ```
 
 ## <a name = "libraries"></a>Other Important Libraries and Utilities
