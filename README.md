@@ -96,7 +96,7 @@ After all the necessary compoments are installed, you should run
 ```bash
 $ npm install
 ```
-It will install all necessary dependencies for our project. If you are not familar with npm. I suggest you take a look at our _package.json_ file. The _dependencies_ field describes all the node libraries we are using. If you want to install additional libraries, please do
+It will install all necessary dependencies for our project. If the installation throws an error, then most likely it's because node-java installation is unsuccessful. Please refer to the [node-java](#node-java) section for detail. If you are not familar with npm. I suggest you take a look at our _package.json_ file. The _dependencies_ field describes all the node libraries we are using. If you want to install additional libraries, please do
 ```
 $ npm install --save [library]
 ```
