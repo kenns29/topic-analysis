@@ -211,8 +211,50 @@ sessions
 ...
 ```
 
-* papers
+##### papers
 Stores information for papers, it has following schema:
+
+```
+{
+  _id : /* ObjectID */,
+  id : /* a unique identifier for the paper */,
+  title : /* title of the paper in string */,
+  year : /* year the paper is published */,
+  type : /* type of the paper:
+          1 -> academic paper
+          2 -> roundtable/workshop paper
+          */,
+  panel : /* the id of the panel to which this paper belongs */,
+  abstract : /* the abstract of the paper in string */,
+  title_tokens : [ /* tokenized title in array */
+    {
+      text : /* original text of the token */,
+      index : /* index of the token in the title */,
+      sent_index : /* index of the sentence to which the token belongs */,
+      index_in_sent : /* index of the token in the sentence */,
+      begin_position : /* the character position of the first character of the token */,
+      end_position : /* 1 + the end position of the last character of the token */,
+      ner : /* named entity of the token */,
+      lemma : /* lemma of the token */
+    },
+    ...
+  ],
+  abstract_tokens : [ /* tokenized abstract in array */
+    {
+      text : /* original text of the token */,
+      index : /* index of the token in the abstract */,
+      sent_index : /* index of the sentence to which the token belongs */,
+      index_in_sent : /* index of the token in the sentence */,
+      begin_position : /* the character position of the first character of the token */,
+      end_position : /* 1 + the end position of the last character of the token */,
+      ner : /* named entity of the token */,
+      lemma : /* lemma of the token */
+    },
+    ...
+  ]
+}
+```
+
 <details>
 <summary>Example</summary><p>
 
