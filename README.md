@@ -350,9 +350,12 @@ module.exports = exports = function(req, res){
     var data_array = yield col.find({id : id}).toArray();
     db.close();
     var m = data_array[0];
+    /* deserialize the model from the binary */
     var topic_model = TopicModel().load_from_binary(m.model.buffer);
+    /* return the json formated representation for the model */
     return Promise.resolve(topic_model.get_topics_with_id(20));
   }).then(function(json){
+    /* send the json formated model to the front-end */
     res.json(json);
   }).catch(function(err){
     console.log(err);
