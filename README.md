@@ -8,7 +8,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Project Structure](#structure)
 * [Database](#database)
 * [Other Important Libraries and Utilities](#libraries)
-* [A little about MVC](#MVC)
+* [A little about MVC and Organization of Code](#MVC)
 
 
 ## <a name = "git"></a>Get the project
@@ -306,24 +306,24 @@ Stores the topic models
 
 ```
 {
-	_id : /* ObjectId */,
-	id : /* unique identifier for the model */,
-	name : /* name of the model */,
-	year : /* year of the data for which the model was trained */,
-	type : 1 /* type of the data for which the model was trained
+  _id : /* ObjectId */,
+  id : /* unique identifier for the model */,
+  name : /* name of the model */,
+  year : /* year of the data for which the model was trained */,
+  type : 1 /* type of the data for which the model was trained
               1 -> academic panel
               2 -> roundtable/workshop panel
             */,
-	level : 3 /* specifies if the data is paper or panel
+  level : 3 /* specifies if the data is paper or panel
               3 -> paper
               4 -> panel
              */,
-	field : 5 /* specifies if the model is trained on title or abstract
+  field : 5 /* specifies if the model is trained on title or abstract
               5 -> title
               6 -> abstract
              */,
-	num_topics : 10 /* number or topics the model has */,
-	num_iterations : 2000 /* number of iterations during training of the model */,
+  num_topics : 10 /* number or topics the model has */,
+  num_iterations : 2000 /* number of iterations during training of the model */,
   model : /* the serialized java object of the class nlp.edu.asu.vader.mallet.model.TopicModel, which wraps up the Mallet topic model along with some helper functions in binary format
            */
 }
@@ -360,15 +360,31 @@ module.exports = exports = function(req, res){
     res.send(err);
   });
 };
+```
+
+##### users
+
+Stores the information for each user
 
 ```
+{
+  _id : /* ObjectID, this will be used as the unique identifier for user */,
+  local : {
+  	email : /* email address of the user, also serves as user name */,
+  	password : /* password hashed */
+  }
+}
+```
+##### sessions
+
+Stores user's login session. This is handled by the [passport](http://passportjs.org/) library automatically, generally you won't have to worry about it.
 
 ## <a name = "libraries"></a>Other Important Libraries and Utilities
 
 * [d3](#d3)
 * [jquery](#jquery)
 * [Promise](#Promise)
-
+* [passport](#passport)
 #### <a name = "d3"></a>d3
 
 [d3](https://d3js.org/) is now perhaps "THE" library to do visualization on web. We use it throughout the entire project. If you are not familiar with it right now, please spend some time to become an **_expert_** of it. You can start with some online [tutorials](https://github.com/d3/d3/wiki/Tutorials), and the [API Reference](https://github.com/d3/d3/wiki/API-Reference) is always your friend. Beware that d3 has two non-compatible versions: [v3](https://github.com/d3/d3-3.x-api-reference/blob/master/API-Reference.md) and [v4](https://github.com/d3/d3/blob/master/API.md). We are only using v4, but it helps if you know both. The similarity between these two versions are much greater than their differences. You can check [Changes in D3 4.0](https://github.com/d3/d3/blob/master/CHANGES.md) and [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) to know more.
@@ -404,4 +420,10 @@ co(function*(){
 ```
 These are handy so it doesn't hurt to know a little bit about them. Also currently, they are only supported by Chrome and Firefox, this is why our project doesn't work in IE right now.
 
-## <a name = "mvc"></a>A little about MVC
+#### <a name = "passport"></a>passport
+
+The [passport](http://passportjs.org/) library is used to handel user logins. Our user model is located at _auth/user.js_ and the login and signup handlers are in _auth/passport.js_.
+
+## <a name = "mvc"></a>A little about MVC and Organization of Code
+
+MVC stands for model-view-controller, and according to this [wikipedia article](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), it is a software architectural pattern for implementing user interfaces on computers. It divides software into three components: model, view and controller. In our application, you can think the model is the data, the views are our visualization components, such as "topic view", "document view", "timeline view", etc. And the controllers are responsible for the updates of models and views. Models and views can have their helper functions to wrap up commonly used functionalities. Our views are mostly located in _browser/js/view/_, our controllers are in _browser/js/control_, and models are mostly in the backend. I have also seperated the AJAX load and UI components from the MVC, they are in _browser/js/load/_ and _browser/js/UI_. This pattern is not rigidly enforced in our project and I opt to not use any framework ([angularjs](https://angularjs.org), [reactjs](https://facebook.github.io/react/), etc) for flexibility. It is up to the developers to decide which is the best way to organize their code, but please beware of our exisiting code structure and the MVC. But the bottom line is you should always **_modularize_** your code. If you happen to be a less experienced javascript programmer, please spend some time learn about object oriented programming in javascript, or you can read some of stuff in our project for inspiration. If you happend to be a experienced programmer, I will be very grateful if you can help me improve code organization. However, I would advise **_against_** spending too much time on code organization (to a point which hinders your ability to get work done on time). It is bad to write messy code (although often acceptable for research code), but it is worse if we spend too much time on organization and can't catch the deadline (which is not acceptable). So our priority is to get things done, and it's better if you can be neat too.
