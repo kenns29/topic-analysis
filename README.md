@@ -403,7 +403,7 @@ We use jquery to do [AJAX](https://developer.mozilla.org/en-US/docs/AJAX/Getting
 
 #### <a name = "promise"></a>Promise
 
-Most asynchronous components in our code are wrapped in [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Promise is natively supported by javascript since [ES6](https://github.com/lukehoban/es6features). It makes asynchronous programming easier (avoiding the [Callback Hell](http://callbackhell.com/)). Promise is easy to use. But if you are new to asynchronous, it will take a while to grasp its concepts. We used Promise throughout the entire project.
+Most asynchronous components in our code are wrapped in [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Promise is natively supported by javascript since [ES6](https://github.com/lukehoban/es6features). It makes asynchronous programming easier (avoiding the [Callback Hell](http://callbackhell.com/)). Promise is easy to use. But if you are new to asynchronous programming, it will take a while to grasp its concepts. We used Promise throughout the entire project.
 
 ###### generator function
 
