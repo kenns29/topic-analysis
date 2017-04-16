@@ -8,7 +8,7 @@ This tutorial briefly describe how to get started on the project. I will cover t
 * [Project Structure](#structure)
 * [Database](#database)
 * [Other Important Libraries and Utilities](#libraries)
-* [A little about MVC and Organization of Code](#MVC)
+* [A little about MVC and Organization of Code](#mvc)
 
 
 ## <a name = "git"></a>Get the project
