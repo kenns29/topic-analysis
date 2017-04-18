@@ -3,7 +3,7 @@ var co = require('co');
 var mongodb = require('mongodb');
 var mongo_client = mongodb.MongoClient;
 var DOC = require('../flags/doc_flags');
-var keywords_query = require('./querys').keywords_query;
+var QueryData = require('./query_data');
 module.exports = exports = function(){
   var url = ConnStat().url();
   var data;
@@ -13,12 +13,8 @@ module.exports = exports = function(){
   var field = DOC.TITLE;
   var keywords = [];
   function load(){
-    var token_field = field === DOC.ABSTRACT ? 'abstract_tokens' : 'title_tokens';
-    var query = {};
-    if(year >= 0) query.year = year;
-    if(type >= 0) query.type = type;
-    if(to_year > 0) query.year = {$gte:year,$lt:to_year};
-    if(keywords.length > 0) query[token_field] = keywords_query(keywords);
+    var query = QueryData().year(year).to_year(to_year)
+    .field(field).keywords(keywords).type(type).make_query();
     return co(function*(){
       var db = yield mongo_client.connect(url);
       var col = db.collection('papers');

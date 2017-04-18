@@ -14,14 +14,11 @@ module.exports = exports = function(req, res){
   var percent = str2boolean(req.query.percent);
   var metric = Number(req.query.metric);
   var col_name = level === DOC.PN ? 'panels' : 'papers';
-
-  console.log('keyword', keyword);
-  keyword = word_combo.hr2ur(keyword);
-  console.log('keyword', keyword);
+  var hr = req.query.keyword;
+  console.log('hr', hr);
   co(function*(){
-    var parser = yield word_combo.load();
-    var parsed = parser.parse(keyword);
-    console.log('parsed', parsed);
+    var query = word_combo.hr2query(hr);
+    console.log('query', query);
     var min_year = KeywordTimelineFlags.MIN_YEAR;
     var max_year = KeywordTimelineFlags.MAX_YEAR;
     var year2index = function(year){return year - min_year;};
@@ -36,11 +33,12 @@ module.exports = exports = function(req, res){
     }
     var data = {
       id : keyword,
-      parsed : parsed,
+      query : query,
       data : data_array
     };
     res.json(data);
   }).catch(function(err){
+    console.log(err);
     res.status(500);
     res.send(err);
   });

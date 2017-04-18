@@ -7,7 +7,8 @@ var service_url = require('../service');
 var ur2hr = require('../../../db_mongo/word_combo/ur2hr');
 module.exports = exports = $('#test').click(function(){
   co(function*(){
-    var input = '^%key%_%word% & %word%';
+    // var input = '^%key%_%word% & %word%';
+    var input = 'key&word/woman';
     var data = yield load().keyword(ur2hr(input)).load();
     console.log('data', data);
   }).catch(function(err){
