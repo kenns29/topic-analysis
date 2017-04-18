@@ -1,5 +1,5 @@
 {
-   "comment": "JSON Math Parser",
+   "comment": "JSON Grammar Parser",
    "lex": {
       "rules": [
          ["\\s+",                    "/* skip whitespace */"],

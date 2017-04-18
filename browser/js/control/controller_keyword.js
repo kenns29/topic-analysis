@@ -59,6 +59,10 @@ function insert_keyword_timeline(keyword){
       }
     }).catch(function(err){
       console.log(err);
+      if(err.responseText && err.responseText.match(/parse/i)){
+        $(global.multi_keyword_timeline.loading()).hide();
+        alert('incorrect input format');
+      }
     });
   }
 }
