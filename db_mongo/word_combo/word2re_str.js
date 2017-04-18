@@ -1,7 +1,7 @@
 module.exports = exports = word2re_str;
 function word2re_str(word){
   if(word[0] == '%'){
-    word = parsed.substring(1);
+    word = word.substring(1);
   } else {
     word = '\\b' + word;
   }
