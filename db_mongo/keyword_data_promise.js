@@ -13,10 +13,12 @@ module.exports = exports = function keyword_data_promise(data, keywords, token_f
 function keyword_tokens(tokens, keywords){
   var keyword_tokens = [];
   var key2keyword = [];
+  var re = new RegExp();
   keywords.forEach(function(hr){
     var ur = word_combo.hr2ur(hr);
     var words = ur.split(/[&\/\(\)]/);
     words.forEach(function(keyword){
+      if(keyword.match())
       key2keyword[keyword.toLowerCase()] = keyword;
     });
   });

@@ -8,6 +8,8 @@ var hr2query = require('./hr2query');
 var ur2query = require('./ur2query');
 var plain2hr = require('./plain2hr');
 var hr2plain = require('./hr2plain');
+var word2re_str = require('./word2re_str');
+var word2re = require('./word2re');
 var grammar = require('./grammar.json');
 var Parser = require("jison").Parser;
 module.exports = exports = word_combo;
@@ -28,5 +30,7 @@ function word_combo(){
   ret.ur2query = function(ur){return ur2query(ur, parser, token_field);};
   ret.parser = function(){return parser;}
   ret.token_field = function(_){return arguments.length > 0 ? (token_field = _, ret) : token_field;};
+  ret.word2re = word2re;
+  ret.word2re_str = word2re_str;
   return ret;
 }

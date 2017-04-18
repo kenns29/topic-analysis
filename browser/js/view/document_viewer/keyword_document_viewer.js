@@ -59,9 +59,11 @@ module.exports = exports = function(){
       for(let j = 0; j < len; j++){
         let token = d.keyword_tokens[j];
         let charindex = [token.begin_position, token.end_position];
-        if(charindex[0] > pre_charindex[1]) span_array.push({span : title.substring(pre_charindex[1], charindex[0]), keyword : null});
+        if(charindex[0] > pre_charindex[1])
+          span_array.push({span : title.substring(pre_charindex[1], charindex[0]), keyword : null});
         span_array.push({span : title.substring(charindex[0], charindex[1]), keyword : token.lemma});
-        if(j === len - 1 && charindex[1] < title.length)span_array.push({span : title.substring(charindex[1], title.length), keyword : null});
+        if(j === len - 1 && charindex[1] < title.length)
+          span_array.push({span : title.substring(charindex[1], title.length), keyword : null});
         pre_charindex = charindex;
       }
     }
