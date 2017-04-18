@@ -9,6 +9,7 @@ var get_flags = KeywordSelectControls.get_flags;
 var str2flag = KeywordSelectControls.str2flag;
 var disable_opts = KeywordSelectControls.disable_opts;
 var enable_opts = KeywordSelectControls.enable_opts;
+var WordCombo = require('../../../db_mongo/word_combo');
 module.exports = exports = function(){
   var data;
   function update(_data){
@@ -38,10 +39,13 @@ module.exports = exports = function(){
     // load().then(function(data){
     //   update();
     // });
+    var word_combo = WordCombo();
     var update_all_keyword_timeline = global.controller_keyword.update_all_keyword_timeline;
     var insert_keyword_timeline = global.controller_keyword.insert_keyword_timeline;
     $('#keyword-select-div #btn-add-word').click(function(){
-      insert_keyword_timeline($('#keyword-select-div #textbox-keyword').val());
+      var plain = $('#keyword-select-div #textbox-keyword').val();
+      var hr = word_combo.plain2hr(plain);
+      insert_keyword_timeline(hr);
     });
     $('#keyword-select-div #select-level').change(update_all_keyword_timeline);
     $('#keyword-select-div #select-type').change(update_all_keyword_timeline);

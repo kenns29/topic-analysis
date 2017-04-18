@@ -38,6 +38,7 @@ function update_all_keyword_timeline(){
   });
 }
 function insert_keyword_timeline(keyword){
+  console.log('keyword', keyword);
   if(keyword !== null && keyword !== undefined && keyword !== ''){
     keyword = keyword.toLowerCase();
     var flag = get_flags();
