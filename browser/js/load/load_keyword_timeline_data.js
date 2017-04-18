@@ -2,6 +2,7 @@ var $ = require('jquery');
 var DOC = require('../../../flags/doc_flags');
 var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 var service_url = require('../service');
+var WordCombo = require('../../../db_mongo/word_combo');
 module.exports = exports = function(){
   var data;
   var type = DOC.A;
@@ -12,9 +13,10 @@ module.exports = exports = function(){
   var keyword = '';
   function load(_keyword){
     if(_keyword) keyword = _keyword;
+    var hr = WordCombo().plain2hr(keyword);
     var deferred = $.ajax({
       url : service_url + '/loadkeywordtimelinedata',
-      data : {type:type,level:level,field:field,keyword:keyword,percent:percent,metric:metric},
+      data : {type:type,level:level,field:field,keyword:hr,percent:percent,metric:metric},
       dataType: 'json'
     });
     return Promise.resolve(deferred);

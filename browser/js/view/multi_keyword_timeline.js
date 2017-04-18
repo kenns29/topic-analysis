@@ -6,6 +6,7 @@ var LoadPanels = require('../load/load_panels');
 var KeywordSelect = require('../UI/keyword_select');
 // var UpdateKeywordDocumentViewer = require('../control/update_keyword_document_viewer');
 var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
+var WordCombo = require('../../../db_mongo/word_combo');
 module.exports = exports = function(){
   var container = '#keyword-timeline-view-div';
   var svg, width, height;
@@ -68,7 +69,7 @@ module.exports = exports = function(){
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
     var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[timeline_x_offset - 5, timeline_height/2]+')')
     .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10).style('cursor', 'pointer')
-    .text(function(d){return d.id});
+    .text(function(d){return WordCombo().hr2plain(d.id)});
     var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[timeline_x_offset, 0]+ ')');
     area_enter.append('rect').attr('width', W).attr('height', timeline_height).attr('fill','white');
     area_enter.append('path');

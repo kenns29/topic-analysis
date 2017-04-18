@@ -5,6 +5,7 @@ var ConnStat = require('../db_mongo/connection');
 var DOC = require('../flags/doc_flags');
 var KeywordTimelineFlags = require('../flags/keyword_timeline_flags');
 var str2boolean = require('./str2boolean');
+var WordCombo = require('../db_mongo/word_combo');
 module.exports = exports = function(req, res){
   var keyword = req.query.keyword;
   var type = Number(req.query.type);
@@ -50,22 +51,25 @@ module.exports = exports = function(req, res){
 };
 
 function count_aggr(keyword, type, metric){
-  var match = {'title_tokens.lemma' : {
-    $regex : keyword, $options : 'i'
-  }};
-  if(type >= 0) match.type = type;
+  var match = {$and : []};
+  var keyword_query = WordCombo().hr2query(keyword);
+  match.$and.push(keyword_query);
+  // var match = {'title_tokens.lemma' : {
+  //   $regex : keyword, $options : 'i'
+  // }};
+  if(type >= 0) match.$and.push({'type':type});
   if(metric === KeywordTimelineFlags.METRIC_DOCUMENT){
     return [
-      {$unwind : '$title_tokens'},
       {$match : match},
+      {$unwind : '$title_tokens'},
       {$group : {_id : '$id', year: {$last : '$year'}}},
       {$group : {_id : '$year', count : {$sum : 1}}},
       {$sort : {_id : 1}}
     ];
   } else {
     return [
-      {$unwind : '$title_tokens'},
       {$match : match},
+      {$unwind : '$title_tokens'},
       {$group : {_id : '$year', count : {$sum : 1}}},
       {$sort : {_id : 1}}
     ];
