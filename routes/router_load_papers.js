@@ -16,6 +16,7 @@ module.exports = exports = function(req, res){
   var to_year = Number(req.query.to_year); if(!to_year) to_year = -1;
   var type = Number(req.query.type);
   var keywords = str2array(req.query.keywords);
+  console.log('keywords', keywords);
   var get_papers = GetPapers().year(year).to_year(to_year).keywords(keywords).type(type);
   var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
   get_papers().then(function(data){

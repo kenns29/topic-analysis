@@ -18,6 +18,7 @@ module.exports = exports = function(){
       data : {model_id:model_id,year:year,to_year:to_year,type:type,field:field,keywords:keywords_str},
       dataType: 'json',
       success : function(data){
+        console.log('papers', data);
         callback(data);
       }
     });

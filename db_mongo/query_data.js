@@ -1,5 +1,5 @@
 var DOC = require('../flags/doc_flags');
-var keywords_query = require('./querys').keywords_query;
+var keywords_query = require('./query').keywords_query;
 module.exports = exports = query_data;
 function query_data(){
   var year = 1979;
@@ -17,11 +17,13 @@ function query_data(){
       and_map.set('year', {$gte:year,$lt:to_year});
     }
     if(keywords.length > 0){
-      and_map.set(token_field, keywords_query(keywords));
+      and_map.set('keyword', keywords_query(keywords, token_field + '.lemma'));
     }
     var and_array = [];
     for(let [key, value] of and_map){
-      let obj = {}; obj[key] = value;
+      let obj = {};
+      if(key != 'keyword') obj[key] = value;
+      else obj = value;
       and_array.push(obj);
     }
     query.$and = and_array;
