@@ -69,7 +69,7 @@ module.exports = exports = function(){
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
     var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[timeline_x_offset - 5, timeline_height/2]+')')
     .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10).style('cursor', 'pointer')
-    .text(function(d){return WordCombo().hr2plain(d.id)});
+    .text(function(d){return WordCombo().hr2plain(d.id)}).call(label_mouseover);
     var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[timeline_x_offset, 0]+ ')');
     area_enter.append('rect').attr('width', W).attr('height', timeline_height).attr('fill','white');
     area_enter.append('path');
@@ -102,6 +102,17 @@ module.exports = exports = function(){
       });
     };
     return Promise.all([t1(), t2()]);
+  }
+  function label_mouseover(element){
+    element.on('mouseover', function(d){
+      var v = content(d);
+      tooltip.show(d3.select(container).node(), v);
+    }).on('mousemove', function(){
+      tooltip.move(d3.select(container).node());
+    }).on('mouseout', function(){tooltip.hide();});
+    function content(d){
+      return WordCombo().hr2plain(d.id);
+    }
   }
   function area_mouseover(element){
     element.on('mouseover', function(d){
