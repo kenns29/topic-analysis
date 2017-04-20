@@ -1,3 +1,13 @@
+var router_index = require('./router_get_index');
+var router_login = require('./router_get_login');
+var router_signup = require('./router_get_signup');
+var middleware_is_logged_in = require('./middleware_is_logged_in');
+var router_user_profile = require('./router_get_userprofile');
+var router_logout = require('./router_get_logout');
+
+var router_post_signup = require('./router_post_signup');
+var router_post_login = require('./router_post_login');
+
 var router_load_papers = require('./router_load_papers');
 var router_topic_trainer = require('./router_topic_trainer');
 var router_load_panels = require('./router_load_panels');
@@ -12,34 +22,13 @@ var router_test = require('./router_test');
 var express = require('express');
 module.exports = exports = function(passport){
   var router = express.Router();
-  router.get('/', function(req, res) {
-    res.render('index', { title: 'Topic Analysis', user: req.user});
-  });
-  router.get('/login', function(req, res){
-    res.render('login', { title : 'Login', message: req.flash('loginMessage') });
-  });
-  router.get('/signup', function(req, res){
-    res.render('signup', { message: req.flash('signupMessage') });
-  });
-  router.get('/userprofile', function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect('/');
-  }, function(req, res){
-    res.render('userprofile', {user : req.user});
-  });
-  router.get('/logout', function(req, res){
-    req.logout(); res.redirect('/');
-  });
-  router.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '/login',
-    failureRedirect : '/signup',
-    failureFlash : true
-  }));
-  router.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/',
-    failureRedirect : '/login',
-    failureFlash : true
-  }));
+  router.get('/', router_index(passport));
+  router.get('/login', router_login(passport));
+  router.get('/signup', router_signup(passport));
+  router.get('/userprofile', middleware_is_logged_in(passport), router_user_profile(passport));
+  router.get('/logout', router_logout(passport));
+  router.post('/signup', router_post_signup(passport));
+  router.post('/login', router_post_login(passport));
   router.get('/loadpapers', router_load_papers(passport));
   router.get('/loadpanels', router_load_panels(passport));
   router.get('/topictrainer', router_topic_trainer(passport));

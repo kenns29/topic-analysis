@@ -56,9 +56,6 @@ function count_aggr(keyword, type, metric){
   var match = {$and : []};
   var keyword_query = WordCombo().hr2query(keyword);
   match.$and.push(keyword_query);
-  // var match = {'title_tokens.lemma' : {
-  //   $regex : keyword, $options : 'i'
-  // }};
   if(type >= 0) match.$and.push({'type':type});
   if(metric === KeywordTimelineFlags.METRIC_DOCUMENT){
     return [
