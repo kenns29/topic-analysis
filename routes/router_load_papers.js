@@ -9,24 +9,27 @@ var DOC = require('../flags/doc_flags');
 var model_data_promise = require('../db_mongo/model_data_promise');
 var keyword_data_promise = require('../db_mongo/keyword_data_promise');
 var str2array = require('./str2array');
-module.exports = exports = function(req, res){
-  var model_id = Number(req.query.model_id);
-  var field = Number(req.query.field);
-  var year = Number(req.query.year);
-  var to_year = Number(req.query.to_year); if(!to_year) to_year = -1;
-  var type = Number(req.query.type);
-  var keywords = str2array(req.query.keywords);
-  console.log('keywords', keywords);
-  var get_papers = GetPapers().year(year).to_year(to_year).keywords(keywords).type(type);
-  var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
-  get_papers().then(function(data){
-    if(model_id) return model_data_promise(data, model_id, token_field);
-    if(keywords.length > 0) return keyword_data_promise(data, keywords, token_field);
-    return Promise.resolve(data);
-  }).then(function(data){
-    res.json(data);
-  }).catch(function(err){
-    console.log(err);
-    res.send(err);
-  });
-};
+module.exports = exports = load;
+function load(passport){
+  return function(req, res){
+    var model_id = Number(req.query.model_id);
+    var field = Number(req.query.field);
+    var year = Number(req.query.year);
+    var to_year = Number(req.query.to_year); if(!to_year) to_year = -1;
+    var type = Number(req.query.type);
+    var keywords = str2array(req.query.keywords);
+    console.log('keywords', keywords);
+    var get_papers = GetPapers().year(year).to_year(to_year).keywords(keywords).type(type);
+    var token_field = field === DOC.TITLE ? 'title_tokens' : 'abstract_tokens';
+    get_papers().then(function(data){
+      if(model_id) return model_data_promise(data, model_id, token_field);
+      if(keywords.length > 0) return keyword_data_promise(data, keywords, token_field);
+      return Promise.resolve(data);
+    }).then(function(data){
+      res.json(data);
+    }).catch(function(err){
+      console.log(err);
+      res.send(err);
+    });
+  };
+}
