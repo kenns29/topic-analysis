@@ -7,6 +7,7 @@ var router_logout = require('./router_get_logout');
 
 var router_post_signup = require('./router_post_signup');
 var router_post_login = require('./router_post_login');
+var router_post_user_topics = require('./router_post_user_topics');
 
 var router_load_papers = require('./router_load_papers');
 var router_topic_trainer = require('./router_topic_trainer');
@@ -20,7 +21,7 @@ var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_
 var router_load_word_tree = require('./router_load_word_tree');
 var router_test = require('./router_test');
 var express = require('express');
-module.exports = exports = function(passport){
+module.exports = exports = function(passport, upload){
   var router = express.Router();
   router.get('/', router_index(passport));
   router.get('/login', router_login(passport));

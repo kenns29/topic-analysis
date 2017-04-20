@@ -19,6 +19,7 @@ global.controller_keyword = require('./control/controller_keyword')();
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')
 require('./UI/btn_train_topics');
+require('./UI/form_upload_user_topics');
 
 global.model_stats_display.load().then(function(data){
   global.model_stats_display.data(data).update();

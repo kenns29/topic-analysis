@@ -17,6 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.text({type: 'text/plain'}));
 require('./auth/passport')(passport);
 app.use(express.static(path.join(__dirname, 'public')));
 var access_log_stream = fs.createWriteStream(path.join(__dirname, 'access.log'),{flags: 'a'});
@@ -30,7 +31,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-var routes = require('./routes/index')(passport);
+var routes = require('./routes/index')(passport, upload);
 app.use('/', routes);
 app.listen(10082, function () {
   console.log('Example app listening on port 10082!');
