@@ -27,36 +27,54 @@
 </nav>
 <div id ="wrapper">
   <div id = "left-side-bar">
-    <div id = "data-select">
-      <div id = "year-select">
-        <label>Year:</label><select id = "from-year"></select>
-        <!-- <label>to</label>
-        <select id = "to-year"></select> -->
+    <ul class = "nav nav-tabs" role="tablist" data-tabs="tabs">
+      <li role="presentation" name="side-tab" class="active">
+        <a id = "side-topic-tab" href="#side-topic-panel"
+        aria-controls="topic-panel" role="tab" data-toggle="tab">
+        <b>Mallet Topics</b></a>
+      </li>
+      <li role="presentation" name="side-tab">
+        <a id = "side-user-topic-tab" href="#side-user-topic-panel"
+        aria-controls="user-topic-panel" role="tab" data-toggle="tab">
+        <b>User Topics</b></a>
+      </li>
+    </ul>
+    <div class = "tab-content">
+      <div role="tabpanel" id="side-topic-panel">
+        <div id = "data-select">
+          <div id = "year-select">
+            <label>Year:</label><select id = "from-year"></select>
+            <!-- <label>to</label>
+            <select id = "to-year"></select> -->
+          </div>
+        </div>
+        <div>
+          <button id = "btn-train-topics" class="btn btn-default">Train Model</button>
+          <!-- <button id = "btn-load-papers" class="btn btn-default">Load Papers</button> -->
+          <!-- <button id = "btn-load-panels" class="btn btn-default">Load Panels</button> -->
+        </div>
+        <div id = "topic-trainer-option-div">
+          <h4>Model Training Options</h4>
+          <div><label>Type:</label><select id = "select_model_type" value = "A">
+            <option value = "A">academic</option>
+            <option value = "RW">roundtable/workshop</option>
+          </select></div>
+          <div><label>P/PN:</label><select id = "select_model_level" value= "P">
+            <option value ="P">paper</option>
+            <option value = "PN">panel</option>
+          </select></div>
+          <div><label>Number of Topics:</label><input type="text" id="input_num_topics" value = "10"></div>
+          <div><label>Number of Iterations:</label><input type="text" id = "input_num_iterations" value = "2000"></div>
+        </div>
+        <div id = "topic-model-display-loading">Training Topics..</div>
+        <div id = "topic-model-display-div">
+          <h4>Models</h4>
+        </div>
+        <!-- <button id = "test" class = "btn btn-default">Test</button> -->
+      </div>
+      <div role="tabpanel" id="side-user-topic-panel" class = "invisible">
       </div>
     </div>
-    <div>
-      <button id = "btn-train-topics" class="btn btn-default">Train Model</button>
-      <!-- <button id = "btn-load-papers" class="btn btn-default">Load Papers</button> -->
-      <!-- <button id = "btn-load-panels" class="btn btn-default">Load Panels</button> -->
-    </div>
-    <div id = "topic-trainer-option-div">
-      <h4>Model Training Options</h4>
-      <div><label>Type:</label><select id = "select_model_type" value = "A">
-        <option value = "A">academic</option>
-        <option value = "RW">roundtable/workshop</option>
-      </select></div>
-      <div><label>P/PN:</label><select id = "select_model_level" value= "P">
-        <option value ="P">paper</option>
-        <option value = "PN">panel</option>
-      </select></div>
-      <div><label>Number of Topics:</label><input type="text" id="input_num_topics" value = "10"></div>
-      <div><label>Number of Iterations:</label><input type="text" id = "input_num_iterations" value = "2000"></div>
-    </div>
-    <div id = "topic-model-display-loading">Training Topics..</div>
-    <div id = "topic-model-display-div">
-      <h4>Models</h4>
-    </div>
-    <button id = "test" class = "btn btn-default">Test</button>
   </div>
   <div id = "center-view">
     <div id = "middle-view">
@@ -65,7 +83,12 @@
           <li role="presentation" name="keyword-tab" class="active">
             <a id = "topic-tab" href="#topic-panel"
             aria-controls="topic-panel" role="tab" data-toggle="tab">
-            <b>Topics</b></a>
+            <b>Mallet Topics</b></a>
+          </li>
+          <li role="presentation" name="keyword-tab">
+            <a id = "user-topic-tab" href="#user-topic-panel"
+            aria-controls="user-topic-panel" role="tab" data-toggle="tab">
+            <b>User Topics</b></a>
           </li>
           <li role="presentation" name="keyword-tab">
             <a id = "keyword-timeline-view-tab" href="#keyword-timeline-view-panel"
@@ -86,6 +109,18 @@
               </div>
             </div>
             <div id = "model-compare-div">
+              <div id='loading' class='loading'>
+                <span class="loading-helper"></span><img src="loading.gif" />
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="invisible" id="user-topic-panel">
+            <div id="user-topic-view-div">
+              <div id='loading' class='loading'>
+                <span class="loading-helper"></span><img src="loading.gif" />
+              </div>
+            </div>
+            <div id="user-topic-timeline-view-div">
               <div id='loading' class='loading'>
                 <span class="loading-helper"></span><img src="loading.gif" />
               </div>
