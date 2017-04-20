@@ -40,34 +40,43 @@ body{
   overflow-y: auto;
   overflow-x: hidden;
   .tab-content{
+    position: relative;
     height : calc(100% - 42px);
-    #data-select {
-      position: relative;
-      width: 100%;
-      height:auto;
-      #year-select {
+    #side-topic-panel{
+      height:100%;
+      position: absolute;;
+      #data-select {
         position: relative;
+        width: 100%;
+        height:auto;
+        #year-select {
+          position: relative;
+          width:100%;
+          height : auto;
+        }
+      }
+      #topic-trainer-option-div {
+        position: relative;
+        padding-top: 10px;
+        input {width:50px}
+      }
+      #topic-model-display-div {
+        position: relative;
+        padding-top:10px;
         width:100%;
+      }
+      #topic-model-display-loading {
+        position:relative;
+        padding-top: 10px;
+        padding-bottom : 5px;
+        width : 100%;
         height : auto;
+        display:none;
       }
     }
-    #topic-trainer-option-div {
-      position: relative;
-      padding-top: 10px;
-      input {width:50px}
-    }
-    #topic-model-display-div {
-      position: relative;
-      padding-top:10px;
-      width:100%;
-    }
-    #topic-model-display-loading {
-      position:relative;
-      padding-top: 10px;
-      padding-bottom : 5px;
-      width : 100%;
-      height : auto;
-      display:none;
+    #side-user-topic-panel{
+      height:100%;
+      position: absolute;
     }
   }
 }
