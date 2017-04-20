@@ -27,8 +27,11 @@ module.exports = exports = function(passport){
   router.get('/signup', router_signup(passport));
   router.get('/userprofile', middleware_is_logged_in(passport), router_user_profile(passport));
   router.get('/logout', router_logout(passport));
+
   router.post('/signup', router_post_signup(passport));
   router.post('/login', router_post_login(passport));
+  router.post('/usertopics', router_post_user_topics(passport));
+
   router.get('/loadpapers', router_load_papers(passport));
   router.get('/loadpanels', router_load_panels(passport));
   router.get('/topictrainer', router_topic_trainer(passport));
