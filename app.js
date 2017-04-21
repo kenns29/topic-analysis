@@ -34,6 +34,6 @@ app.use(flash());
 var routes = require('./routes/index')(passport, upload);
 app.use('/', routes);
 app.listen(10082, function () {
-  console.log('Example app listening on port 10082!');
+  console.log('Listening on port 10082!');
 });
 module.exports = app;
