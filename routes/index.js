@@ -31,7 +31,7 @@ module.exports = exports = function(passport, upload){
 
   router.post('/signup', router_post_signup(passport));
   router.post('/login', router_post_login(passport));
-  router.post('/usertopics', router_post_user_topics(passport));
+  router.post('/usertopics', upload.single('file'), router_post_user_topics(passport));
 
   router.get('/loadpapers', router_load_papers(passport));
   router.get('/loadpanels', router_load_panels(passport));
