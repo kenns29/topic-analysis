@@ -269,6 +269,10 @@
           aria-controls="topic-document-viewer-panel" role="tab" data-toggle="tab"><b>Topic Documents</b></a>
         </li>
         <li role = "presentation" name="doc-tab">
+          <a id="keyword-document-viewer-tab" href="#user-topic-document-viewer-panel"
+          aria-controls="user-topic-document-viewer-panel" role="tab" data-toggle="tab"><b>User Topic Documents</b></a>
+        </li>
+        <li role = "presentation" name="doc-tab">
           <a id="keyword-document-viewer-tab" href="#keyword-document-viewer-panel"
           aria-controls="keyword-document-viewer-panel" role="tab" data-toggle="tab"><b>Keyword Documents</b></a>
         </li>
@@ -276,6 +280,13 @@
       <div class = "tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="topic-document-viewer-panel">
           <div id = "topic-document-viewer-div">
+            <div id='loading' class='loading'>
+              <span class="loading-helper"></span><img src="loading.gif" />
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="user-topic-document-viewer-panel">
+          <div id = "user-topic-document-viewer-div">
             <div id='loading' class='loading'>
               <span class="loading-helper"></span><img src="loading.gif" />
             </div>
