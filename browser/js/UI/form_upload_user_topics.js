@@ -5,7 +5,8 @@ form.addEventListener('submit', function(ev){
   oReq.open("POST", "/usertopics", true);
   oReq.onload = function(oEvent) {
     if (oReq.status == 200) {
-      alert('uploaded');
+      alert('upload successful');
+      let data = oReq.response;
     } else {
       alert('error');
     }
