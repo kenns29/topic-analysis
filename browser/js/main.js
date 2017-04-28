@@ -17,6 +17,7 @@ global.multi_user_topic_timeline = MultiUserTopicTimeline().init();
 //Controlllers
 global.controller_keyword_document_viewer = require('./control/controller_keyword_document_viewer')();
 global.controller_keyword = require('./control/controller_keyword')();
+global.controller_user_topics = require('./control/controller_user_topics')();
 
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')
