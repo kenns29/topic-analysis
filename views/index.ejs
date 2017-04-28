@@ -70,7 +70,6 @@
         <div id = "topic-model-display-div">
           <h4>Models</h4>
         </div>
-        <!-- <button id = "test" class = "btn btn-default">Test</button> -->
       </div>
       <div role="tabpanel" id="side-user-topic-panel" class = "invisible">
         <form enctype="multipart/form-data" method="post" name="user-topics">
@@ -126,8 +125,45 @@
               </div>
             </div>
             <div id="user-topic-timeline-view-div">
-              <div id='loading' class='loading'>
-                <span class="loading-helper"></span><img src="loading.gif" />
+              <div id = "user-topic-select-div">
+                <div class = "control">
+                  <label>P/PN</label><select id = "select-level">
+                    <option value = "P" selected>papers</option>
+                    <option value = "PN">panels</option>
+                  </select>
+                </div>
+                <div class = "control">
+                  <label>Type</label><select id="select-type">
+                    <option value = "A" selected>academic</option>
+                    <option value = "RW">roundtable/workshop</option>
+                    <option value = "ALL">all</option>
+                  </select>
+                </div>
+                <div class = "control">
+                  <label>Title/Abstract</label><select id = "select-field">
+                    <option value = "TITLE" selected>title</option>
+                  </select>
+                </div>
+                <div class = "control">
+                  <label>Metric</label><select id ="select-metric">
+                    <option value = "METRIC_DOCUMENT" selected># of documents</option>
+                    <option value = "METRIC_WORD"># of words</option>
+                  </select>
+                </div>
+                <div class = "control">
+                  <button class="btn btn-default" id = "btn-add-word">add word</button>
+                </div>
+                <div class = "control">
+                  <input type="checkbox" id="checkbox-brush"><label>brush timeline</label>
+                </div>
+                <div class = "control">
+                  <input type="checkbox" id="checkbox-keyword-timeline-percent"><label>percent</label>
+                </div>
+              </div>
+              <div id = "user-topic-timeline-view">
+                <div id='loading' class='loading'>
+                  <span class="loading-helper"></span><img src="loading.gif" />
+                </div>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ var KeywordSelect = require('../UI/keyword_select');
 var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 var WordCombo = require('../../../db_mongo/word_combo');
 module.exports = exports = function(){
-  var container = '#user-topic-timeline-view-div';
+  var container = '#user-topic-timeline-view';
   var svg, width, height;
   var timeline_g, W, H;
   var margin = {top:20, bottom:10, left:10, right:20};
@@ -67,7 +67,7 @@ module.exports = exports = function(){
     var timeline_enter = timeline_sel.enter().append('g').attr('class', 'timeline');
     var label_enter = timeline_enter.append('text').attr('transform', 'translate('+[timeline_x_offset - 5, timeline_height/2]+')')
     .attr('dominant-baseline', 'middle').attr('text-anchor', 'end').attr('font-size',  10).style('cursor', 'pointer')
-    .text(function(d){return WordCombo().hr2plain(d.id)}).call(label_mouseover);
+    .text(function(d){return d.id;}).call(label_mouseover);
     var area_enter = timeline_enter.append('g').attr('class', 'area').attr('transform', 'translate(' +[timeline_x_offset, 0]+ ')');
     area_enter.append('rect').attr('width', W).attr('height', timeline_height).attr('fill','white');
     area_enter.append('path');
@@ -109,7 +109,7 @@ module.exports = exports = function(){
       tooltip.move(d3.select(container).node());
     }).on('mouseout', function(){tooltip.hide();});
     function content(d){
-      return d;
+      return d.id;
     }
   }
   function area_mouseover(element){
