@@ -11,6 +11,8 @@ var WordTree = require('./view/word_tree');
 global.word_tree = WordTree().init();
 var TopicModelCompare = require('./view/topic_model_compare');
 global.topic_model_compare = TopicModelCompare().init();
+var MultiUserTopicTimeline = require('./view/multi_user_topic_timeline');
+global.multi_user_topic_timeline = MultiUserTopicTimeline().init();
 
 //Controlllers
 global.controller_keyword_document_viewer = require('./control/controller_keyword_document_viewer')();

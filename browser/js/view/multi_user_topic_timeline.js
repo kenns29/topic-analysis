@@ -21,7 +21,7 @@ module.exports = exports = function(){
   var x_axis;
   var x_axis_g;
   var tooltip;
-  var timeline_x_offset = 50;
+  var timeline_x_offset = 90;
   var brushes = brushes_factory();
   var loading;
   var duration = 500;
@@ -109,7 +109,7 @@ module.exports = exports = function(){
       tooltip.move(d3.select(container).node());
     }).on('mouseout', function(){tooltip.hide();});
     function content(d){
-      return WordCombo().hr2plain(d.id);
+      return d;
     }
   }
   function area_mouseover(element){
