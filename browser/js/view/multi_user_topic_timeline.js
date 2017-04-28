@@ -6,7 +6,7 @@ var KeywordSelect = require('../UI/keyword_select');
 var KeywordTimelineFlags = require('../../../flags/keyword_timeline_flags');
 var WordCombo = require('../../../db_mongo/word_combo');
 module.exports = exports = function(){
-  var container = '#keyword-timeline-view-div';
+  var container = '#user-topic-timeline-view-div';
   var svg, width, height;
   var timeline_g, W, H;
   var margin = {top:20, bottom:10, left:10, right:20};
@@ -79,9 +79,9 @@ module.exports = exports = function(){
     x_axis_g.selectAll('.tick').select('text')
     .attr('text-anchor', 'end').attr('dominant-baseline', 'hanging')
     .attr('y', 3).attr('transform', 'translate(-6, 0)rotate(-45)');
-    label_enter.on('click', function(d, i){
-      global.controller_keyword.remove_keyword_timeline(d.id);
-    });
+    // label_enter.on('click', function(d, i){
+    //   global.controller_keyword.remove_keyword_timeline(d.id);
+    // });
     var t = d3.transition().duration(duration);
     var t1 = function(){
       return new Promise(function(resolve, reject){
@@ -250,10 +250,7 @@ module.exports = exports = function(){
         if(d3.event.selection){
           domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
           extent = domain.map(x_scale);
-          global.controller_keyword_document_viewer
-          .keywords(data.map(function(d){return d.id;}))
-          .year(domain[0]).to_year(domain[1])
-          .update();
+
         }
       });
       return brush;
