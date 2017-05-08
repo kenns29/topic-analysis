@@ -4,8 +4,6 @@ var $ = require('jquery');
 var d3 = require('d3');
 module.exports.get_flags = get_flags;
 module.exports.str2flag = str2flag;
-module.exports.disable_opts = disable_opts;
-module.exports.enable_opts = enable_opts;
 function get_flags(){
   var level_str = $('#user-topic-control-div #select-level').val();
   var type_str = $('#user-topic-control-div #select-type').val();
