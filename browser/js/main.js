@@ -29,6 +29,8 @@ global.model_stats_display.load().then(function(data){
 });
 var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
+require('./UI/user_topic_interaction');
+
 require('./UI/wordtree_controls').init_year_select();
 require('./UI/btn_draw_wordtree');
 

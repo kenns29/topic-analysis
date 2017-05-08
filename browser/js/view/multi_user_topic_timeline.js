@@ -79,9 +79,7 @@ module.exports = exports = function(){
     x_axis_g.selectAll('.tick').select('text')
     .attr('text-anchor', 'end').attr('dominant-baseline', 'hanging')
     .attr('y', 3).attr('transform', 'translate(-6, 0)rotate(-45)');
-    // label_enter.on('click', function(d, i){
-    //   global.controller_keyword.remove_keyword_timeline(d.id);
-    // });
+
     var t = d3.transition().duration(duration);
     var t1 = function(){
       return new Promise(function(resolve, reject){

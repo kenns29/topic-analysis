@@ -36,11 +36,22 @@ function load(){
           let dat = aggr[i];
           data_array[year2index(dat._id)].count = (dat ? dat.count : 0);
         }
+        if(percent){
+          let aggr = yield col.aggregate(total_aggr(type, metric)).toArray();
+          let year2total = [];
+          aggr.forEach(function(d){year2total[d._id] = d.count;});
+          data_array.forEach(function(d){
+            let total = year2total[d.year];
+            d.percent = total ? d.count / total : 0;
+            d.total = total ? total : 0;
+          });
+        }
         json.push({
           id : topic.name,
           data : data_array
         });
       }
+      db.close();
       res.json(json);
     }).catch(function(err){
       console.log(err);
@@ -61,6 +72,27 @@ function count_aggr(words, type, metric){
     {$group : {_id : '$year', count : {$sum : 1}}},
     {$sort : {_id : 1}}
   ];
+}
+
+function total_aggr(type, metric){
+  var match = {};
+  if(type >= 0) match.type = type;
+  if(metric === KeywordTimelineFlags.METRIC_DOCUMENT){
+    return [
+      {$match : match},
+      {$group : {_id : '$year', count : {$sum : 1}}},
+      {$sort : {_id : 1}}
+    ];
+  } else {
+    return [
+      {$match : match},
+      {$project : {year : 1, title_tokens : 1}},
+      {$group : {_id : '$year', count : {
+        $sum : {$size : '$title_tokens'}
+      }}},
+      {$sort:{_id : 1}}
+    ];
+  }
 }
 
 function words_query(words){

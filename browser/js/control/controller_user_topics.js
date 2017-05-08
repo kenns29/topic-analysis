@@ -11,7 +11,7 @@ function controller(){
       var data = yield LoadUserTopicTimelineData().type(flags.type).level(flags.level)
       .field(flags.field).percent(flags.percent).metric(flags.metric).load();
       $(global.multi_user_topic_timeline.loading()).hide();
-      global.multi_user_topic_timeline.data(data).update();
+      global.multi_user_topic_timeline.data(data).percent(flags.percent).update();
     }).catch(function(err){
       console.log(err);
     });
