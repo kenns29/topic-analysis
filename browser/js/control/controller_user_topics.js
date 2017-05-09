@@ -19,8 +19,13 @@ function controller(){
       console.log(err);
     });
   }
-  function selected_model(name){
-    update_timeline(name);
+  function selected_model(selected_model){
+    global.user_model_stats_display.selected_model(selected_model).d3models().filter(function(g){
+      return g.name !== selected_model.name;
+    }).select('.radio-td').select('.radio').select('input').each(function(){
+      this.checked = false;
+    });
+    update_timeline(selected_model.name);
   }
   function add_model(form){
     co(function*(){

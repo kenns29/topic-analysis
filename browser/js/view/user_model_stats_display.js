@@ -7,7 +7,6 @@ var data = [];
 var table;
 var selected_model = {};
 var model_update;
-
 module.exports = exports = display;
 function display(){
   function init(){
@@ -50,7 +49,7 @@ function display(){
     model_update.select('.name').html(function(d){return d.name;});
     model_update.select('.num-topics').html(function(d){return d.topics.length;});
     model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
-      global.controller_user_topics.selected_model(d.name);
+      global.controller_user_topics.selected_model(d);
     });
     model_update.select('.trash').select('i').on('click', function(d, i){
       global.controller_user_topics.delete_model(d.name);
@@ -67,5 +66,6 @@ function display(){
   ret.update = update;
   ret.data = function(_){return arguments.length>0 ? (data =_, ret) : data;};
   ret.selected_model = function(_){return arguments.length > 0 ? (selected_model = _, ret) : selected_model;};
+  ret.d3models = function(){return model_update;};
   return ret;
 }
