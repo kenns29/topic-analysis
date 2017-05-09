@@ -4,15 +4,18 @@ var LoadUserTopicTimelineData = require('../load/load_user_topic_timeline_data')
 var user_topic_controls = require('../UI/user_topic_controls');
 var UploadUserTopics = require('../load/upload_user_topics');
 var DeleteUserTopicModel = require('../load/delete_user_topic_model');
+var SafeLoad = require('../safe_load');
 
 module.exports = exports = controller;
 function controller(){
+  var safe_load_multi_timeline = SafeLoad();
   function update_timeline(name){
     var flags = user_topic_controls.get_flags();
     return co(function*(){
+      var load = LoadUserTopicTimelineData().type(flags.type).level(flags.level)
+      .model_name(name).field(flags.field).percent(flags.percent).metric(flags.metric).load;
       $(global.multi_user_topic_timeline.loading()).show();
-      var data = yield LoadUserTopicTimelineData().type(flags.type).level(flags.level)
-      .model_name(name).field(flags.field).percent(flags.percent).metric(flags.metric).load();
+      var data = yield safe_load_multi_timeline(load());
       $(global.multi_user_topic_timeline.loading()).hide();
       global.multi_user_topic_timeline.data(data).percent(flags.percent).update();
     }).catch(function(err){
