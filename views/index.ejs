@@ -73,8 +73,10 @@
       </div>
       <div role="tabpanel" id="side-user-topic-panel" class = "invisible">
         <form enctype="multipart/form-data" method="post" name="user-topics">
-          <input id = "upload-user-topics" type="file" name="file">
-          <input type="submit" value="upload">
+          <label>name</label><input id = "upload-user-topics-name" name = "model_name" type="text" value=""/>
+          <input id = "upload-user-topics" type="file" name="file"/>
+          <input type="checkbox">
+          <input type="submit" value="upload"/>
         </form>
         <button id = "btn-draw-user-topic-timeline" class = "btn btn-default">Draw Timeline</button>
       </div>

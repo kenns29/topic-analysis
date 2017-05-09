@@ -96,13 +96,22 @@ function total_aggr(type, metric){
 }
 
 function words_query(words){
-  var $or = [];
+  var $in = [];
   words.forEach(function(word){
     var re = new RegExp();
     re.compile('\\b'+word+'\\b', 'i');
-    $or.push({
-      'title_tokens.lemma' : re
-    });
+    $in.push(re);
   });
-  return {$or:$or};
+  return {'title_tokens.lemma' : {$in : $in}};
 }
+// function words_query(words){
+//   var $or = [];
+//   words.forEach(function(word){
+//     var re = new RegExp();
+//     re.compile('\\b'+word+'\\b', 'i');
+//     $or.push({
+//       'title_tokens.lemma' : re
+//     });
+//   });
+//   return {$or:$or};
+// }

@@ -7,8 +7,9 @@ module.exports = exports = post;
 function post(passport){
   return function(req, res){
     var text = req.file.buffer.toString('utf8');
+    var name = req.body.model_name;
     co(function*(){
-      var data = yield import_csv(text, 'test');
+      var data = yield import_csv(text, name);
       res.json(data);
     }).catch(function(err){
       console.log(err);
