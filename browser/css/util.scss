@@ -20,12 +20,18 @@
     max-height: 100px;
   }
 }
-.invisible{
-  visibility: hidden;
+
+.nav li a{
+  padding : 7px 7px;
 }
 /*
 *	Utilities
 */
+
+.invisible{
+  visibility: hidden;
+}
+
 .d3-tip {
   line-height: 1;
   font-weight: bold;
