@@ -3,6 +3,8 @@ var co = require('co');
 var LoadUserTopicTimelineData = require('../load/load_user_topic_timeline_data');
 var user_topic_controls = require('../UI/user_topic_controls');
 var UploadUserTopics = require('../load/upload_user_topics');
+var DeleteUserTopicModel = require('../load/delete_user_topic_model');
+
 module.exports = exports = controller;
 function controller(){
   function update_timeline(name){
@@ -33,11 +35,19 @@ function controller(){
     });
   }
   function delete_model(name){
-    
+    co(function*(){
+      yield DeleteUserTopicModel().model_name(name).load();
+      var data = yield global.user_model_stats_display.load();
+      global.user_model_stats_display.data(data).update();
+    }).catch(function(err){
+      alert('can not delete successfully');
+      console.log(err);
+    });
   }
   var ret = {};
   ret.update_timeline = update_timeline;
   ret.selected_model = selected_model;
   ret.add_model = add_model;
+  ret.delete_model = delete_model;
   return ret;
 }

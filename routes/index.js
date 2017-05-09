@@ -16,6 +16,7 @@ var router_load_topic_model_stats = require('./router_load_topic_model_stats');
 var router_load_topic_model = require('./router_load_topic_model');
 var router_load_topic_models = require('./router_load_topic_models');
 var router_delete_topic_model = require('./router_delete_topic_model');
+var router_delete_user_topic_model = require('./router_delete_user_topic_model');
 var router_load_tfidf = require('./router_load_tfidf');
 var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_data');
 var router_load_word_tree = require('./router_load_word_tree');
@@ -41,12 +42,15 @@ module.exports = exports = function(passport, upload){
   router.get('/loadtopicmodelstats', router_load_topic_model_stats(passport));
   router.get('/loadtopicmodel', router_load_topic_model(passport));
   router.get('/loadtopicmodels', router_load_topic_models(passport));
-  router.get('/deletetopicmodel', router_delete_topic_model(passport));
   router.get('/loadtfidf', router_load_tfidf(passport));
   router.get('/loadkeywordtimelinedata', router_load_keyword_timeline_data(passport));
   router.get('/loadwordtree', router_load_word_tree(passport));
   router.get('/loadusertopictimelinedata', router_load_user_topic_timeline_data(passport));
   router.get('/loadusertopics', router_load_user_topics(passport));
+  router.get('/deletetopicmodel', router_delete_topic_model(passport));
+  router.get('/deleteusertopicmodel', router_delete_user_topic_model(passport));
+
   router.get('/test', router_test(passport));
+
   return router;
 };

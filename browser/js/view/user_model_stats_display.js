@@ -53,7 +53,7 @@ function display(){
       global.controller_user_topics.selected_model(d.name);
     });
     model_update.select('.trash').select('i').on('click', function(d, i){
-
+      global.controller_user_topics.delete_model(d.name);
     });
     return ret;
   }
