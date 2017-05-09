@@ -9,6 +9,7 @@ var str2boolean = require('./str2boolean');
 module.exports = exports = load;
 function load(){
   return function(req, res){
+    var name = req.query.name;
     var type = Number(req.query.type);
     var level = Number(req.query.level);
     var percent = str2boolean(req.query.percent);
@@ -23,7 +24,7 @@ function load(){
       var db = yield MongoClient.connect(ConnStat().url());
       var topic_col = db.collection('user_topics');
       var col = db.collection(col_name);
-      var model = yield topic_col.findOne({name:'test'});
+      var model = yield topic_col.findOne({name:name});
       var topics = model.topics;
 
       var json = [];

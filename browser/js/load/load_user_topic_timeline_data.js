@@ -9,10 +9,11 @@ module.exports = exports = function(){
   var field = DOC.TITLE;
   var percent = false;
   var metric = KeywordTimelineFlags.METRIC_DOCUMENT;
+  var model_name = 'test';
   function load(){
     var deferred = $.ajax({
       url : service_url + '/loadusertopictimelinedata',
-      data : {type:type,level:level,field:field,percent:percent,metric:metric},
+      data : {name:model_name,type:type,level:level,field:field,percent:percent,metric:metric},
       dataType: 'json'
     });
     return Promise.resolve(deferred);
@@ -22,6 +23,7 @@ module.exports = exports = function(){
   }
   ret.data = function(){return data;};
   ret.load = load;
+  ret.model_name = function(_){return arguments.length > 0 ? (model_name = _, ret) : model_name;};
   ret.type = function(_){return arguments.length > 0 ? (type = _, ret) : type;};
   ret.field = function(_){return arguments.length > 0 ? (field = _, ret) : field;};
   ret.level = function(_){return arguments.length > 0 ? (level = _, ret) : level;};

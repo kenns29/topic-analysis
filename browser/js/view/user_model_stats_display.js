@@ -50,7 +50,7 @@ function display(){
     model_update.select('.name').html(function(d){return d.name;});
     model_update.select('.num-topics').html(function(d){return d.topics.length;});
     model_update.select('.radio-td').select('.radio').select('input').on('click', function(d){
-
+      global.controller_user_topics.selected_model(d.name);
     });
     model_update.select('.trash').select('i').on('click', function(d, i){
 
