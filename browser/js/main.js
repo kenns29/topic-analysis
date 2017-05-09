@@ -5,6 +5,7 @@ var KeywordDocumentViewer = require('./view/document_viewer/keyword_document_vie
 global.keyword_document_viewer = KeywordDocumentViewer().init();
 global.topic_viewer = require('./view/topic_viewer');
 global.model_stats_display = require('./view/model_stats_display');
+global.user_model_stats_display = require('./view/user_model_stats_display')().init();
 var MultiKeywordTimeline = require('./view/multi_keyword_timeline');
 global.multi_keyword_timeline = MultiKeywordTimeline().init();
 var WordTree = require('./view/word_tree');
@@ -24,9 +25,6 @@ require('./UI/btn_load_panels')
 require('./UI/btn_train_topics');
 require('./UI/form_upload_user_topics');
 
-global.model_stats_display.load().then(function(data){
-  global.model_stats_display.data(data).update();
-});
 var KeywordSelect = require('./UI/keyword_select');
 global.keyword_select = KeywordSelect().init();
 require('./UI/user_topic_interaction');
@@ -41,7 +39,9 @@ require('./UI/checkbox_timeline_brush');
 require('./UI/checkbox_timeline_percent');
 require('./UI/btn_draw_user_topic_timeline');
 
-require('./init/draw_keyword_timelines')();
-// require('./init/draw_model_compare')();
-require('./init/draw_word_tree')();
+require('./init/draw_topic_model_stats');
+require('./init/draw_user_topic_model_stats');
+require('./init/draw_keyword_timelines');
+// require('./init/draw_model_compare');
+require('./init/draw_word_tree');
 require('./UI/test');

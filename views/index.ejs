@@ -72,21 +72,28 @@
         </div>
       </div>
       <div role="tabpanel" id="side-user-topic-panel" class = "invisible">
-        <form enctype="multipart/form-data" method="post" name="user-topics">
-          <div>
-            <label>name</label><input id = "upload-user-topics-name" name = "model_name" type="text" value=""/>
-          </div>
-          <div>
-            <input id = "upload-user-topics" type="file" name="file"/>
-          </div>
-          <div>
-            <input id = "checkbox-overwrite-upload-user-topics" name="overwrite" type="checkbox"><label>Overwrite</label>
-          </div>
-          <div>
-            <input type="submit" value="upload"/>
-          </div>
-        </form>
+        <div>
+          <h4>Upload Topics</h4>
+          <form enctype="multipart/form-data" method="post" name="user-topics">
+            <div>
+              <label>name</label><input id = "upload-user-topics-name" name = "model_name" type="text" value=""/>
+            </div>
+            <div>
+              <input id = "upload-user-topics" type="file" name="file"/>
+            </div>
+            <div>
+              <input id = "checkbox-overwrite-upload-user-topics" name="overwrite" type="checkbox"><label>Overwrite</label>
+            </div>
+            <div>
+              <input type="submit" value="upload"/>
+            </div>
+          </form>
+        </div>
         <button id = "btn-draw-user-topic-timeline" class = "btn btn-default">Draw Timeline</button>
+        <div>
+          <h4>Models</h4>
+          <div id = "user-topic-model-stats-div"></div>
+        </div>
       </div>
     </div>
   </div>
