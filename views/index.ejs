@@ -120,6 +120,11 @@
             aria-controls="keyword-tree-view-panel" role="tab" data-toggle="tab">
             <b>Word Tree</b></a>
           </li>
+          <li role="presentation" name="keyword-tab">
+            <a id = "top-keywords-view-tab" href="#top-keywords-view-panel"
+            aria-controls="top-keywords-view-panel" role="tab" data-toggle="tab">
+            <b>Top Keywords</b></a>
+          </li>
         </ul>
         <div class = "tab-content">
           <div role="tabpanel" id="topic-panel">
@@ -229,7 +234,7 @@
               </div>
             </div>
           </div>
-          <div role="tabpanel" class ="invisible" id = "keyword-tree-view-panel">
+          <div role="tabpanel" class="invisible" id="keyword-tree-view-panel">
             <div id="keyword-tree-control-div">
               <div class = "control">
                 <div id = "keyword-tree-year-select">
@@ -274,6 +279,9 @@
                 <span class="loading-helper"></span><img src="loading.gif" />
               </div>
             </div>
+          </div>
+          <div role="tabpanel" class="invisible" id="top-keywords-view-panel">
+            <div id = "top-keywords-div"></div>
           </div>
         </div>
       </div>
