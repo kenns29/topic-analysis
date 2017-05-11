@@ -145,37 +145,7 @@ module.exports = exports = function(){
       return area_fun(d.data);
     }).attr('fill', 'lightpink').attr('stroke', 'black').attr('stroke-width', 1);
   }
-  function add_timeline(line_data){
-    if(!id2data[line_data.id]){
-      line_data.index = data.length;
-      id2data[line_data.id] = line_data;
-      data.push(line_data);
-      brushes.add(line_data.id);
-    }
-    return ret;
-  }
-  function replace_timeline(line_data){
-    if(id2data[line_data.id]){
-      let index = id2data[line_data.id].index;
-      line_data.index = index;
-      data[index] = line_data;
-      id2data[line_data.id] = line_data;
-    }
-  }
-  function remove_timeline(id){
-    var i = data.length - 1;
-    while(i >= 0){
-      if(data[i].id === id){
-        data.splice(i, 1);
-        delete id2data[id];
-        for(let j = i; j < data.length;j++) data[j].index = j;
-        break;
-      }
-      --i;
-    }
-    brushes.remove(id);
-    return ret;
-  }
+
   var ret = {};
   ret.data = function(_){
     if(arguments.length > 0){
@@ -187,9 +157,6 @@ module.exports = exports = function(){
   };
   ret.init = init;
   ret.update = update;
-  ret.add_timeline = add_timeline;
-  ret.replace_timeline = replace_timeline;
-  ret.remove_timeline = remove_timeline;
   ret.activate_brushes = function(){brushes.activate();};
   ret.deactivate_brushes = function(){brushes.deactivate();};
   ret.loading = function(){return loading;};
@@ -248,7 +215,7 @@ module.exports = exports = function(){
         if(d3.event.selection){
           domain = d3.event.selection.map(function(d){return Math.round(x_scale.invert(d));});
           extent = domain.map(x_scale);
-
+          
         }
       });
       return brush;
