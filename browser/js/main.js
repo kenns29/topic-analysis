@@ -36,7 +36,6 @@ require('./UI/document_tab_nav');
 require('./UI/keyword_tab_nav');
 require('./UI/side_tab_nav');
 require('./UI/checkbox_timeline_brush');
-require('./UI/checkbox_timeline_percent');
 
 require('./init/draw_topic_model_stats');
 require('./init/draw_user_topic_model_stats');
