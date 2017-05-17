@@ -14,6 +14,8 @@ var TopicModelCompare = require('./view/topic_model_compare');
 global.topic_model_compare = TopicModelCompare().init();
 var MultiUserTopicTimeline = require('./view/multi_user_topic_timeline');
 global.multi_user_topic_timeline = MultiUserTopicTimeline().init();
+var TopKeyWords = require('./view/top_keywords');
+global.top_keywords = TopKeyWords().init();
 
 //Controlllers
 global.controller_keyword_document_viewer = require('./control/controller_keyword_document_viewer')();
@@ -21,7 +23,7 @@ global.controller_keyword = require('./control/controller_keyword')();
 global.controller_user_topics = require('./control/controller_user_topics')();
 
 require('./UI/btn_load_papers');
-require('./UI/btn_load_panels')
+require('./UI/btn_load_panels');
 require('./UI/btn_train_topics');
 require('./UI/form_upload_user_topics');
 
@@ -42,4 +44,5 @@ require('./init/draw_user_topic_model_stats');
 require('./init/draw_keyword_timelines');
 // require('./init/draw_model_compare');
 require('./init/draw_word_tree');
+require('./init/draw_top_keyword');
 require('./UI/test');

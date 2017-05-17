@@ -22,6 +22,7 @@ var router_load_keyword_timeline_data = require('./router_load_keyword_timeline_
 var router_load_word_tree = require('./router_load_word_tree');
 var router_load_user_topic_timeline_data = require('./router_load_user_topic_timeline_data');
 var router_load_user_topics = require('./router_load_user_topics');
+var router_load_top_keyword_data = require('./router_load_top_keyword_data');
 var router_test = require('./router_test');
 var express = require('express');
 module.exports = exports = function(passport, upload){
@@ -49,7 +50,7 @@ module.exports = exports = function(passport, upload){
   router.get('/loadusertopics', router_load_user_topics(passport));
   router.get('/deletetopicmodel', router_delete_topic_model(passport));
   router.get('/deleteusertopicmodel', router_delete_user_topic_model(passport));
-
+  router.get('/loadtopkeyworddata', router_load_top_keyword_data(passport));
   router.get('/test', router_test(passport));
 
   return router;
