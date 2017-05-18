@@ -21,6 +21,7 @@
     "express": "*",
     "express-session": "^1.15.1",
     "fs-promise": "^1.0.0",
+    "hashmap": "^2.1.0",
     "intercept-stdout": "^0.1.2",
     "java": "*",
     "jison": "^0.4.17",
