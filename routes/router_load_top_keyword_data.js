@@ -16,6 +16,7 @@ function load(passport){
       for (var i = 0; i < data.length ; i++) {
       	paper = data[i];
       	year = paper.year;
+            title = paper.title;
       	if (!Map1.has(year)) {
       		Map1.set(year, new HashMap());
       	}
@@ -23,11 +24,13 @@ function load(passport){
       	var lemma;
       	var Map2 = Map1.get(year);
       	for (var j = 0; j < tokens.length; j++) {
-      		lemma = tokens[j].lemma;
+      		lemma = tokens[j].lemma.toLowerCase();
       		if (!Map2.has(lemma)) {
-      			Map2.set(lemma, 1);
-      		} else{
-      			Map2.set(lemma, Map2.get(lemma) + 1);
+                        var titleSet = new Set();
+                        titleSet.add(title);
+      			Map2.set(lemma, titleSet);
+      		} else {
+                        Map2.get(lemma).add(title);
       		}
       	}
       }
@@ -41,23 +44,35 @@ function load(passport){
       		}
       		var wordCnt = {};
       		wordCnt.word = key2;
-      		wordCnt.cnt = value2;
+      		wordCnt.cnt = value2.size;
+                  wordCnt.titles = value2;
       		arrayOfKeywords.push(wordCnt);
       	});
 
       	arrayOfKeywords.sort(function(a, b) {
       		return b.cnt - a.cnt;
       	});
+
       	var arrayOfTopN = [];
-      	arrayOfKeywords.slice(0, 20).forEach(function(pair) {
-      		arrayOfTopN.push(pair.word);
+
+      	arrayOfKeywords.slice(0, 5).forEach(function(pair) {
+                  var arrayOfTitles = [];
+                  for (let title of pair.titles) arrayOfTitles.push(title);
+      		arrayOfTopN.push({word: pair.word, titles: arrayOfTitles});
+                  // arrayOfTopN.push(pair.cnt);
+                  // arrayOfTopN.push(pair.titles.values().next().value);
       	});
+            // console.log(arrayOfTopN);
+            // var wordOfTopN = [];
+            // for (var i = 0; i < arrayOfTopN.length; i ++) {
+            //       wordOfTopN.push(arrayOfTopN[i].word);
+            // }
       	var yearObj = {};
       	yearObj.year = key1;
       	yearObj.words = arrayOfTopN;
       	arrayOfYears.push(yearObj);
       });
-      console.log(arrayOfYears);
+      // res.json(arrayOfTopN); it is in the Map1 loop.
       res.json(arrayOfYears);
     }).catch(function(err){
       console.log(err);

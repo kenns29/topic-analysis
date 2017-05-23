@@ -2,6 +2,8 @@ var $ = require('jquery');
 var d3 = require('../load_d3');
 var container = '#top-keywords-div';
 var table;
+//var data = [{year, [{word1, [tile1, title2]},{}},{year}];
+//<div id='1997'><a>word1</a><a>word2</a></div>
 module.exports = exports = display;
 function display(){
   function init(){
@@ -43,10 +45,15 @@ function display(){
   		}
   		var cell = row.append('th');
   		var cellHtml = jsonArr[i].year + "<br>";
-  		for (var j = 0; j < jsonArr[i].words.length; j++) {
-  			cellHtml += jsonArr[i].words[j];
-  			cellHtml += "<br>";
-  		}
+      // var cellHtml = jsonArr[i].word + "<br>";
+      for (var j = 0; j < jsonArr[i].words.length; j++) {
+        cellHtml += jsonArr[i].words[j].word;
+        cellHtml += "<br>";
+      }
+  		// for (let item of jsonArr[i].titles) {
+  		// 	cellHtml += item;
+  		// 	cellHtml += "<br>";
+  		// }
   		cell.html(cellHtml);
   	}
   }
