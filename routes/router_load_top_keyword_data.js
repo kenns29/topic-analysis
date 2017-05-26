@@ -13,6 +13,7 @@ function load(passport){
       var year;
       var tokens;
       var Map1 = new HashMap();
+      var textMap = new HashMap();
       for (var i = 0; i < data.length ; i++) {
       	paper = data[i];
       	year = paper.year;
@@ -25,6 +26,7 @@ function load(passport){
       	var Map2 = Map1.get(year);
       	for (var j = 0; j < tokens.length; j++) {
       		lemma = tokens[j].lemma.toLowerCase();
+                  text = tokens[j].text;
       		if (!Map2.has(lemma)) {
                         var titleSet = new Set();
                         titleSet.add(title);
@@ -32,8 +34,26 @@ function load(passport){
       		} else {
                         Map2.get(lemma).add(title);
       		}
+
+                  if (!textMap.has(lemma)) {
+                        var textSet = new Set();
+                        textSet.add(text);
+                        textMap.set(lemma, textSet);
+                  } else {
+                        textMap.get(lemma).add(text);
+                  }
       	}
       }
+      console.log(textMap);
+      // var arrayOfTexts = [];
+      // textMap.forEach(function(value, key) {
+      //       var textObj = {};
+      //       textObj.lemma = key;
+      //       textObj.texts = value;
+      //       arrayOfTexts.push(textObj);
+      // });
+      // console.log(arrayOfTexts);
+
       var arrayOfYears = [];
       var stopwords = yield StopWords().load();
       Map1.forEach(function(value1, key1){
@@ -55,24 +75,20 @@ function load(passport){
 
       	var arrayOfTopN = [];
 
-      	arrayOfKeywords.slice(0, 5).forEach(function(pair) {
+      	arrayOfKeywords.slice(0, 10).forEach(function(pair) {
                   var arrayOfTitles = [];
                   for (let title of pair.titles) arrayOfTitles.push(title);
-      		arrayOfTopN.push({word: pair.word, titles: arrayOfTitles});
-                  // arrayOfTopN.push(pair.cnt);
-                  // arrayOfTopN.push(pair.titles.values().next().value);
+                  var textsOfLemma = [];
+                  textsOfLemma= Array.from(textMap.get(pair.word));
+      		arrayOfTopN.push({word: pair.word, titles: arrayOfTitles, textsOfWord: textsOfLemma});
+                  
       	});
             // console.log(arrayOfTopN);
-            // var wordOfTopN = [];
-            // for (var i = 0; i < arrayOfTopN.length; i ++) {
-            //       wordOfTopN.push(arrayOfTopN[i].word);
-            // }
       	var yearObj = {};
       	yearObj.year = key1;
       	yearObj.words = arrayOfTopN;
       	arrayOfYears.push(yearObj);
       });
-      // res.json(arrayOfTopN); it is in the Map1 loop.
       res.json(arrayOfYears);
     }).catch(function(err){
       console.log(err);
