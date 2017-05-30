@@ -75,7 +75,7 @@ function load(passport){
 
       	var arrayOfTopN = [];
 
-      	arrayOfKeywords.slice(0, 10).forEach(function(pair) {
+      	arrayOfKeywords.slice(0, 100).forEach(function(pair) {
                   var arrayOfTitles = [];
                   for (let title of pair.titles) arrayOfTitles.push(title);
                   var textsOfLemma = [];

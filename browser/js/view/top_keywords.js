@@ -29,37 +29,28 @@ function display(){
     .style('background-color', '#F8F8F8')
     .style('width', '100%');
 
-    // for (var i = 0; i < 6; i++) {
-    // 	var row = table.append('tr');
-    // 	for (var j = 0; j < 6; j++) {
-    // 		row.append('th').html(i + ',' + j);
-    // 	}
-    // }
-    // header.append('th').attr('class', 'name').attr('align', 'center').style('width', '20%').style('display', 'table-cell').html('name');
-    // header.append('th').attr('class', 'num-topics').attr('align', 'center').style('width', '20%').style('display', 'table-cell').html('num-dics');
-    // header.append('th').attr('class', 'radio-td').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('sel');
-    // header.append('th').attr('class', 'trash').attr('align', 'center').style('width', '10%').style('display', 'table-cell').html('del');
     return ret;
   }
 
   function addData(jsonArr) {
-  	console.log(jsonArr);
+  	// console.log(jsonArr);
   	var row;
   	for (var i = 0; i < jsonArr.length; i++) {
   		if (i % 6 == 0) {
   			row = table.append('tr');
   		}
   		var cell = row.append('th');
-  		var cellHtml = jsonArr[i].year + "<br>"; 
-      for (var j = 0; j < jsonArr[i].words.length; j++) {
-        cellHtml += "<a>" + jsonArr[i].words[j].word + "</a>";
-        cellHtml += "<br>";
+  		var cellHtml = "<span>" + jsonArr[i].year + "</span>"; 
+      // for (var j = 0; j < jsonArr[i].words.length; j++) {
+      for (var j = 0; j < 10; j++) {
+        cellHtml += "<a>" + "<span>" + jsonArr[i].words[j].word + "</span>" + "</a>";
       }
   		cell.html(cellHtml);
   	}
     //register event listener to node "a".
     function wordClick(d, i) {
-        d3.select(this)
+        console.log(d);
+        d3.select(this).selectAll('span')
         .style('background-color', 'rgb(' + [225, 182, 193] + ')');
 
         titlesDiv.select('p')
@@ -68,7 +59,6 @@ function display(){
         .style('display', 'inline-block');
 
         titlesDiv.html("");
-        console.log(d);
         var titlesList;
         var lightedWord;
         titlesList = d.titles;
@@ -96,7 +86,7 @@ function display(){
                 eachLine.push({substring: wordsOfTitle[index], isLightWord: 1});
               }        
           }
-          console.log(eachLine);
+          // console.log(eachLine);
           //draw the titleList
           var ul = titlesDiv.append('ul');
 
@@ -106,41 +96,73 @@ function display(){
           .enter()
           .append('span')
             .style('background-color', function(d){
-              console.log(d);
+              // console.log(d);
               if(d.isLightWord == 0) return 'white';
               else{
                 return 'rgba(' + [0, 0, 255, 0.3] + ')';
               }
             })
             .text(function(d) {
-              console.log(d);
+              // console.log(d);
               return d.substring + " ";
             });
         }    
+      }  //end of wordClick function
 
-      }
-
-      // function deleteWord(d, i) {
-      //   d3.event.preventDefault();
-      //   d3.select(this)
-      //   .style('visibility', 'hidden');
-      // }
+      function deleteWord(d,i) {
+        console.log(d);
+        var deletedWord = this.textContent;
+        var yearOftheWord = this.parentNode.children[0].textContent;
+        var parentNodeOfword = this.parentNode;
+        console.log(deletedWord);
+        console.log(yearOftheWord);
+            // console.log(parentNodeOfword);
+        console.log(this);
+        d3.select(this).remove();
+        d3.event.preventDefault();
+            // console.log("after deleting " + parentNodeOfword);
+        var indexOftheObject;
+        if (yearOftheWord > 1990) {
+          indexOftheObject = yearOftheWord - 1979 -1;
+        } else {
+          indexOftheObject = yearOftheWord - 1979;
+        }
+        console.log(indexOftheObject);
+        var arrayOfTheWord = jsonArr[indexOftheObject].words;
+        var indexOfTheWord;
+        for(var i = 0; i < arrayOfTheWord.length; i++) {
+          if (deletedWord == arrayOfTheWord[i].word) {
+              indexOfTheWord = i;
+          }
+        }
+        arrayOfTheWord.splice(indexOfTheWord, 1);
+        parentNodeOfword.innerHTML = '';
+        var cellHtml;
+        cellHtml = "<span>" + yearOftheWord + "</span>";
+        for (var j = 0; j < 10; j++) {
+          cellHtml += "<a>" + "<span>" + arrayOfTheWord[j].word + "</span>" + "</a>";
+        }
+        parentNodeOfword.innerHTML += cellHtml;
+        console.log(parentNodeOfword);
+        d3.select(parentNodeOfword)
+        .selectAll("a")
+        .data(function(d,i) {console.log(d); return d.words})
+        .style('display', 'block')
+        .on("click", wordClick)
+        .on("contextmenu", deleteWord)
+      } //end of the deletWord function
 
       d3.select(container).selectAll("th")
       .data(jsonArr)
         .selectAll("a")
-        .data(function(d,i){return d.words;})
+        .style('display', 'block')
+        .data(function(d,i){ return d.words;})   
         .on("click", wordClick)
-        .on("contextmenu", function() {
-            console.log(this);
-            d3.select(this).remove();
-            d3.event.preventDefault();
-          });
+        .on("contextmenu", deleteWord);
 
 
 
   }
-
   var ret = {};
   ret.init = init;
   ret.addData = addData;

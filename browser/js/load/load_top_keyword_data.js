@@ -8,6 +8,13 @@ module.exports = exports = function(){
     });
     return Promise.resolve(deferred);
   }
+  // function loadSingleData(year, count){
+  //   var deferred = $.ajax({
+  //     url : service_url + '/loadsinglekeyworddata?year=year&count=count',
+  //     dataType: 'json'
+  //   });
+  //   return Promise.resolve(deferred);
+  // }
   function ret(){
     return load();
   }
