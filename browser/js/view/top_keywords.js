@@ -3,9 +3,10 @@ var d3 = require('../load_d3');
 var container = '#top-keywords-div';
 var table;
 var titlesTable;
-//var data = [{year, [{word1, [tile1, title2]},{}},{year}];
+//var data = [{year:year1, words:[{word:word1, titles:[tile1, title2], textsOfWord:[text1,text2]},{}},{year}];
 //<div id='1997'><a>word1</a><a>word2</a></div>
 var titlesContainer = '#topword-titles-viewer-div';
+var timelineContainer = '#topword-timeline-viewer-div';
 module.exports = exports = display;
 function display(){
   function init(){
@@ -49,7 +50,7 @@ function display(){
   	}
     //register event listener to node "a".
     function wordClick(d, i) {
-        console.log(d);
+        // console.log(d);
         d3.select(this).selectAll('span')
         .style('background-color', 'rgb(' + [225, 182, 193] + ')');
 
@@ -65,7 +66,9 @@ function display(){
         highlightWords = d.textsOfWord;
         
         var firstLine;
-        firstLine = "<p>" + "<b>" + d.word + "</b>" + " has " + titlesList.length + " titles." + "</p>";
+        var yearOftheWord = this.parentNode.children[0].textContent;
+        firstLine = "<p>" + "<b>" + d.word + "</b>" + " has " 
+        + titlesList.length + " titles in " + yearOftheWord + "</p>";
         titlesDiv.html(firstLine);
 
         for(var i = 0; i < titlesList.length; i++) {
@@ -110,14 +113,14 @@ function display(){
       }  //end of wordClick function
 
       function deleteWord(d,i) {
-        console.log(d);
+        // console.log(d);
         var deletedWord = this.textContent;
         var yearOftheWord = this.parentNode.children[0].textContent;
         var parentNodeOfword = this.parentNode;
-        console.log(deletedWord);
-        console.log(yearOftheWord);
+        // console.log(deletedWord);
+        // console.log(yearOftheWord);
             // console.log(parentNodeOfword);
-        console.log(this);
+        // console.log(this);
         d3.select(this).remove();
         d3.event.preventDefault();
             // console.log("after deleting " + parentNodeOfword);
@@ -127,7 +130,7 @@ function display(){
         } else {
           indexOftheObject = yearOftheWord - 1979;
         }
-        console.log(indexOftheObject);
+        // console.log(indexOftheObject);
         var arrayOfTheWord = jsonArr[indexOftheObject].words;
         var indexOfTheWord;
         for(var i = 0; i < arrayOfTheWord.length; i++) {
@@ -143,10 +146,10 @@ function display(){
           cellHtml += "<a>" + "<span>" + arrayOfTheWord[j].word + "</span>" + "</a>";
         }
         parentNodeOfword.innerHTML += cellHtml;
-        console.log(parentNodeOfword);
+        // console.log(parentNodeOfword);
         d3.select(parentNodeOfword)
         .selectAll("a")
-        .data(function(d,i) {console.log(d); return d.words})
+        .data(function(d,i) { return d.words})
         .style('display', 'block')
         .on("click", wordClick)
         .on("contextmenu", deleteWord)
