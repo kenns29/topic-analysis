@@ -5,10 +5,9 @@ var DeleteTopicModel = require('../load/delete_topic_model');
 module.exports = exports = controller;
 function controller(){
   function select_model(selected_model){
-    global.model_stats_display.selected_model(selected_model).d3models().filter(function(g){
-      return g.id !== selected_model.id;
-    }).select('.radio-td').select('.radio').select('input').each(function(){
-      this.checked = false;
+    global.model_stats_display.selected_model(selected_model).d3models()
+    .select('.radio-td').select('.radio').select('input').each(function(g){
+      this.checked = g.id === selected_model.id;
     });
     co(function*(){
       $(global.topic_viewer.loading()).show();

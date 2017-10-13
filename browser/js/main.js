@@ -19,7 +19,7 @@ global.multi_user_topic_timeline = MultiUserTopicTimeline().init();
 global.controller_keyword_document_viewer = require('./control/controller_keyword_document_viewer')();
 global.controller_keyword = require('./control/controller_keyword')();
 global.controller_user_topics = require('./control/controller_user_topics')();
-
+global.controller_topic_model_selection = require('./control/controller_topic_model_selection')();
 require('./UI/btn_load_papers');
 require('./UI/btn_load_panels')
 require('./UI/btn_train_topics');
@@ -43,3 +43,9 @@ require('./init/draw_keyword_timelines');
 // require('./init/draw_model_compare');
 require('./init/draw_word_tree');
 require('./UI/test');
+
+global.model_stats_display.load().then(function(data){
+  if(!data || data.length === 0) return;
+  global.controller_topic_model_selection
+  .select_model(data[Math.floor(data.length/2)]);
+});
